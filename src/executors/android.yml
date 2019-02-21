@@ -5,9 +5,9 @@ description: |
 
 parameters:
   sdk-version:
-  	type: enum
-    enum: [23, 24, 25, 26, 27, 28]
-    default: 28
+    type: enum
+    enum: ["23", "24", "25", "26", "27", "28"]
+    default: "28"
     description: >
       The API level to use.
       For Android Oreo 8.1.0, use API level "27", for example.
