@@ -1,0 +1,25 @@
+description: |
+  Select a CircleCI convenience image to get building on Android.
+  See https://hub.docker.com/r/circleci/android/tags for a full list of
+  the available images.
+
+parameters:
+  sdk-version:
+  	type: enum
+    enum: [23, 24, 25, 26, 27, 28]
+    default: 28
+    description: >
+      The API level to use.
+      For Android Oreo 8.1.0, use API level "27", for example.
+      See https://source.android.com/setup/start/build-numbers for a full list.
+
+  variant:
+    type: enum
+    enum: ["", node, ndk]
+    default: ""
+    description: >
+      Choose an optional Android image variant, either node or ndk:
+      https://hub.docker.com/r/circleci/android/tags
+
+docker:
+  - image: circleci/android:api-<<parameters.sdk-version>><<#parameters.variant>>-<<parameters.variant>><</parameters.variant>>

@@ -1,0 +1,18 @@
+description: >
+  Accept all Android SDK Manager licenses
+
+steps:
+  - run:
+      name: Accept Android Licenses
+      shell: /bin/bash -e
+      description: >
+        Accepts all Android SDK licenses.
+        This command is typically not necessary to execute, since the CircleCI convenience images
+        ship with all licenses accepted.
+        This command will add approximately 10 seconds to the build time.
+      # Use a custom shell.
+      # We don't `set -o pipefail` since sdkmanager does not interact nicely
+      # with the incoming pipe, which can result in the `yes` command exiting with code 147.
+      command: |
+        yes | sdkmanager --licenses
+        yes | sdkmanager --update
