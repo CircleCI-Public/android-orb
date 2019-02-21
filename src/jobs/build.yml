@@ -3,7 +3,7 @@ description: >
 
 executor:
   name: android
-  sdk: "23"
+  sdk-version: 23
 
 steps:
   - checkout
