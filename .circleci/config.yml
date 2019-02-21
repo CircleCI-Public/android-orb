@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   orb-tools: circleci/orb-tools@8.3.0
-  android: circleci/android@dev:alpha
+  # android: circleci/android@dev:alpha
 
 workflows:
   lint_pack-validate_publish-dev:
