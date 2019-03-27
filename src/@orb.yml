@@ -1,4 +1,5 @@
 version: 2.1
 
 description: >
-  Orb for working with Android projects on CircleCI
+  Orb for working with Android projects on CircleCI. Source:
+  https://github.com/circleci-public/android-orb
