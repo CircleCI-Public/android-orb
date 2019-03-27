@@ -1,0 +1,10 @@
+description: >
+  Start building an Android project on CircleCI
+
+executor:
+  name: android
+  sdk-version: "23"
+
+steps:
+  - checkout
+  - accept-licenses
