@@ -1,4 +1,4 @@
 version: 2.1
 
 description: >
-  Orb for working with Android projects
+  Orb for working with Android projects on CircleCI

@@ -7,4 +7,4 @@ executor:
 
 steps:
   - checkout
-  - accept_licenses
+  - accept-licenses
