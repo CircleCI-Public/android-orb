@@ -116,6 +116,7 @@ workflows:
           tag: api-23
           ndk-version: android-ndk-r17c
           ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
+          resource-class: medium
           filters: *integration-dev_filters
 
       - android:
@@ -145,6 +146,7 @@ workflows:
           tag: api-27
           ndk-version: android-ndk-r17c
           ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
+          resource-class: medium
           filters: *integration-dev_filters
 
       - android:
@@ -196,6 +198,7 @@ workflows:
           tag: api-28
           ndk-version: android-ndk-r18b
           ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
+          resource-class: medium
           filters: *integration-dev_filters
 
       # 19c
@@ -250,6 +253,7 @@ workflows:
           tag: api-23
           ndk-version: android-ndk-r17c
           ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
+          resource-class: medium
           filters: *integration-master_filters
 
       - android:
@@ -279,6 +283,7 @@ workflows:
           tag: api-27
           ndk-version: android-ndk-r17c
           ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
+          resource-class: medium
           filters: *integration-master_filters
 
       - android:
@@ -330,6 +335,7 @@ workflows:
           tag: api-28
           ndk-version: android-ndk-r18b
           ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
+          resource-class: medium
           filters: *integration-master_filters
 
       # 19c
