@@ -19,7 +19,12 @@ jobs:
         type: string
         description: ndk sha value to pass
 
-    resource_class: small
+      resource-class:
+        type: enum
+        enum: [small, medium, medium+, large, xlarge]
+        default: small
+
+    resource_class: <<parameters.resource-class>>
     docker:
       - image: circleci/android:<<parameters.tag>>
 
@@ -118,6 +123,7 @@ workflows:
           tag: api-24
           ndk-version: android-ndk-r17c
           ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
+          resource-class: medium
           filters: *integration-dev_filters
 
       - android:
@@ -182,6 +188,7 @@ workflows:
           tag: api-27
           ndk-version: android-ndk-r18b
           ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
+          resource-class: medium
           filters: *integration-dev_filters
 
       - android:
@@ -197,6 +204,7 @@ workflows:
           tag: api-23
           ndk-version: android-ndk-r19c
           ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
+          resource-class: medium
           filters: *integration-dev_filters
 
       - android:
@@ -218,6 +226,7 @@ workflows:
           tag: api-26
           ndk-version: android-ndk-r19c
           ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
+          resource-class: medium
           filters: *integration-dev_filters
 
       - android:
@@ -248,6 +257,7 @@ workflows:
           tag: api-24
           ndk-version: android-ndk-r17c
           ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
+          resource-class: medium
           filters: *integration-master_filters
 
       - android:
@@ -312,6 +322,7 @@ workflows:
           tag: api-27
           ndk-version: android-ndk-r18b
           ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
+          resource-class: medium
           filters: *integration-master_filters
 
       - android:
@@ -327,6 +338,7 @@ workflows:
           tag: api-23
           ndk-version: android-ndk-r19c
           ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
+          resource-class: medium
           filters: *integration-master_filters
 
       - android:
@@ -348,6 +360,7 @@ workflows:
           tag: api-26
           ndk-version: android-ndk-r19c
           ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
+          resource-class: medium
           filters: *integration-master_filters
 
       - android:
