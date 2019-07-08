@@ -36,7 +36,7 @@ steps:
 
         $SUDO chown -R circleci:circleci /opt/android/<<parameters.ndk-version>>
 
-        export ANDROID_NDK_HOME=/opt/android/<<parameters.ndk-version>>
+        echo "export ANDROID_NDK_HOME=/opt/android/<<parameters.ndk-version>>" >> $BASH_ENV
 
         if [[ -d /opt/android/<<parameters.ndk-version>> && \
           -n "$(ls -A /opt/android/<<parameters.ndk-version>>)" ]]; then
