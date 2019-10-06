@@ -4,7 +4,7 @@ An orb for working with Android on CircleCI.
 
 ## Usage
 
-For full usage guidelines, see the [orb registry listing](http://circleci.com/orbs/registry/orb/circleci/android).
+For full usage guidelines, see the [orb registry listing](https://circleci.com/orbs/registry/orb/circleci/android).
 
 ## Documentation
 
