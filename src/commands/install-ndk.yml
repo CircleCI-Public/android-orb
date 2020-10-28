@@ -23,7 +23,7 @@ steps:
       command: |
         [ -w /usr/local/bin ] && SUDO="" || SUDO=sudo
 
-        $SUDO curl --silent --show-error --location --fail --retry 3 \
+        $SUDO curl --http1.1 --silent --show-error --location --fail --retry 3 \
           --output /tmp/<<parameters.ndk-version>>.zip \
           https://dl.google.com/android/repository/<<parameters.ndk-version>>-linux-x86_64.zip
 
