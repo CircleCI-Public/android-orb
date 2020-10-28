@@ -2,7 +2,18 @@ version: 2.1
 
 orbs:
   orb-tools: circleci/orb-tools@10
-  android: circleci/android@dev:alpha
+  android: circleci/android@<<pipeline.parameters.dev-orb-version>>
+
+# Pipeline parameters
+parameters:
+  # These pipeline parameters are required by the "trigger-integration-tests-workflow"
+  # job, by default.
+  run-integration-tests:
+    type: boolean
+    default: false
+  dev-orb-version:
+    type: string
+    default: "dev:alpha"
 
 jobs:
   android:
@@ -74,6 +85,7 @@ prod-deploy_requires: &prod-deploy_requires
 
 workflows:
   lint_pack-validate_publish-dev:
+    unless: << pipeline.parameters.run-integration-tests >>
     jobs:
       - orb-tools/lint
 
@@ -93,7 +105,8 @@ workflows:
           requires:
             - orb-tools/publish-dev
 
-  integration-tests_prod-release:
+  integration-tests_deploy:
+    when: << pipeline.parameters.run-integration-tests >>
     jobs:
       # triggered by non-master branch commits
       # 17c
