@@ -46,18 +46,6 @@ jobs:
           ndk-version: <<parameters.ndk-version>>
           ndk-sha: <<parameters.ndk-sha>>
 
-integration-dev_filters: &integration-dev_filters
-  branches:
-    ignore: /.*/
-  tags:
-    only: /integration-.*/
-
-integration-master_filters: &integration-master_filters
-  branches:
-    ignore: /.*/
-  tags:
-    only: /master-.*/
-
 prod-deploy_requires: &prod-deploy_requires
   [
     17c-23-master,
@@ -116,7 +104,6 @@ workflows:
           ndk-version: android-ndk-r17c
           ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
           resource-class: medium
-          filters: *integration-dev_filters
 
       - android:
           name: 17c-24-dev
@@ -124,21 +111,18 @@ workflows:
           ndk-version: android-ndk-r17c
           ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
           resource-class: medium
-          filters: *integration-dev_filters
 
       - android:
           name: 17c-25-dev
           tag: api-25
           ndk-version: android-ndk-r17c
           ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
-          filters: *integration-dev_filters
 
       - android:
           name: 17c-26-dev
           tag: api-26
           ndk-version: android-ndk-r17c
           ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
-          filters: *integration-dev_filters
 
       - android:
           name: 17c-27-dev
@@ -146,21 +130,18 @@ workflows:
           ndk-version: android-ndk-r17c
           ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
           resource-class: medium
-          filters: *integration-dev_filters
 
       - android:
           name: 17c-28-dev
           tag: api-28
           ndk-version: android-ndk-r17c
           ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
-          filters: *integration-dev_filters
 
       - android:
           name: 17c-29-dev
           tag: api-29
           ndk-version: android-ndk-r17c
           ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
-          filters: *integration-dev_filters
 
       # 18b
       - android:
@@ -168,28 +149,24 @@ workflows:
           tag: api-23
           ndk-version: android-ndk-r18b
           ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
-          filters: *integration-dev_filters
 
       - android:
           name: 18b-24-dev
           tag: api-24
           ndk-version: android-ndk-r18b
           ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
-          filters: *integration-dev_filters
 
       - android:
           name: 18b-25-dev
           tag: api-25
           ndk-version: android-ndk-r18b
           ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
-          filters: *integration-dev_filters
 
       - android:
           name: 18b-26-dev
           tag: api-26
           ndk-version: android-ndk-r18b
           ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
-          filters: *integration-dev_filters
 
       - android:
           name: 18b-27-dev
@@ -197,7 +174,6 @@ workflows:
           ndk-version: android-ndk-r18b
           ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
           resource-class: medium
-          filters: *integration-dev_filters
 
       - android:
           name: 18b-28-dev
@@ -205,14 +181,12 @@ workflows:
           ndk-version: android-ndk-r18b
           ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
           resource-class: medium
-          filters: *integration-dev_filters
 
       - android:
           name: 18b-29-dev
           tag: api-29
           ndk-version: android-ndk-r18b
           ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
-          filters: *integration-dev_filters
 
       # 19c
       - android:
@@ -221,21 +195,18 @@ workflows:
           ndk-version: android-ndk-r19c
           ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
           resource-class: medium
-          filters: *integration-dev_filters
 
       - android:
           name: 19c-24-dev
           tag: api-24
           ndk-version: android-ndk-r19c
           ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
-          filters: *integration-dev_filters
 
       - android:
           name: 19c-25-dev
           tag: api-25
           ndk-version: android-ndk-r19c
           ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
-          filters: *integration-dev_filters
 
       - android:
           name: 19c-26-dev
@@ -243,28 +214,24 @@ workflows:
           ndk-version: android-ndk-r19c
           ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
           resource-class: medium
-          filters: *integration-dev_filters
 
       - android:
           name: 19c-27-dev
           tag: api-27
           ndk-version: android-ndk-r19c
           ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
-          filters: *integration-dev_filters
 
       - android:
           name: 19c-28-dev
           tag: api-28
           ndk-version: android-ndk-r19c
           ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
-          filters: *integration-dev_filters
 
       - android:
           name: 19c-29-dev
           tag: api-29
           ndk-version: android-ndk-r19c
           ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
-          filters: *integration-dev_filters
 
       # triggered by master branch commits
       # 17c
@@ -274,7 +241,6 @@ workflows:
           ndk-version: android-ndk-r17c
           ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
           resource-class: medium
-          filters: *integration-master_filters
 
       - android:
           name: 17c-24-master
@@ -282,21 +248,18 @@ workflows:
           ndk-version: android-ndk-r17c
           ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
           resource-class: medium
-          filters: *integration-master_filters
 
       - android:
           name: 17c-25-master
           tag: api-25
           ndk-version: android-ndk-r17c
           ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
-          filters: *integration-master_filters
 
       - android:
           name: 17c-26-master
           tag: api-26
           ndk-version: android-ndk-r17c
           ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
-          filters: *integration-master_filters
 
       - android:
           name: 17c-27-master
@@ -304,21 +267,18 @@ workflows:
           ndk-version: android-ndk-r17c
           ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
           resource-class: medium
-          filters: *integration-master_filters
 
       - android:
           name: 17c-28-master
           tag: api-28
           ndk-version: android-ndk-r17c
           ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
-          filters: *integration-master_filters
 
       - android:
           name: 17c-29-master
           tag: api-29
           ndk-version: android-ndk-r17c
           ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
-          filters: *integration-master_filters
 
       # 18b
       - android:
@@ -326,28 +286,24 @@ workflows:
           tag: api-23
           ndk-version: android-ndk-r18b
           ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
-          filters: *integration-master_filters
 
       - android:
           name: 18b-24-master
           tag: api-24
           ndk-version: android-ndk-r18b
           ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
-          filters: *integration-master_filters
 
       - android:
           name: 18b-25-master
           tag: api-25
           ndk-version: android-ndk-r18b
           ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
-          filters: *integration-master_filters
 
       - android:
           name: 18b-26-master
           tag: api-26
           ndk-version: android-ndk-r18b
           ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
-          filters: *integration-master_filters
 
       - android:
           name: 18b-27-master
@@ -355,7 +311,6 @@ workflows:
           ndk-version: android-ndk-r18b
           ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
           resource-class: medium
-          filters: *integration-master_filters
 
       - android:
           name: 18b-28-master
@@ -363,14 +318,12 @@ workflows:
           ndk-version: android-ndk-r18b
           ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
           resource-class: medium
-          filters: *integration-master_filters
 
       - android:
           name: 18b-29-master
           tag: api-29
           ndk-version: android-ndk-r18b
           ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
-          filters: *integration-master_filters
 
       # 19c
       - android:
@@ -379,21 +332,18 @@ workflows:
           ndk-version: android-ndk-r19c
           ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
           resource-class: medium
-          filters: *integration-master_filters
 
       - android:
           name: 19c-24-master
           tag: api-24
           ndk-version: android-ndk-r19c
           ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
-          filters: *integration-master_filters
 
       - android:
           name: 19c-25-master
           tag: api-25
           ndk-version: android-ndk-r19c
           ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
-          filters: *integration-master_filters
 
       - android:
           name: 19c-26-master
@@ -401,28 +351,24 @@ workflows:
           ndk-version: android-ndk-r19c
           ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
           resource-class: medium
-          filters: *integration-master_filters
 
       - android:
           name: 19c-27-master
           tag: api-27
           ndk-version: android-ndk-r19c
           ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
-          filters: *integration-master_filters
 
       - android:
           name: 19c-28-master
           tag: api-28
           ndk-version: android-ndk-r19c
           ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
-          filters: *integration-master_filters
 
       - android:
           name: 19c-29-master
           tag: api-29
           ndk-version: android-ndk-r19c
           ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
-          filters: *integration-master_filters
 
       - orb-tools/dev-promote-prod-from-commit-subject:
           orb-name: circleci/android
