@@ -6,7 +6,7 @@ description: |
 parameters:
   sdk-version:
     type: enum
-    enum: ["23", "24", "25", "26", "27", "28", "29"]
+    enum: ["23", "24", "25", "26", "27", "28", "29", "30"]
     default: "29"
     description: >
       The API level to use.
