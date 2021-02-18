@@ -22,6 +22,10 @@ parameters:
     type: integer
     description: Duration in seconds to wait before the next try
     default: 5
+  no-output-timeout:
+    type: string
+    description: Use this to configure the no_output_timeout value
+    default: 10m
 steps:
   - << parameters.pre-steps >>
   - run:
@@ -44,4 +48,5 @@ steps:
             fi
         }
         run_with_retry
+      no_output_timeout: << parameters.no-output-timeout >>
   - << parameters.post-steps >>

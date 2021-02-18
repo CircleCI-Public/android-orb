@@ -1,21 +1,6 @@
 description: |
-  Run Android UI tests. This is a job that wraps the
-  "start-emulator-and-run-tests" command.
+  Run Android UI tests
 parameters:
-  executor:
-    type: executor
-    description: Executor for the job
-    default: android-machine
-  checkout:
-    type: boolean
-    default: true
-    description: Whether to run the checkout step
-  job-pre-steps:
-    type: steps
-    default: []
-  job-post-steps:
-    type: steps
-    default: []
   avd-name:
     type: string
     description: |
@@ -182,18 +167,15 @@ parameters:
     description: |
       Whether to kill the emulators after the tests complete
     default: true
-executor: << parameters.executor >>
+
 steps:
-  - << parameters.job-pre-steps >>
-  - when:
-      condition: << parameters.checkout >>
-      steps:
-        - checkout
-  - start-emulator-and-run-tests:
+  - create-avd:
       avd-name: << parameters.avd-name >>
       system-image: <<parameters.system-image>>
-      install-system-image: << parameters.install-system-image >>
-      additional-avd-args: << parameters.additional-avd-args >>
+      install: << parameters.install-system-image >>
+      additional-args: << parameters.additional-avd-args >>
+  - start-emulator:
+      avd-name: << parameters.avd-name >>
       gpu: << parameters.gpu >>
       camera-front: << parameters.camera-front >>
       camera-back: << parameters.camera-back >>
@@ -204,8 +186,8 @@ steps:
       no-snapshot: << parameters.no-snapshot >>
       delay-adb: << parameters.delay-adb >>
       verbose: << parameters.verbose >>
-      additional-emulator-args: << parameters.additional-emulator-args >>
-      override-emulator-args: << parameters.override-emulator-args >>
+      additional-args: << parameters.additional-emulator-args >>
+      override-args: << parameters.override-emulator-args >>
       wait-for-emulator: << parameters.wait-for-emulator >>
       pre-emulator-wait-steps: << parameters.pre-emulator-wait-steps >>
       post-emulator-launch-assemble-command: << parameters.post-emulator-launch-assemble-command >>
@@ -213,14 +195,22 @@ steps:
       post-emulator-wait-steps: << parameters.post-emulator-wait-steps >>
       run-logcat: << parameters.run-logcat >>
       restore-gradle-cache-key: << parameters.restore-gradle-cache-key >>
-      save-gradle-cache: << parameters.save-gradle-cache >>
       disable-animations: << parameters.disable-animations >>
-      pre-run-tests-steps: << parameters.pre-run-tests-steps >>
-      post-run-tests-steps: << parameters.post-run-tests-steps >>
-      run-tests-working-directory: << parameters.run-tests-working-directory >>
+  - run-tests:
+      pre-steps: << parameters.pre-run-tests-steps >>
+      post-steps: << parameters.post-run-tests-steps >>
+      working-directory: << parameters.run-tests-working-directory >>
       test-command: << parameters.test-command >>
       max-tries: << parameters.max-tries >>
       retry-interval: << parameters.retry-interval >>
       no-output-timeout: << parameters.no-output-timeout >>
-      kill-emulators: << parameters.kill-emulators >>
-  - << parameters.job-post-steps >>
+  - when:
+      condition: << parameters.save-gradle-cache >>
+      steps:
+        - save-gradle-cache:
+            cache-key: << parameters.restore-gradle-cache-key >>
+  - when:
+      condition: << parameters.kill-emulators >>
+      steps:
+        - kill-emulators
+

@@ -68,7 +68,7 @@ jobs:
           run-logcat: true
           memory: 3072
           restore-gradle-cache-key: v1-multiple
-          post-emulator-launch-assemble-command: "cd compose-samples/Owl && ./gradlew assembleDebugAndroidTest && cd ../Crane && ./gradlew assembleDebugAndroidTest"
+          post-emulator-launch-assemble-command: "cd compose-samples/Owl && ./gradlew assembleDebugAndroidTest && cd ../Jetsnack && ./gradlew assembleDebugAndroidTest"
       - android/run-tests:
           pre-steps:
             - run:
@@ -82,7 +82,7 @@ jobs:
                   echo "Dummy post-steps"
           working-directory: ./compose-samples/Owl
       - android/run-tests:
-          working-directory: ./compose-samples/Crane
+          working-directory: ./compose-samples/Jetsnack
       - android/save-gradle-cache:
           cache-key: v1-multiple
       - android/kill-emulators
@@ -96,8 +96,39 @@ jobs:
           # we expect the no-window parameter to be overriden by override-args
           no-window: true
           override-args: "-delay-adb -verbose -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim"
-          wait-for-emulator: false
+          wait-for-emulator: true
+          restore-gradle-cache-post-emulator-launch: false
+          post-emulator-launch-assemble-command: ""
           disable-animations: false
+          pre-emulator-wait-steps:
+            - run:
+                name: Dummy pre-emulator-wait-steps
+                command: |
+                  echo "Test"
+          post-emulator-wait-steps:
+            - run:
+                name: Dummy post-emulator-wait-steps
+                command: |
+                  echo "Test"
+      - android/kill-emulators
+
+  test-start-emulator-and-run-tests:
+      executor:
+        name: android/android-machine
+        resource-class: xlarge
+      steps:
+        - checkout
+        - android/start-emulator-and-run-tests:
+            pre-emulator-wait-steps:
+                - run:
+                    name: Clone project
+                    command: |
+                        git clone https://github.com/android/compose-samples
+                        cd compose-samples
+                        # pin the revision for consistency
+                        git checkout f1e930dbe6f209dde9ceb5d3419bbf314aabcb58
+            post-emulator-launch-assemble-command: cd compose-samples/Jetchat && ./gradlew assembleDebugAndroidTest
+            run-tests-working-directory: ./compose-samples/Jetchat
 
 prod-deploy_requires: &prod-deploy_requires
   [
@@ -125,6 +156,7 @@ prod-deploy_requires: &prod-deploy_requires
     ui-tests-system-images;android-29;default;x86,
     ui-tests-system-images;android-29;google_apis;x86_64,
     test-emulator-commands,
+    test-start-emulator-and-run-tests
   ]
 
 workflows:
@@ -446,6 +478,8 @@ workflows:
 
       - test-emulator-commands:
           system-image: "system-images;android-29;default;x86"
+
+      - test-start-emulator-and-run-tests
 
       - orb-tools/dev-promote-prod-from-commit-subject:
           orb-name: circleci/android
