@@ -1,0 +1,32 @@
+description: |
+  Create an AVD.
+parameters:
+  avd-name:
+    type: string
+    description: |
+      The name of the AVD to create
+  system-image:
+    type: string
+    description: |
+      Name of system image e.g. "system-images;android-29;default;x86"
+  install:
+    type: boolean
+    description: |
+      Whether to first install the system image via sdkmanager
+  additional-args:
+    type: string
+    default: ""
+    description: |
+      Additional args to be passed directly to the avd creation command
+steps:
+  - when:
+      condition: << parameters.install >>
+      steps:
+        - run:
+            name: Install system image "<< parameters.system-image >>"
+            command: |
+              sdkmanager "<< parameters.system-image >>"
+  - run:
+      name: Create avd "<< parameters.avd-name >>"
+      command: |
+        echo "no" | avdmanager --verbose create avd -n "<< parameters.avd-name >>" -k "<< parameters.system-image >>" << parameters.additional-args >>

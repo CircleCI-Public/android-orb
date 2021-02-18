@@ -1,0 +1,15 @@
+description: |
+  An simple example of using the run-ui-tests job,
+  using most of the default parameters.
+  Parameters like the system-image and emulator
+  options (e.g. "no-window") may need to be
+  adjusted from the defaults, according to your project.
+usage:
+  version: 2.1
+  orbs:
+    android: circleci/android@1.0
+  workflows:
+    test:
+      jobs:
+        - android/run-ui-tests:
+            system-image: "system-images;android-28;default;x86"

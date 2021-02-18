@@ -1,0 +1,8 @@
+description: |
+  Wait for the emulator to start.
+  Requires the "circle-android" script being present in PATH.
+steps:
+  - run:
+      name: Wait for the emulator to start
+      command: |
+        circle-android wait-for-boot
