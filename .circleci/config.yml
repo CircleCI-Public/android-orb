@@ -67,7 +67,7 @@ jobs:
           avd-name: test1
           run-logcat: true
           memory: 3072
-          restore-gradle-cache-key: v1-multiple
+          restore-gradle-cache-prefix: v1-multiple
           post-emulator-launch-assemble-command: "cd compose-samples/Owl && ./gradlew assembleDebugAndroidTest && cd ../Jetsnack && ./gradlew assembleDebugAndroidTest"
       - android/run-tests:
           pre-steps:
@@ -84,7 +84,7 @@ jobs:
       - android/run-tests:
           working-directory: ./compose-samples/Jetsnack
       - android/save-gradle-cache:
-          cache-key: v1-multiple
+          cache-prefix: v1-multiple
       - android/kill-emulators
       - run: sdkmanager "system-images;android-28;default;x86"
       - android/create-avd:
@@ -120,15 +120,19 @@ jobs:
         - checkout
         - android/start-emulator-and-run-tests:
             pre-emulator-wait-steps:
-                - run:
-                    name: Clone project
-                    command: |
-                        git clone https://github.com/android/compose-samples
-                        cd compose-samples
-                        # pin the revision for consistency
-                        git checkout f1e930dbe6f209dde9ceb5d3419bbf314aabcb58
-            post-emulator-launch-assemble-command: cd compose-samples/Jetchat && ./gradlew assembleDebugAndroidTest
+              - run:
+                  name: Clone project
+                  command: |
+                      git clone https://github.com/android/compose-samples
+                      cd compose-samples
+                      # pin the revision for consistency
+                      git checkout f1e930dbe6f209dde9ceb5d3419bbf314aabcb58
+              - android/restore-build-cache
+              - run: cd compose-samples/Jetchat && ./gradlew assembleDebugAndroidTest
+            post-emulator-launch-assemble-command: ""
             run-tests-working-directory: ./compose-samples/Jetchat
+            post-run-tests-steps:
+              - android/save-build-cache
 
 prod-deploy_requires: &prod-deploy_requires
   [

@@ -105,9 +105,9 @@ parameters:
       and before commencing the wait for the emulator to finish starting up.
     type: boolean
     default: true
-  restore-gradle-cache-key:
+  restore-gradle-cache-prefix:
     description: |
-      Cache key used if the "restore-gradle-cache-post-emulator-launch" parameter
+      Cache prefix used if the "restore-gradle-cache-post-emulator-launch" parameter
       is set to true.
     type: string
     default: "v1"
@@ -194,7 +194,7 @@ steps:
       restore-gradle-cache-post-emulator-launch: << parameters.restore-gradle-cache-post-emulator-launch >>
       post-emulator-wait-steps: << parameters.post-emulator-wait-steps >>
       run-logcat: << parameters.run-logcat >>
-      restore-gradle-cache-key: << parameters.restore-gradle-cache-key >>
+      restore-gradle-cache-prefix: << parameters.restore-gradle-cache-prefix >>
       disable-animations: << parameters.disable-animations >>
   - run-tests:
       pre-steps: << parameters.pre-run-tests-steps >>
@@ -208,7 +208,7 @@ steps:
       condition: << parameters.save-gradle-cache >>
       steps:
         - save-gradle-cache:
-            cache-key: << parameters.restore-gradle-cache-key >>
+            cache-prefix: << parameters.restore-gradle-cache-prefix >>
   - when:
       condition: << parameters.kill-emulators >>
       steps:

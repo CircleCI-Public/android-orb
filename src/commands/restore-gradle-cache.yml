@@ -1,7 +1,7 @@
 description: |
   Restore gradle cache
 parameters:
-  cache-key:
+  cache-prefix:
     description: Used to form part of the cache key
     type: string
     default: v1
@@ -12,4 +12,4 @@ steps:
         shasum | awk '{print $1}' > /tmp/gradle_cache_seed
       name: Generate Cache Checksum
   - restore_cache:
-      key: gradle-<< parameters.cache-key>>-{{ arch }}-{{ checksum "/tmp/gradle_cache_seed" }}
+      key: gradle-<< parameters.cache-prefix>>-{{ arch }}-{{ checksum "/tmp/gradle_cache_seed" }}
