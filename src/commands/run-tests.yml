@@ -2,9 +2,11 @@ description: |
   Runs tests, with retries supported
 parameters:
   pre-steps:
+    description: Steps to run before the tests
     type: steps
     default: []
   post-steps:
+    description: Steps to run after the tests
     type: steps
     default: []
   test-command:
@@ -16,15 +18,16 @@ parameters:
     type: string
     default: "."
   max-tries:
+    description: Max number of tries. To disable retries, set this to 1.
     type: integer
     default: 2
   retry-interval:
-    type: integer
     description: Duration in seconds to wait before the next try
+    type: integer
     default: 5
   no-output-timeout:
-    type: string
     description: Use this to configure the no_output_timeout value
+    type: string
     default: 10m
 steps:
   - << parameters.pre-steps >>

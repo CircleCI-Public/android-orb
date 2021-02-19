@@ -1,5 +1,6 @@
 description: |
-  This selects an Android machine image. CircleCI's Android machine images are recommended for Android emulator tests.
+  This selects an Android machine image.
+  CircleCI's Android machine images are recommended for Android emulator tests.
   Currently, this defaults to the first Android machine image, which is currently
   in preview status: https://github.com/CircleCI-Public/android-image-preview-docs
 machine:

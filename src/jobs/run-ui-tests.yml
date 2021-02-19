@@ -3,105 +3,100 @@ description: |
   "start-emulator-and-run-tests" command.
 parameters:
   executor:
-    type: executor
     description: Executor for the job
+    type: executor
     default: android-machine
   checkout:
+    description: Whether to run the checkout step
     type: boolean
     default: true
-    description: Whether to run the checkout step
-  job-pre-steps:
-    type: steps
-    default: []
-  job-post-steps:
-    type: steps
-    default: []
   avd-name:
-    type: string
     description: |
       The name of the AVD to create
+    type: string
     default: test
   system-image:
-    type: string
     description: |
-      Name of system image e.g. "system-images;android-29;default;x86"
+      Name of system image e.g. "system-images;android-29;default;x86".
+      It should match the name seen in the "sdkmanager --list" output.
+    type: string
     default: system-images;android-29;default;x86
   install-system-image:
-    type: boolean
     description: |
       Whether to first install the system image via sdkmanager
+    type: boolean
     default: true
   additional-avd-args:
-    type: string
-    default: ""
     description: |
       Additional args to be passed directly to the avd creation command
-  gpu:
     type: string
-    default: "swiftshader_indirect"
+    default: ""
+  gpu:
     description: |
       The value to use for the "-gpu" flag.
       If set to "", the emulator will be run without the -gpu flag.
-  camera-front:
     type: string
-    default: "none"
+    default: "swiftshader_indirect"
+  camera-front:
     description: |
       The value to use for the "-camera-front" flag.
       If set to "", the emulator will be run without the -camera-front flag.
-  camera-back:
     type: string
-    default: "none"
+    default: ""
+  camera-back:
     description: |
       The value to use for the "-camera-back" flag.
       If set to "", the emulator will be run without the -camera-back flag.
+    type: string
+    default: ""
   memory:
-    type: integer
-    default: -1
     description: |
       The value to use for the "-memory" flag.
       If set to -1, the emulator will be run without the -memory flag.
+    type: integer
+    default: -1
   no-window:
-    type: boolean
-    default: true
     description: |
       Whether to run the emulator with the -no-window flag
-  no-audio:
     type: boolean
     default: true
+  no-audio:
     description: |
       Whether to run the emulator with the -noaudio flag
-  no-boot-anim:
     type: boolean
     default: true
+  no-boot-anim:
     description: |
       Whether to run the emulator with the -no-boot-anim flag
-  no-snapshot:
     type: boolean
     default: true
+  no-snapshot:
     description: |
       Whether to run the emulator with the -no-snapshot flag
-  delay-adb:
     type: boolean
     default: true
+  delay-adb:
     description: |
       Whether to run the emulator with the -delay-adb flag
-  verbose:
     type: boolean
     default: true
+  verbose:
     description: |
       Whether to run the emulator with the -verbose flag
+    type: boolean
+    default: true
   additional-emulator-args:
-    type: string
-    default: ""
     description: |
       Additional args to be passed directly to the emulator command
-  override-emulator-args:
     type: string
     default: ""
+  override-emulator-args:
     description: |
       If this is set to a non-blank value, the emulator command will be
       run with the -avd flag and the value of "override-args" (i.e. none of the defaults
       provided by the orb command will be used)
+    type: string
+    default: ""
   pre-emulator-wait-steps:
     description: |
       Steps to execute while before beginning to wait for the emulator to start up
@@ -143,24 +138,28 @@ parameters:
     type: steps
     default: []
   wait-for-emulator:
+    description: |
+      Whether to wait for the emulator to start up
     type: boolean
     default: true
-    description: |
-      Wait for the emulator to start up
   run-logcat:
+    description: |
+      Whether to run with logcat in the background, after the emulator starts up
     type: boolean
     default: false
-    description: |
-      Run with logcat in the background, after the emulator starts up
   disable-animations:
+    description: |
+      Whether to disable animations that may interfere with tests, after the emulator starts up
     type: boolean
     default: true
-    description: |
-      Disable animations that may interfere with tests, after the emulator starts up
   pre-run-tests-steps:
+    description: |
+      Steps to run before the tests
     type: steps
     default: []
   post-run-tests-steps:
+    description: |
+      Steps to run after the tests
     type: steps
     default: []
   test-command:
@@ -172,25 +171,25 @@ parameters:
     type: string
     default: "."
   max-tries:
+    description: Max number of tries. To disable retries, set this to 1.
     type: integer
     default: 2
   retry-interval:
-    type: integer
     description: Duration in seconds to wait before the next try
+    type: integer
     default: 5
   no-output-timeout:
-    type: string
     description: |
       Use this to configure the no_output_timeout value of the test run
+    type: string
     default: 10m
   kill-emulators:
-    type: boolean
     description: |
       Whether to kill the emulators after the tests complete
+    type: boolean
     default: true
 executor: << parameters.executor >>
 steps:
-  - << parameters.job-pre-steps >>
   - when:
       condition: << parameters.checkout >>
       steps:
@@ -230,4 +229,3 @@ steps:
       retry-interval: << parameters.retry-interval >>
       no-output-timeout: << parameters.no-output-timeout >>
       kill-emulators: << parameters.kill-emulators >>
-  - << parameters.job-post-steps >>

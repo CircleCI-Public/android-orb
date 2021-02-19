@@ -1,75 +1,75 @@
-description: Starts an emulator as a background process
+description: Start an emulator as a background process
 parameters:
   avd-name:
-    type: string
     description: |
       The name of the AVD to use for the emulator
-  gpu:
     type: string
-    default: "swiftshader_indirect"
+  gpu:
     description: |
       The value to use for the "-gpu" flag.
       If set to "", the emulator will be run without the -gpu flag.
-  camera-front:
     type: string
-    default: "none"
+    default: "swiftshader_indirect"
+  camera-front:
     description: |
       The value to use for the "-camera-front" flag.
       If set to "", the emulator will be run without the -camera-front flag.
-  camera-back:
     type: string
-    default: "none"
+    default: ""
+  camera-back:
     description: |
       The value to use for the "-camera-back" flag.
       If set to "", the emulator will be run without the -camera-back flag.
+    type: string
+    default: ""
   memory:
-    type: integer
-    default: -1
     description: |
       The value to use for the "-memory" flag.
       If set to -1, the emulator will be run without the -memory flag.
+    type: integer
+    default: -1
   no-window:
-    type: boolean
-    default: true
     description: |
       Whether to run the emulator with the -no-window flag
-  no-audio:
     type: boolean
     default: true
+  no-audio:
     description: |
       Whether to run the emulator with the -noaudio flag
-  no-boot-anim:
     type: boolean
     default: true
+  no-boot-anim:
     description: |
       Whether to run the emulator with the -no-boot-anim flag
-  no-snapshot:
     type: boolean
     default: true
+  no-snapshot:
     description: |
       Whether to run the emulator with the -no-snapshot flag
-  delay-adb:
     type: boolean
     default: true
+  delay-adb:
     description: |
       Whether to run the emulator with the -delay-adb flag
-  verbose:
     type: boolean
     default: true
+  verbose:
     description: |
       Whether to run the emulator with the -verbose flag
+    type: boolean
+    default: true
   additional-args:
-    type: string
-    default: ""
     description: |
       Additional args to be passed directly to the emulator command
-  override-args:
     type: string
     default: ""
+  override-args:
     description: |
       If this is set to a non-blank value, the emulator command will be
       run with the -avd flag and the value of "override-args" (i.e. none of the defaults
       provided by the orb command will be used)
+    type: string
+    default: ""
   pre-emulator-wait-steps:
     description: |
       Steps to execute while before beginning to wait for the emulator to start up
@@ -106,20 +106,20 @@ parameters:
     type: steps
     default: []
   wait-for-emulator:
+    description: |
+      Whether to wait for the emulator to start up
     type: boolean
     default: true
-    description: |
-      Wait for the emulator to start up
   run-logcat:
+    description: |
+      Whether to run with logcat in the background, after the emulator starts up
     type: boolean
     default: false
-    description: |
-      Run with logcat in the background, after the emulator starts up
   disable-animations:
+    description: |
+      Whether to disable animations that may interfere with tests, after the emulator starts up
     type: boolean
     default: true
-    description: |
-      Disable animations that may interfere with tests, after the emulator starts up
 steps:
   - run:
       name: Start emulator
@@ -178,7 +178,7 @@ steps:
           - equal: [ true, << parameters.wait-for-emulator >> ]
       steps:
         - run:
-            name: "Assemble app: << parameters.post-emulator-launch-assemble-command >>"
+            name: "Run: << parameters.post-emulator-launch-assemble-command >>"
             command: |
               # This is meant to do something useful in parallel with the emulator
               # starting up, like assembling the app, which is required for UI tests
@@ -203,4 +203,4 @@ steps:
             condition: << parameters.disable-animations >>
             steps:
                 - disable-animations
-  - << parameters.post-emulator-wait-steps >>
+        - << parameters.post-emulator-wait-steps >>

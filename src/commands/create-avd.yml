@@ -8,7 +8,8 @@ parameters:
   system-image:
     type: string
     description: |
-      Name of system image e.g. "system-images;android-29;default;x86"
+      Name of system image e.g. "system-images;android-29;default;x86".
+      It should match the name seen in the "sdkmanager --list" output.
   install:
     type: boolean
     description: |

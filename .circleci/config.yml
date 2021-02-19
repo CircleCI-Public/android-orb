@@ -465,7 +465,7 @@ workflows:
       - android/run-ui-tests:
           name: "ui-tests-<<matrix.system-image>>"
           checkout: false
-          job-pre-steps:
+          pre-steps:
             - run:
                 name: Setup project
                 command: |

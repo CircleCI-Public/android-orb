@@ -1,6 +1,5 @@
 description: |
-  An example of overriding the android-machine
-  executor's default resource class
+  An example of overriding the android-machine executor's default resource class
 usage:
   version: 2.1
   orbs:
