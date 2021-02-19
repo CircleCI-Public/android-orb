@@ -14,7 +14,8 @@ parameters:
   resource-class:
     description: |
       Resource class used for the executor. It is recommended
-      to use large and above to avoid memory issues.
+      to use large and above to avoid memory issues such as process
+      crashes when running emulator tests.
     type: enum
     default: large
     enum: [medium, large, xlarge, 2xlarge]

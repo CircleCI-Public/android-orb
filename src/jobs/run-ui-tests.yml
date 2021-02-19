@@ -126,6 +126,12 @@ parameters:
       is set to true.
     type: string
     default: "v1"
+  restore-gradle-cache-find-args:
+    description: |
+      Use this to customize how the find command is used to look for relevant
+      file changes.
+    type: string
+    default: ". -name 'build.gradle'"
   save-gradle-cache:
     description: |
       Whether to write to the gradle cache after the tests have run
@@ -213,6 +219,7 @@ steps:
       post-emulator-wait-steps: << parameters.post-emulator-wait-steps >>
       run-logcat: << parameters.run-logcat >>
       restore-gradle-cache-prefix: << parameters.restore-gradle-cache-prefix >>
+      restore-gradle-cache-find-args: << parameters.restore-gradle-cache-find-args >>
       save-gradle-cache: << parameters.save-gradle-cache >>
       disable-animations: << parameters.disable-animations >>
       pre-run-tests-steps: << parameters.pre-run-tests-steps >>

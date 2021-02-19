@@ -29,13 +29,13 @@ parameters:
       If set to "", the emulator will be run without the -gpu flag.
   camera-front:
     type: string
-    default: "none"
+    default: ""
     description: |
       The value to use for the "-camera-front" flag.
       If set to "", the emulator will be run without the -camera-front flag.
   camera-back:
     type: string
-    default: "none"
+    default: ""
     description: |
       The value to use for the "-camera-back" flag.
       If set to "", the emulator will be run without the -camera-back flag.
@@ -111,6 +111,12 @@ parameters:
       is set to true.
     type: string
     default: "v1"
+  restore-gradle-cache-find-args:
+    description: |
+      Use this to customize how the find command is used to look for relevant
+      file changes.
+    type: string
+    default: ". -name 'build.gradle'"
   save-gradle-cache:
     description: |
       Whether to write to the gradle cache after the tests have run
@@ -195,6 +201,7 @@ steps:
       post-emulator-wait-steps: << parameters.post-emulator-wait-steps >>
       run-logcat: << parameters.run-logcat >>
       restore-gradle-cache-prefix: << parameters.restore-gradle-cache-prefix >>
+      restore-gradle-cache-find-args: << parameters.restore-gradle-cache-find-args >>
       disable-animations: << parameters.disable-animations >>
   - run-tests:
       pre-steps: << parameters.pre-run-tests-steps >>

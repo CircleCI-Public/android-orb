@@ -94,6 +94,12 @@ parameters:
       is set to true.
     type: string
     default: "v1"
+  restore-gradle-cache-find-args:
+    description: |
+      Use this to customize how the find command is used to look for relevant
+      file changes.
+    type: string
+    default: ". -name 'build.gradle'"
   post-emulator-wait-steps:
     description: |
       Steps to execute after waiting for the emulator to start up
@@ -164,6 +170,7 @@ steps:
       steps:
         - restore-gradle-cache:
             cache-prefix: << parameters.restore-gradle-cache-prefix >>
+            find-args: << parameters.restore-gradle-cache-find-args >>
   - when:
       condition:
         and:
