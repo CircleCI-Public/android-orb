@@ -1,14 +1,6 @@
 description: |
   Runs tests, with retries supported
 parameters:
-  pre-steps:
-    description: Steps to run before the tests
-    type: steps
-    default: []
-  post-steps:
-    description: Steps to run after the tests
-    type: steps
-    default: []
   test-command:
     description: Command to run in order to run the tests
     type: string
@@ -30,7 +22,6 @@ parameters:
     type: string
     default: 10m
 steps:
-  - << parameters.pre-steps >>
   - run:
       name: Run tests with max tries of <<parameters.max-tries>>
       working_directory: <<parameters.working-directory>>
@@ -52,4 +43,3 @@ steps:
         }
         run_with_retry
       no_output_timeout: << parameters.no-output-timeout >>
-  - << parameters.post-steps >>

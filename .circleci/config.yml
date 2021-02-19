@@ -70,16 +70,6 @@ jobs:
           restore-gradle-cache-prefix: v1-multiple
           post-emulator-launch-assemble-command: "cd compose-samples/Owl && ./gradlew assembleDebugAndroidTest && cd ../Jetsnack && ./gradlew assembleDebugAndroidTest"
       - android/run-tests:
-          pre-steps:
-            - run:
-                name: Dummy pre-steps test
-                command: |
-                  echo "Dummy pre-steps"
-          post-steps:
-            - run:
-                name: Dummy post-steps test
-                command: |
-                  echo "Dummy post-steps"
           working-directory: ./compose-samples/Owl
       - android/run-tests:
           working-directory: ./compose-samples/Jetsnack

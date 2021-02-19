@@ -211,14 +211,14 @@ steps:
       post-emulator-wait-steps: << parameters.post-emulator-wait-steps >>
       run-logcat: << parameters.run-logcat >>
       disable-animations: << parameters.disable-animations >>
+  - << parameters.pre-run-tests-steps >>
   - run-tests:
-      pre-steps: << parameters.pre-run-tests-steps >>
-      post-steps: << parameters.post-run-tests-steps >>
       working-directory: << parameters.run-tests-working-directory >>
       test-command: << parameters.test-command >>
       max-tries: << parameters.max-tries >>
       retry-interval: << parameters.retry-interval >>
       no-output-timeout: << parameters.no-output-timeout >>
+  - << parameters.post-run-tests-steps >>
   - when:
       condition: << parameters.save-gradle-cache >>
       steps:
