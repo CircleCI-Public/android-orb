@@ -45,6 +45,84 @@ jobs:
       - android/install-ndk:
           ndk-version: <<parameters.ndk-version>>
           ndk-sha: <<parameters.ndk-sha>>
+  test-emulator-commands:
+    parameters:
+      system-image:
+        type: string
+    executor: android/android-machine
+    steps:
+      - checkout
+      - run:
+          name: Clone project
+          command: |
+            git clone https://github.com/android/compose-samples
+            cd compose-samples
+            # pin the revision for consistency
+            git checkout f1e930dbe6f209dde9ceb5d3419bbf314aabcb58
+      - android/create-avd:
+          avd-name: test1
+          system-image: <<parameters.system-image>>
+          install: true
+      - android/start-emulator:
+          avd-name: test1
+          run-logcat: true
+          memory: 3072
+          restore-gradle-cache-prefix: v1-multiple
+          post-emulator-launch-assemble-command: "cd compose-samples/Owl && ./gradlew assembleDebugAndroidTest && cd ../Jetsnack && ./gradlew assembleDebugAndroidTest"
+      - android/run-tests:
+          working-directory: ./compose-samples/Owl
+      - android/run-tests:
+          working-directory: ./compose-samples/Jetsnack
+      - android/save-gradle-cache:
+          cache-prefix: v1-multiple
+      - android/kill-emulators
+      - run: sdkmanager "system-images;android-28;default;x86"
+      - android/create-avd:
+          avd-name: test2
+          system-image: system-images;android-28;default;x86
+          install: false
+      - android/start-emulator:
+          avd-name: test2
+          # we expect the no-window parameter to be overriden by override-args
+          no-window: true
+          override-args: "-delay-adb -verbose -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim"
+          wait-for-emulator: true
+          restore-gradle-cache-post-emulator-launch: false
+          post-emulator-launch-assemble-command: ""
+          disable-animations: false
+          pre-emulator-wait-steps:
+            - run:
+                name: Dummy pre-emulator-wait-steps
+                command: |
+                  echo "Test"
+          post-emulator-wait-steps:
+            - run:
+                name: Dummy post-emulator-wait-steps
+                command: |
+                  echo "Test"
+      - android/kill-emulators
+
+  test-start-emulator-and-run-tests:
+      executor:
+        name: android/android-machine
+        resource-class: xlarge
+      steps:
+        - checkout
+        - android/start-emulator-and-run-tests:
+            pre-emulator-wait-steps:
+              - run:
+                  name: Clone project
+                  command: |
+                      git clone https://github.com/android/compose-samples
+                      cd compose-samples
+                      # pin the revision for consistency
+                      git checkout f1e930dbe6f209dde9ceb5d3419bbf314aabcb58
+              - android/restore-build-cache
+              - run: cd compose-samples/Jetchat && ./gradlew assembleDebugAndroidTest
+            post-emulator-launch-assemble-command: ""
+            run-tests-working-directory: ./compose-samples/Jetchat
+            post-run-tests-steps:
+              - android/save-build-cache
 
 prod-deploy_requires: &prod-deploy_requires
   [
@@ -68,7 +146,11 @@ prod-deploy_requires: &prod-deploy_requires
     19c-26-master,
     19c-27-master,
     19c-28-master,
-    19c-29-master
+    19c-29-master,
+    ui-tests-system-images;android-29;default;x86,
+    ui-tests-system-images;android-29;google_apis;x86_64,
+    test-emulator-commands,
+    test-start-emulator-and-run-tests
   ]
 
 workflows:
@@ -369,6 +451,29 @@ workflows:
           tag: api-29
           ndk-version: android-ndk-r19c
           ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
+
+      - android/run-ui-tests:
+          name: "ui-tests-<<matrix.system-image>>"
+          checkout: false
+          pre-steps:
+            - run:
+                name: Setup project
+                command: |
+                  git clone https://github.com/android/compose-samples
+                  cd compose-samples
+                  # pin the revision for consistency
+                  git checkout f1e930dbe6f209dde9ceb5d3419bbf314aabcb58
+                  cd ..
+                  cp -r compose-samples/Jetchat/* .
+                  rm -rf compose-samples
+          matrix:
+            parameters:
+              system-image: ["system-images;android-29;default;x86", "system-images;android-29;google_apis;x86_64"]
+
+      - test-emulator-commands:
+          system-image: "system-images;android-29;default;x86"
+
+      - test-start-emulator-and-run-tests
 
       - orb-tools/dev-promote-prod-from-commit-subject:
           orb-name: circleci/android

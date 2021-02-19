@@ -1,0 +1,45 @@
+description: |
+  Runs tests, with retries supported
+parameters:
+  test-command:
+    description: Command to run in order to run the tests
+    type: string
+    default: "./gradlew connectedDebugAndroidTest"
+  working-directory:
+    description: Working directory to run the tests in
+    type: string
+    default: "."
+  max-tries:
+    description: Max number of tries. To disable retries, set this to 1.
+    type: integer
+    default: 2
+  retry-interval:
+    description: Duration in seconds to wait before the next try
+    type: integer
+    default: 5
+  no-output-timeout:
+    description: Use this to configure the no_output_timeout value
+    type: string
+    default: 10m
+steps:
+  - run:
+      name: Run tests with max tries of <<parameters.max-tries>>
+      working_directory: <<parameters.working-directory>>
+      command: |
+        run_with_retry() {
+            MAX_TRIES=<<parameters.max-tries>>
+            n=1
+            until [ $n -gt $MAX_TRIES ]
+            do
+              echo "Starting test attempt $n"
+              <<parameters.test-command>> && break
+              n=$[$n+1]
+              sleep << parameters.retry-interval >>
+            done
+            if [ $n -gt $MAX_TRIES ]; then
+              echo "Max tries reached (<< parameters.max-tries >>)"
+              exit 1
+            fi
+        }
+        run_with_retry
+      no_output_timeout: << parameters.no-output-timeout >>

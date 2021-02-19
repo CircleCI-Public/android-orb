@@ -10,9 +10,15 @@ description: >
 
   See https://developer.android.com/studio/build/build-cache
 
+parameters:
+  cache-prefix:
+    description: Used to form part of the cache key
+    type: string
+    default: v1
+
 steps:
   - save_cache:
-      key: android-orb-v1-{{ epoch }}
+      key: android-orb-<<parameters.cache-prefix>>-{{ epoch }}
       paths:
         - ~/.android/build-cache
         - ~/.android/cache

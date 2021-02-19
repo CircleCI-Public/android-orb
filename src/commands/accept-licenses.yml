@@ -7,7 +7,7 @@ steps:
       shell: /bin/bash -e
       description: >
         Accepts all Android SDK licenses.
-        This command is typically not necessary to execute, since the CircleCI convenience images
+        This command is typically not necessary to execute, since the CircleCI machine/convenience images
         ship with all licenses accepted.
         This command will add approximately 10 seconds to the build time.
       # Use a custom shell.

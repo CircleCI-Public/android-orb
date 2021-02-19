@@ -1,0 +1,22 @@
+description: |
+  This selects an Android machine image.
+  CircleCI's Android machine images are recommended for Android emulator tests.
+  Currently, this defaults to the first Android machine image, which is currently
+  in preview status: https://github.com/CircleCI-Public/android-image-preview-docs
+machine:
+  image: << parameters.image-name >>
+  resource_class: << parameters.resource-class >>
+parameters:
+  image-name:
+    description: |
+      Name of CircleCI Android machine image to use
+    type: string
+    default: "android:202102-01"
+  resource-class:
+    description: |
+      Resource class used for the executor. It is recommended
+      to use large and above to avoid memory issues such as process
+      crashes when running emulator tests.
+    type: enum
+    default: large
+    enum: [medium, large, xlarge, 2xlarge]

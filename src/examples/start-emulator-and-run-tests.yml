@@ -1,0 +1,22 @@
+description: |
+  An simple example of using the start-emulator-and-run-tests command
+  in a job, using most of the default parameters.
+  Parameters like the system-image and emulator options (e.g. "no-window")
+  may need to be adjusted from the defaults, according to your project.
+usage:
+  version: 2.1
+  orbs:
+    android: circleci/android@1.0
+  jobs:
+    test:
+      executor:
+        name: android/android-machine
+        resource-class: xlarge
+      steps:
+        - checkout
+        - android/start-emulator-and-run-tests:
+            system-image: "system-images;android-29;default;x86"
+  workflows:
+    test:
+      jobs:
+        - test

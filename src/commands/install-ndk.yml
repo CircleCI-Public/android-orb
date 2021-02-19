@@ -1,6 +1,8 @@
 description: >
   Extend CircleCI's Android convenience images by installing a version
   of the Android NDK of your choice.
+  This is not intended for the Android machine image, where the sdkmanager
+  should be used instead.
 
 parameters:
   ndk-version:

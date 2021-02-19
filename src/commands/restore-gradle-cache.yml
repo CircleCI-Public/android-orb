@@ -1,0 +1,21 @@
+description: |
+  Restore gradle cache
+parameters:
+  cache-prefix:
+    description: Used to form part of the cache key
+    type: string
+    default: v1
+  find-args:
+    description: |
+      Use this to customize how the find command is used to look for relevant
+      file changes.
+    type: string
+    default: ". -name 'build.gradle'"
+steps:
+  - run:
+      name: Generate cache checksum
+      command: |
+        find << parameters.find-args >> | sort | xargs cat |
+        shasum | awk '{print $1}' > /tmp/gradle_cache_seed
+  - restore_cache:
+      key: gradle-<< parameters.cache-prefix>>-{{ arch }}-{{ checksum "/tmp/gradle_cache_seed" }}

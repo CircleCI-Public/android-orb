@@ -1,5 +1,6 @@
 description: |
-  Orb for working with Android projects on CircleCI. Source: https://github.com/circleci-public/android-orb
+  Orb for working with Android projects on CircleCI.
+  Supports running Android emulator UI tests.
 display:
   source_url: https://github.com/circleci-public/android-orb
 version: 2.1
