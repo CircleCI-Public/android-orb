@@ -1,5 +1,7 @@
 description: |
-  Run Android UI tests
+  Creates an AVD, starts an emulator and runs tests.
+  This is a wrapper command that wraps the
+  create-avd, start-emulator and run-tests commands.
 parameters:
   avd-name:
     description: |

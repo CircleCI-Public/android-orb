@@ -1,6 +1,6 @@
 description: |
-  Run Android UI tests. This is a job that wraps the
-  "start-emulator-and-run-tests" command.
+  Creates an AVD, starts an emulator and runs Android UI tests.
+  This is a job that wraps the "start-emulator-and-run-tests" command.
 parameters:
   executor:
     description: Executor for the job

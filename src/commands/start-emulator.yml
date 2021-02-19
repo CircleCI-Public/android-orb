@@ -1,8 +1,11 @@
-description: Start an emulator as a background process
+description: |
+  Start an emulator as a background process.
+  The AVD used should already be created. (See "create-avd" command for how
+  one could be created)
 parameters:
   avd-name:
     description: |
-      The name of the AVD to use for the emulator
+      The name of the existing AVD to use for the emulator
     type: string
   gpu:
     description: |
