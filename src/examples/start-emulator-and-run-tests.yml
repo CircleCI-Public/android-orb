@@ -11,11 +11,25 @@ usage:
     test:
       executor:
         name: android/android-machine
-        resource-class: xlarge
+        resource-class: large
       steps:
         - checkout
+        # Creates an AVD and starts up the emulator using the AVD.
+        # While the emulator is starting up, the gradle cache will
+        # be restored and the Android app will be assembled.
+        # When the emulator is ready, UI tests will be run.
+        # After the tests are run, the gradle cache will be saved (if it
+        # hasn't been saved before)
         - android/start-emulator-and-run-tests:
-            system-image: "system-images;android-29;default;x86"
+            system-image: system-images;android-29;default;x86
+        #   The cache prefix can be overridden
+        #   restore-gradle-cache-prefix: v1a
+        #
+        #   The command to be run, while waiting for emulator startup, can be overridden
+        #   post-emulator-launch-assemble-command: ./gradlew assembleDebugAndroidTest
+        #
+        #   The test command can be overridden
+        #   test-command: ./gradlew connectedDebugAndroidTest
   workflows:
     test:
       jobs:
