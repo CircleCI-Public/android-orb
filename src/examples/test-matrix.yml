@@ -1,5 +1,5 @@
 description: |
-  An simple example of using a test matrix to test on different
+  A simple example of using a test matrix to test on different
   emulators.
 usage:
   version: 2.1

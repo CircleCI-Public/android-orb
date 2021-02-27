@@ -1,5 +1,5 @@
 description: |
-  An simple example of using the run-ui-tests job,
+  A simple example of using the run-ui-tests job,
   using most of the default parameters.
   Parameters like the system-image and emulator options (e.g. "no-window")
   may need to be adjusted from the defaults, according to your project.
