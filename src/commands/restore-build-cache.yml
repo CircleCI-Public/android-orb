@@ -9,4 +9,5 @@ parameters:
 
 steps:
   - restore_cache:
+      name: Restore build cache
       key: android-orb-<<parameters.cache-prefix>>-

@@ -18,4 +18,5 @@ steps:
         find << parameters.find-args >> | sort | xargs cat |
         shasum | awk '{print $1}' > /tmp/gradle_cache_seed
   - restore_cache:
+      name: Restore gradle cache
       key: gradle-<< parameters.cache-prefix>>-{{ arch }}-{{ checksum "/tmp/gradle_cache_seed" }}
