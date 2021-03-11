@@ -468,7 +468,7 @@ workflows:
                   rm -rf compose-samples
           matrix:
             parameters:
-              system-image: ["system-images;android-29;default;x86", "system-images;android-29;google_apis;x86_64"]
+              system-image: ["system-images;android-29;default;x86", "system-images;android-29;google_apis;x86_64", "system-images;android-25;default;x86"]
 
       - test-emulator-commands:
           system-image: "system-images;android-29;default;x86"
