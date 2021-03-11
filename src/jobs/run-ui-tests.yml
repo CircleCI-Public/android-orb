@@ -2,6 +2,26 @@ description: |
   Creates an AVD, starts an emulator and runs Android UI tests.
   This is a job that wraps the "start-emulator-and-run-tests" command.
 parameters:
+  test-command:
+    description: Command to run in order to run the tests
+    type: string
+    default: "./gradlew connectedDebugAndroidTest"
+  system-image:
+    description: |
+      Name of system image e.g. "system-images;android-29;default;x86".
+      It should match the name seen in the "sdkmanager --list" output.
+    type: string
+    default: system-images;android-29;default;x86
+  pre-run-tests-steps:
+    description: |
+      Steps to run before the tests
+    type: steps
+    default: []
+  post-run-tests-steps:
+    description: |
+      Steps to run after the tests
+    type: steps
+    default: []
   executor:
     description: Executor for the job
     type: executor
@@ -15,12 +35,6 @@ parameters:
       The name of the AVD to create
     type: string
     default: test
-  system-image:
-    description: |
-      Name of system image e.g. "system-images;android-29;default;x86".
-      It should match the name seen in the "sdkmanager --list" output.
-    type: string
-    default: system-images;android-29;default;x86
   install-system-image:
     description: |
       Whether to first install the system image via sdkmanager
@@ -79,7 +93,7 @@ parameters:
     description: |
       Whether to run the emulator with the -delay-adb flag
     type: boolean
-    default: true
+    default: false
   verbose:
     description: |
       Whether to run the emulator with the -verbose flag
@@ -152,20 +166,6 @@ parameters:
       Whether to disable animations that may interfere with tests, after the emulator starts up
     type: boolean
     default: true
-  pre-run-tests-steps:
-    description: |
-      Steps to run before the tests
-    type: steps
-    default: []
-  post-run-tests-steps:
-    description: |
-      Steps to run after the tests
-    type: steps
-    default: []
-  test-command:
-    description: Command to run in order to run the tests
-    type: string
-    default: "./gradlew connectedDebugAndroidTest"
   run-tests-working-directory:
     description: Working directory to run the tests in
     type: string
