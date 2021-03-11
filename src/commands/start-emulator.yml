@@ -55,7 +55,7 @@ parameters:
     description: |
       Whether to run the emulator with the -delay-adb flag
     type: boolean
-    default: true
+    default: false
   verbose:
     description: |
       Whether to run the emulator with the -verbose flag
