@@ -1,13 +1,10 @@
 version: 2.1
 
 orbs:
-  orb-tools: circleci/orb-tools@10
-  android: circleci/android@<<pipeline.parameters.dev-orb-version>>
+  orb-tools: circleci/orb-tools@10.0
+  android: circleci/android@<< pipeline.parameters.dev-orb-version >>
 
-# Pipeline parameters
 parameters:
-  # These pipeline parameters are required by the "trigger-integration-tests-workflow"
-  # job, by default.
   run-integration-tests:
     type: boolean
     default: false
@@ -15,41 +12,124 @@ parameters:
     type: string
     default: "dev:alpha"
 
-jobs:
-  android:
-    parameters:
-      tag:
-        type: string
-        description: circleci/android tag
+prod-deploy_requires: &prod-deploy_requires
+  [
+    ui-tests-system-images;android-29;default;x86,
+    ui-tests-system-images;android-29;google_apis;x86_64,
+    test-emulator-commands,
+    test-start-emulator-and-run-tests
+  ]
 
-      ndk-version:
+workflows:
+  lint_pack-validate_publish-dev:
+    unless: << pipeline.parameters.run-integration-tests >>
+    jobs:
+      - orb-tools/lint
+      - orb-tools/pack:
+          requires:
+            - orb-tools/lint
+      - orb-tools/publish-dev:
+          orb-name: circleci/android
+          context: orb-publishing
+          requires:
+            - orb-tools/pack
+      - orb-tools/trigger-integration-tests-workflow:
+          name: trigger-integration-dev
+          context: orb-publishing
+          requires:
+            - orb-tools/publish-dev
+  integration-tests_deploy:
+    when: << pipeline.parameters.run-integration-tests >>
+    jobs:
+      - test-ndk-install:
+          name: "Test NDK Install on Android Docker"
+          matrix:
+            parameters:
+              executor:
+                - name: android/android-docker
+                  tag: "2021.10.1"
+                - name: android/android-docker
+                  tag: "2021.09.1"
+              ndk:
+                - "23.0.7599858"
+                - "21.4.7075529"
+                - "19.2.5345600"
+      - test-ndk-install:
+          name: "Test NDK Install on Android Machine"
+          executor:
+            name: android/android-machine
+            tag: "2021.10.1"
+          matrix:
+            parameters:
+              ndk:
+                - "23.0.7599858"
+                - "21.4.7075529"
+                - "19.2.5345600"
+      - android/run-ui-tests:
+          name: "ui-tests-<<matrix.system-image>>"
+          executor:
+            name: android/android-machine
+            tag: "202102-01"
+          checkout: false
+          pre-steps:
+            - run:
+                name: Setup project
+                command: |
+                  git clone https://github.com/android/compose-samples
+                  cd compose-samples
+                  # pin the revision for consistency
+                  git checkout f1e930dbe6f209dde9ceb5d3419bbf314aabcb58
+                  cd ..
+                  cp -r compose-samples/Jetchat/* .
+                  rm -rf compose-samples
+          matrix:
+            parameters:
+              system-image: ["system-images;android-29;default;x86", "system-images;android-29;google_apis;x86_64", "system-images;android-25;default;x86"]
+      - test-emulator-commands:
+          system-image: "system-images;android-29;default;x86"
+          tag: "202102-01"
+      - test-start-emulator-and-run-tests:
+          tag: "202102-01"
+      - orb-tools/dev-promote-prod-from-commit-subject:
+          orb-name: circleci/android
+          context: orb-publishing
+          add-pr-comment: true
+          bot-token-variable: GHI_TOKEN
+          bot-user: cpe-bot
+          fail-if-semver-not-indicated: true
+          publish-version-tag: true
+          ssh-fingerprints: 94:6f:77:19:c2:d9:0b:e0:fb:fe:d6:65:39:38:29:d3
+          requires: *prod-deploy_requires
+          filters:
+            branches:
+              only: main
+
+jobs:
+  test-ndk-install:
+    parameters:
+      executor:
+        type: executor
+        description: |
+          Which Android image/executor to use. Choose between 'android-docker'
+          and 'android-machine'.
+      ndk:
         type: string
         description: ndk version to install
-
-      ndk-sha:
-        type: string
-        description: ndk sha value to pass
-
-      resource-class:
-        type: enum
-        enum: [small, medium, medium+, large, xlarge]
-        default: small
-
-    resource_class: <<parameters.resource-class>>
-    docker:
-      - image: circleci/android:<<parameters.tag>>
-
+    executor: << parameters.executor >>
     steps:
       - checkout
-
       - android/install-ndk:
-          ndk-version: <<parameters.ndk-version>>
-          ndk-sha: <<parameters.ndk-sha>>
+          version: << parameters.ndk >>
   test-emulator-commands:
     parameters:
       system-image:
         type: string
-    executor: android/android-machine
+      tag:
+        type: string
+        description: "Android machine image tag to use."
+    executor:
+      name: android/android-machine
+      tag: << parameters.tag >>
     steps:
       - checkout
       - run:
@@ -101,390 +181,29 @@ jobs:
                 command: |
                   echo "Test"
       - android/kill-emulators
-
   test-start-emulator-and-run-tests:
-      executor:
-        name: android/android-machine
-        resource-class: xlarge
-      steps:
-        - checkout
-        - android/start-emulator-and-run-tests:
-            pre-emulator-wait-steps:
-              - run:
-                  name: Clone project
-                  command: |
-                      git clone https://github.com/android/compose-samples
-                      cd compose-samples
-                      # pin the revision for consistency
-                      git checkout f1e930dbe6f209dde9ceb5d3419bbf314aabcb58
-              - android/restore-build-cache
-              - run: cd compose-samples/Jetchat && ./gradlew assembleDebugAndroidTest
-            post-emulator-launch-assemble-command: ""
-            run-tests-working-directory: ./compose-samples/Jetchat
-            post-run-tests-steps:
-              - android/save-build-cache
-
-prod-deploy_requires: &prod-deploy_requires
-  [
-    17c-23-master,
-    17c-24-master,
-    17c-25-master,
-    17c-26-master,
-    17c-27-master,
-    17c-28-master,
-    17c-29-master,
-    18b-23-master,
-    18b-24-master,
-    18b-25-master,
-    18b-26-master,
-    18b-27-master,
-    18b-28-master,
-    18b-29-master,
-    19c-23-master,
-    19c-24-master,
-    19c-25-master,
-    19c-26-master,
-    19c-27-master,
-    19c-28-master,
-    19c-29-master,
-    ui-tests-system-images;android-29;default;x86,
-    ui-tests-system-images;android-29;google_apis;x86_64,
-    test-emulator-commands,
-    test-start-emulator-and-run-tests
-  ]
-
-workflows:
-  lint_pack-validate_publish-dev:
-    unless: << pipeline.parameters.run-integration-tests >>
-    jobs:
-      - orb-tools/lint
-
-      - orb-tools/pack:
-          requires:
-            - orb-tools/lint
-
-      - orb-tools/publish-dev:
-          orb-name: circleci/android
-          context: orb-publishing
-          requires:
-            - orb-tools/pack
-
-      - orb-tools/trigger-integration-tests-workflow:
-          name: trigger-integration-dev
-          context: orb-publishing
-          requires:
-            - orb-tools/publish-dev
-
-  integration-tests_deploy:
-    when: << pipeline.parameters.run-integration-tests >>
-    jobs:
-      # triggered by non-master branch commits
-      # 17c
-      - android:
-          name: 17c-23-dev
-          tag: api-23
-          ndk-version: android-ndk-r17c
-          ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
-          resource-class: medium
-
-      - android:
-          name: 17c-24-dev
-          tag: api-24
-          ndk-version: android-ndk-r17c
-          ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
-          resource-class: medium
-
-      - android:
-          name: 17c-25-dev
-          tag: api-25
-          ndk-version: android-ndk-r17c
-          ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
-
-      - android:
-          name: 17c-26-dev
-          tag: api-26
-          ndk-version: android-ndk-r17c
-          ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
-
-      - android:
-          name: 17c-27-dev
-          tag: api-27
-          ndk-version: android-ndk-r17c
-          ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
-          resource-class: medium
-
-      - android:
-          name: 17c-28-dev
-          tag: api-28
-          ndk-version: android-ndk-r17c
-          ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
-
-      - android:
-          name: 17c-29-dev
-          tag: api-29
-          ndk-version: android-ndk-r17c
-          ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
-
-      # 18b
-      - android:
-          name: 18b-23-dev
-          tag: api-23
-          ndk-version: android-ndk-r18b
-          ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
-
-      - android:
-          name: 18b-24-dev
-          tag: api-24
-          ndk-version: android-ndk-r18b
-          ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
-
-      - android:
-          name: 18b-25-dev
-          tag: api-25
-          ndk-version: android-ndk-r18b
-          ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
-
-      - android:
-          name: 18b-26-dev
-          tag: api-26
-          ndk-version: android-ndk-r18b
-          ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
-
-      - android:
-          name: 18b-27-dev
-          tag: api-27
-          ndk-version: android-ndk-r18b
-          ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
-          resource-class: medium
-
-      - android:
-          name: 18b-28-dev
-          tag: api-28
-          ndk-version: android-ndk-r18b
-          ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
-          resource-class: medium
-
-      - android:
-          name: 18b-29-dev
-          tag: api-29
-          ndk-version: android-ndk-r18b
-          ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
-
-      # 19c
-      - android:
-          name: 19c-23-dev
-          tag: api-23
-          ndk-version: android-ndk-r19c
-          ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
-          resource-class: medium
-
-      - android:
-          name: 19c-24-dev
-          tag: api-24
-          ndk-version: android-ndk-r19c
-          ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
-
-      - android:
-          name: 19c-25-dev
-          tag: api-25
-          ndk-version: android-ndk-r19c
-          ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
-
-      - android:
-          name: 19c-26-dev
-          tag: api-26
-          ndk-version: android-ndk-r19c
-          ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
-          resource-class: medium
-
-      - android:
-          name: 19c-27-dev
-          tag: api-27
-          ndk-version: android-ndk-r19c
-          ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
-
-      - android:
-          name: 19c-28-dev
-          tag: api-28
-          ndk-version: android-ndk-r19c
-          ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
-
-      - android:
-          name: 19c-29-dev
-          tag: api-29
-          ndk-version: android-ndk-r19c
-          ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
-
-      # triggered by master branch commits
-      # 17c
-      - android:
-          name: 17c-23-master
-          tag: api-23
-          ndk-version: android-ndk-r17c
-          ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
-          resource-class: medium
-
-      - android:
-          name: 17c-24-master
-          tag: api-24
-          ndk-version: android-ndk-r17c
-          ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
-          resource-class: medium
-
-      - android:
-          name: 17c-25-master
-          tag: api-25
-          ndk-version: android-ndk-r17c
-          ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
-
-      - android:
-          name: 17c-26-master
-          tag: api-26
-          ndk-version: android-ndk-r17c
-          ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
-
-      - android:
-          name: 17c-27-master
-          tag: api-27
-          ndk-version: android-ndk-r17c
-          ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
-          resource-class: medium
-
-      - android:
-          name: 17c-28-master
-          tag: api-28
-          ndk-version: android-ndk-r17c
-          ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
-
-      - android:
-          name: 17c-29-master
-          tag: api-29
-          ndk-version: android-ndk-r17c
-          ndk-sha: 12cacc70c3fd2f40574015631c00f41fb8a39048
-
-      # 18b
-      - android:
-          name: 18b-23-master
-          tag: api-23
-          ndk-version: android-ndk-r18b
-          ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
-
-      - android:
-          name: 18b-24-master
-          tag: api-24
-          ndk-version: android-ndk-r18b
-          ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
-
-      - android:
-          name: 18b-25-master
-          tag: api-25
-          ndk-version: android-ndk-r18b
-          ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
-
-      - android:
-          name: 18b-26-master
-          tag: api-26
-          ndk-version: android-ndk-r18b
-          ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
-
-      - android:
-          name: 18b-27-master
-          tag: api-27
-          ndk-version: android-ndk-r18b
-          ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
-          resource-class: medium
-
-      - android:
-          name: 18b-28-master
-          tag: api-28
-          ndk-version: android-ndk-r18b
-          ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
-          resource-class: medium
-
-      - android:
-          name: 18b-29-master
-          tag: api-29
-          ndk-version: android-ndk-r18b
-          ndk-sha: 500679655da3a86aecf67007e8ab230ea9b4dd7b
-
-      # 19c
-      - android:
-          name: 19c-23-master
-          tag: api-23
-          ndk-version: android-ndk-r19c
-          ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
-          resource-class: medium
-
-      - android:
-          name: 19c-24-master
-          tag: api-24
-          ndk-version: android-ndk-r19c
-          ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
-
-      - android:
-          name: 19c-25-master
-          tag: api-25
-          ndk-version: android-ndk-r19c
-          ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
-
-      - android:
-          name: 19c-26-master
-          tag: api-26
-          ndk-version: android-ndk-r19c
-          ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
-          resource-class: medium
-
-      - android:
-          name: 19c-27-master
-          tag: api-27
-          ndk-version: android-ndk-r19c
-          ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
-
-      - android:
-          name: 19c-28-master
-          tag: api-28
-          ndk-version: android-ndk-r19c
-          ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
-
-      - android:
-          name: 19c-29-master
-          tag: api-29
-          ndk-version: android-ndk-r19c
-          ndk-sha: fd94d0be6017c6acbd193eb95e09cf4b6f61b834
-
-      - android/run-ui-tests:
-          name: "ui-tests-<<matrix.system-image>>"
-          checkout: false
-          pre-steps:
+    parameters:
+      tag:
+        type: string
+        description: "Android machine image tag to use."
+    executor:
+      name: android/android-machine
+      tag: << parameters.tag >>
+      resource-class: xlarge
+    steps:
+      - checkout
+      - android/start-emulator-and-run-tests:
+          pre-emulator-wait-steps:
             - run:
-                name: Setup project
+                name: Clone project
                 command: |
-                  git clone https://github.com/android/compose-samples
-                  cd compose-samples
-                  # pin the revision for consistency
-                  git checkout f1e930dbe6f209dde9ceb5d3419bbf314aabcb58
-                  cd ..
-                  cp -r compose-samples/Jetchat/* .
-                  rm -rf compose-samples
-          matrix:
-            parameters:
-              system-image: ["system-images;android-29;default;x86", "system-images;android-29;google_apis;x86_64", "system-images;android-25;default;x86"]
-
-      - test-emulator-commands:
-          system-image: "system-images;android-29;default;x86"
-
-      - test-start-emulator-and-run-tests
-
-      - orb-tools/dev-promote-prod-from-commit-subject:
-          orb-name: circleci/android
-          context: orb-publishing
-          add-pr-comment: true
-          bot-token-variable: GHI_TOKEN
-          bot-user: cpe-bot
-          fail-if-semver-not-indicated: true
-          publish-version-tag: true
-          ssh-fingerprints: 94:6f:77:19:c2:d9:0b:e0:fb:fe:d6:65:39:38:29:d3
-          requires: *prod-deploy_requires
-          filters:
-            branches:
-              only: master
+                    git clone https://github.com/android/compose-samples
+                    cd compose-samples
+                    # pin the revision for consistency
+                    git checkout f1e930dbe6f209dde9ceb5d3419bbf314aabcb58
+            - android/restore-build-cache
+            - run: cd compose-samples/Jetchat && ./gradlew assembleDebugAndroidTest
+          post-emulator-launch-assemble-command: ""
+          run-tests-working-directory: ./compose-samples/Jetchat
+          post-run-tests-steps:
+            - android/save-build-cache

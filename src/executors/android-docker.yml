@@ -1,0 +1,20 @@
+description: |
+  Select a CircleCI convenience image to get building on Android.
+  See https://circleci.com/developer/images/image/cimg/android#image-tags for a full list of
+  the available images.
+
+parameters:
+  tag:
+    type: string
+    description: |
+      The Android image tag to use.
+      Choose a tag from https://circleci.com/developer/images/image/cimg/android#image-tags.
+  resource-class:
+    description: Resource class used for the executor.
+    type: enum
+    default: medium
+    enum: [small, medium, medium+, large, xlarge, 2xlarge, 2xlarge+]
+
+docker:
+  - image: cimg/android:<< parameters.tag >>
+resource_class: << parameters.resource-class >>

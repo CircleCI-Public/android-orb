@@ -1,10 +1,12 @@
 description: >
   Start building an Android project on CircleCI
 
-executor:
-  name: android
-  sdk-version: "23"
-  resource-class: medium
+parameters:
+  executor:
+    description: Executor for the job
+    type: executor
+
+executor: << parameters.executor >>
 
 steps:
   - checkout
