@@ -10,9 +10,9 @@ parameters:
     type: string
     default: "."
   max-tries:
-    description: Max number of tries. To disable retries, set this to 1.
+    description: Max number of tries. To enable retries, set this to > 1.
     type: integer
-    default: 2
+    default: 1
   retry-interval:
     description: Duration in seconds to wait before the next try
     type: integer
