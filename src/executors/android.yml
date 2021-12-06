@@ -21,5 +21,12 @@ parameters:
       Choose an optional Android image variant, either node or ndk:
       https://hub.docker.com/r/circleci/android/tags
 
+  resource-class:
+    description: Resource class used for the executor.
+    type: enum
+    default: medium
+    enum: [small, medium, medium+, large, xlarge, 2xlarge, 2xlarge+]
+
 docker:
   - image: circleci/android:api-<<parameters.sdk-version>><<#parameters.variant>>-<<parameters.variant>><</parameters.variant>>
+resource_class: << parameters.resource-class >>
