@@ -4,6 +4,7 @@ description: >
 executor:
   name: android
   sdk-version: "23"
+  resource-class: medium
 
 steps:
   - checkout
