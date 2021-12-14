@@ -25,7 +25,6 @@ parameters:
   executor:
     description: Executor for the job
     type: executor
-    default: android-machine
   checkout:
     description: Whether to run the checkout step
     type: boolean
