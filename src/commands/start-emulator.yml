@@ -168,7 +168,7 @@ steps:
   - when:
       condition:
         and:
-          - << parameters.restore-gradle-cache-post-emulator-launch >> ]
+          - << parameters.restore-gradle-cache-post-emulator-launch >>
           - equal: [ true, << parameters.wait-for-emulator >> ]
       steps:
         - restore-gradle-cache:
