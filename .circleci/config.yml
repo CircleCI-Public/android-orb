@@ -1,209 +1,37 @@
 version: 2.1
-
+setup: true
 orbs:
-  orb-tools: circleci/orb-tools@10.0
-  android: circleci/android@<< pipeline.parameters.dev-orb-version >>
+  orb-tools: circleci/orb-tools@11.1
+  shellcheck: circleci/shellcheck@3.1
 
-parameters:
-  run-integration-tests:
-    type: boolean
-    default: false
-  dev-orb-version:
-    type: string
-    default: "dev:alpha"
-
-prod-deploy_requires: &prod-deploy_requires
-  [
-    ui-tests-system-images;android-29;default;x86,
-    ui-tests-system-images;android-29;google_apis;x86_64,
-    test-emulator-commands,
-    test-start-emulator-and-run-tests
-  ]
+filters: &filters
+  tags:
+    only: /.*/
 
 workflows:
-  lint_pack-validate_publish-dev:
-    unless: << pipeline.parameters.run-integration-tests >>
+  lint-pack:
     jobs:
-      - orb-tools/lint
+      - orb-tools/lint:
+          filters: *filters
       - orb-tools/pack:
-          requires:
-            - orb-tools/lint
-      - orb-tools/publish-dev:
+          filters: *filters
+      - orb-tools/review:
+          exclude: RC009
+          filters: *filters
+      - shellcheck/check:
+          exclude: SC2148,SC2038,SC2086,SC2002,SC2016
+          filters: *filters
+      - orb-tools/publish:
           orb-name: circleci/android
-          context: orb-publishing
+          vcs-type: << pipeline.project.type >>
           requires:
-            - orb-tools/pack
-      - orb-tools/trigger-integration-tests-workflow:
-          name: trigger-integration-dev
+            [orb-tools/lint, orb-tools/review, orb-tools/pack, shellcheck/check]
+          # Use a context to hold your publishing token.
           context: orb-publishing
-          requires:
-            - orb-tools/publish-dev
-  integration-tests_deploy:
-    when: << pipeline.parameters.run-integration-tests >>
-    jobs:
-      - test-ndk-install:
-          name: "Test NDK Install on Android Docker"
-          matrix:
-            parameters:
-              executor:
-                - name: android/android-docker
-                  tag: "2021.10.1"
-                - name: android/android-docker
-                  tag: "2021.09.1"
-              ndk:
-                - "23.0.7599858"
-                - "21.4.7075529"
-                - "19.2.5345600"
-      - test-ndk-install:
-          name: "Test NDK Install on Android Machine"
-          executor:
-            name: android/android-machine
-            tag: "2021.10.1"
-          matrix:
-            parameters:
-              ndk:
-                - "23.0.7599858"
-                - "21.4.7075529"
-                - "19.2.5345600"
-      - android/run-ui-tests:
-          name: "ui-tests-<<matrix.system-image>>"
-          executor:
-            name: android/android-machine
-            tag: "202102-01"
-          checkout: false
-          pre-steps:
-            - run:
-                name: Setup project
-                command: |
-                  git clone https://github.com/android/compose-samples
-                  cd compose-samples
-                  # pin the revision for consistency
-                  git checkout f1e930dbe6f209dde9ceb5d3419bbf314aabcb58
-                  cd ..
-                  cp -r compose-samples/Jetchat/* .
-                  rm -rf compose-samples
-          matrix:
-            parameters:
-              system-image: ["system-images;android-29;default;x86", "system-images;android-29;google_apis;x86_64", "system-images;android-25;default;x86"]
-      - test-emulator-commands:
-          system-image: "system-images;android-29;default;x86"
-          tag: "202102-01"
-      - test-start-emulator-and-run-tests:
-          tag: "202102-01"
-      - orb-tools/dev-promote-prod-from-commit-subject:
-          orb-name: circleci/android
-          context: orb-publishing
-          add-pr-comment: true
-          bot-token-variable: GHI_TOKEN
-          bot-user: cpe-bot
-          fail-if-semver-not-indicated: true
-          publish-version-tag: true
-          ssh-fingerprints: 94:6f:77:19:c2:d9:0b:e0:fb:fe:d6:65:39:38:29:d3
-          requires: *prod-deploy_requires
-          filters:
-            branches:
-              only: main
-
-jobs:
-  test-ndk-install:
-    parameters:
-      executor:
-        type: executor
-        description: |
-          Which Android image/executor to use. Choose between 'android-docker'
-          and 'android-machine'.
-      ndk:
-        type: string
-        description: ndk version to install
-    executor: << parameters.executor >>
-    steps:
-      - checkout
-      - android/install-ndk:
-          version: << parameters.ndk >>
-  test-emulator-commands:
-    parameters:
-      system-image:
-        type: string
-      tag:
-        type: string
-        description: "Android machine image tag to use."
-    executor:
-      name: android/android-machine
-      tag: << parameters.tag >>
-    steps:
-      - checkout
-      - run:
-          name: Clone project
-          command: |
-            git clone https://github.com/android/compose-samples
-            cd compose-samples
-            # pin the revision for consistency
-            git checkout f1e930dbe6f209dde9ceb5d3419bbf314aabcb58
-      - android/create-avd:
-          avd-name: test1
-          system-image: <<parameters.system-image>>
-          install: true
-      - android/start-emulator:
-          avd-name: test1
-          run-logcat: true
-          memory: 3072
-          restore-gradle-cache-prefix: v1-multiple
-          post-emulator-launch-assemble-command: "cd compose-samples/Owl && ./gradlew assembleDebugAndroidTest && cd ../Jetsnack && ./gradlew assembleDebugAndroidTest"
-      - android/run-tests:
-          working-directory: ./compose-samples/Owl
-      - android/run-tests:
-          working-directory: ./compose-samples/Jetsnack
-      - android/save-gradle-cache:
-          cache-prefix: v1-multiple
-      - android/kill-emulators
-      - run: sdkmanager "system-images;android-28;default;x86"
-      - android/create-avd:
-          avd-name: test2
-          system-image: system-images;android-28;default;x86
-          install: false
-      - android/start-emulator:
-          avd-name: test2
-          # we expect the no-window parameter to be overriden by override-args
-          no-window: true
-          override-args: "-delay-adb -verbose -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim"
-          wait-for-emulator: true
-          restore-gradle-cache-post-emulator-launch: false
-          post-emulator-launch-assemble-command: ""
-          disable-animations: false
-          pre-emulator-wait-steps:
-            - run:
-                name: Dummy pre-emulator-wait-steps
-                command: |
-                  echo "Test"
-          post-emulator-wait-steps:
-            - run:
-                name: Dummy post-emulator-wait-steps
-                command: |
-                  echo "Test"
-      - android/kill-emulators
-  test-start-emulator-and-run-tests:
-    parameters:
-      tag:
-        type: string
-        description: "Android machine image tag to use."
-    executor:
-      name: android/android-machine
-      tag: << parameters.tag >>
-      resource-class: xlarge
-    steps:
-      - checkout
-      - android/start-emulator-and-run-tests:
-          pre-emulator-wait-steps:
-            - run:
-                name: Clone project
-                command: |
-                    git clone https://github.com/android/compose-samples
-                    cd compose-samples
-                    # pin the revision for consistency
-                    git checkout f1e930dbe6f209dde9ceb5d3419bbf314aabcb58
-            - android/restore-build-cache
-            - run: cd compose-samples/Jetchat && ./gradlew assembleDebugAndroidTest
-          post-emulator-launch-assemble-command: ""
-          run-tests-working-directory: ./compose-samples/Jetchat
-          post-run-tests-steps:
-            - android/save-build-cache
+          filters: *filters
+      # Triggers the next workflow in the Orb Development Kit.
+      - orb-tools/continue:
+          pipeline-number: << pipeline.number >>
+          vcs-type: << pipeline.project.type >>
+          requires: [orb-tools/publish]
+          filters: *filters
