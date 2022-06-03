@@ -18,25 +18,25 @@ prod-deploy-requires: &prod-deploy-requires
   ]
 
 jobs:
-  test-ndk-install:
+  test-ndk-install: #test installs the Android NDK toolkit
     parameters:
-      executor:
+      executor: #defines the environment to run the job in the parameters, to be called later in the executor child
         type: executor
         description: |
           Which Android image/executor to use. Choose between 'android-docker'
           and 'android-machine'.
-      ndk:
+      ndk: #declares the NDK version to be installed
         type: string
         description: ndk version to install
     executor: << parameters.executor >>
-    steps:
-      - checkout
+    steps: 
+      - checkout #a special step used to check out source code to the configured path
       - android/install-ndk:
-          version: << parameters.ndk >>
+          version: << parameters.ndk >> #uses the ndk parameter to declare the version
 
   test-emulator-commands:
     parameters:
-      system-image:
+      system-image: #parameter to declare the system image for the Android Virtual Device
         type: string
       tag:
         type: string
@@ -47,70 +47,71 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Clone project
+          name: Clone project #clones a github project then enters the directory and checks out a branch
           command: |
-            git clone https://github.com/android/compose-samples
+            git clone https://github.com/android/compose-samples 
             cd compose-samples
             # pin the revision for consistency
             git checkout f1e930dbe6f209dde9ceb5d3419bbf314aabcb58
-      - android/create-avd:
+      - android/create-avd: #creates an Android Virtual Device named test1
           avd-name: test1
-          system-image: <<parameters.system-image>>
-          install: true
-      - android/start-emulator:
+          system-image: <<parameters.system-image>> #takes system-image version from the parameters
+          install: true #true installs image via sdk manager
+      - android/start-emulator: #starts the Android Virtual Device
           avd-name: test1
-          run-logcat: true
-          memory: 3072
+          run-logcat: true #runs logcat in background for logging
+          memory: 3072 #declares allocated memory allowed
           restore-gradle-cache-prefix: v1-multiple
           post-emulator-launch-assemble-command: "cd compose-samples/Owl && ./gradlew assembleDebugAndroidTest && cd ../Jetsnack && ./gradlew assembleDebugAndroidTest"
-      - android/run-tests:
-          working-directory: ./compose-samples/Owl
-      - android/run-tests:
+          #command ran after the emulator is launched
+      - android/run-tests: #runs tests in the emulator
+          working-directory: ./compose-samples/Owl #declares the directory the tests are run in
+      - android/run-tests: #same as above
           working-directory: ./compose-samples/Jetsnack
       - android/save-gradle-cache:
-          cache-prefix: v1-multiple
-      - android/kill-emulators
+          cache-prefix: v1-multiple #cache prefix to add to the key
+      - android/kill-emulators #kills all running emulators
       - run: sdkmanager "system-images;android-28;default;x86"
-      - android/create-avd:
+      - android/create-avd: #creates a second test AVD
           avd-name: test2
           system-image: system-images;android-28;default;x86
-          install: false
+          install: false #does not install via the sdkmanager
       - android/start-emulator:
           avd-name: test2
           # we expect the no-window parameter to be overriden by override-args
-          no-window: true
-          override-args: "-delay-adb -verbose -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim"
-          wait-for-emulator: true
-          restore-gradle-cache-post-emulator-launch: false
+          no-window: true #has the emulator run with the -no-window tag
+          override-args: "-delay-adb -verbose -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim" #runs the avd with these override args
+          wait-for-emulator: true #waits for the emulator to start before continuing
+          restore-gradle-cache-post-emulator-launch: false #does not restore gradle after the emulator starts
           post-emulator-launch-assemble-command: ""
-          disable-animations: false
-          pre-emulator-wait-steps:
+          disable-animations: false #does not disable animations that may interfere with tests
+          pre-emulator-wait-steps: #steps to run before the emulator is started up
             - run:
                 name: Dummy pre-emulator-wait-steps
                 command: |
                   echo "Test"
-          post-emulator-wait-steps:
+          post-emulator-wait-steps: #steps that run after the emulator starts up
             - run:
                 name: Dummy post-emulator-wait-steps
                 command: |
                   echo "Test"
-      - android/kill-emulators
+      - android/kill-emulators #kills emulator
 
   test-start-emulator-and-run-tests:
     parameters:
-      tag:
+      tag: #tag for the android image to be used
         type: string
         description: "Android machine image tag to use."
-    executor:
+    executor: #executor for the android machine, image, and size of executor
       name: android/android-machine
       tag: << parameters.tag >>
       resource-class: xlarge
     steps:
       - checkout
       - android/start-emulator-and-run-tests:
-          pre-emulator-wait-steps:
+          pre-emulator-wait-steps: #commands that run before emulator starts
             - run:
-                name: Clone project
+                name: Clone project #clones a project then checkouts a branch
                 command: |
                     git clone https://github.com/android/compose-samples
                     cd compose-samples
@@ -119,14 +120,14 @@ jobs:
             - android/restore-build-cache
             - run: cd compose-samples/Jetchat && ./gradlew assembleDebugAndroidTest
           post-emulator-launch-assemble-command: ""
-          run-tests-working-directory: ./compose-samples/Jetchat
-          post-run-tests-steps:
+          run-tests-working-directory: ./compose-samples/Jetchat #declares working directory for tests
+          post-run-tests-steps: #steps after commands are run
             - android/save-build-cache  
 
 workflows:
   test-deploy:
     jobs:
-      - test-ndk-install:
+      - test-ndk-install: #runs the test-ndk-install job with an executor in a docker image
           name: "Test NDK Install on Android Docker"
           matrix:
             parameters:
@@ -140,7 +141,7 @@ workflows:
                 - "21.4.7075529"
                 - "19.2.5345600"
           filters: *filters
-      - test-ndk-install:
+      - test-ndk-install: #runs the test-ndk-install job with an executor in the android machine
           name: "Test NDK Install on Android Machine"
           executor:
             name: android/android-machine
@@ -152,7 +153,7 @@ workflows:
                 - "21.4.7075529"
                 - "19.2.5345600"
           filters: *filters
-      - android/run-ui-tests:
+      - android/run-ui-tests: #runs run-ui-tests from the examples directory
           name: "ui-tests-<<matrix.system-image>>"
           executor:
             name: android/android-machine
@@ -169,7 +170,7 @@ workflows:
                   cd ..
                   cp -r compose-samples/Jetchat/* .
                   rm -rf compose-samples
-          matrix:
+          matrix: #selects a matrix of images to run the ui tests on
             parameters:
               system-image: ["system-images;android-29;default;x86", "system-images;android-29;google_apis;x86_64", "system-images;android-25;default;x86"]
           filters: *filters
