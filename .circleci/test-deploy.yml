@@ -18,6 +18,11 @@ prod-deploy-requires: &prod-deploy-requires
   ]
 
 jobs:
+  test-java-version:
+    machine:
+      image: android:2022.04.1
+    steps: android/change-java-version
+    
   test-ndk-install: #test installs the Android NDK toolkit
     parameters:
       executor: #defines the environment to run the job in the parameters, to be called later in the executor child
