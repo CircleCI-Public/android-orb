@@ -11,6 +11,7 @@ filters: &filters
 workflows:
   lint-pack:
     jobs:
+      - android/change-java-version
       - orb-tools/lint:
           filters: *filters
       - orb-tools/pack:
