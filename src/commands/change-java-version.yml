@@ -1,0 +1,30 @@
+description: |
+  Change default java version from OpenJDK v11.
+parameters:
+  java-version:
+    type: integer
+    default: 8
+    description: |
+      The version of OpenJDK to change to
+steps:
+  - run:
+      command: |
+        JAVA_VER="$( java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 )"
+        if [ "$JAVA_VER" -ne <<parameters.java-version>> ]; then
+          if [ <<parameters.java-version>> -eq 8 ] || [ <<parameters.java-version>> -eq 11 ]; then
+            if [ <<parameters.java-version>> -eq 8 ]; then
+              sudo update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+            else
+              sudo update-alternatives --set java /usr/lib/jvm/java-11-openjdk-amd64/bin/java
+            fi
+            sudo update-alternatives --set javac /usr/lib/jvm/java-<<parameters.java-version>>-openjdk-amd64/bin/javac
+          else
+            sudo apt install openjdk-<<parameters.java-version>>-jdk
+          fi
+          echo "export JAVA_HOME=/usr/lib/jvm/java-<<parameters.java-version>>-openjdk-amd64" >>~/.bashrc
+          echo "export PATH=$JAVA_HOME/bin:$PATH" >>~/.bashrc
+        fi
+        JAVA_VER="$( java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 )"
+        JAVAC_VER="$( javac -version 2>&1 | head -1 | cut -f 2- -d ' ' | sed '/^1\./s///' | cut -d'.' -f1 )"
+      name: change OpenJDK version
+

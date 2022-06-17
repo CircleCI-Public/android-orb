@@ -16,14 +16,10 @@ workflows:
       - orb-tools/pack:
           filters: *filters
       - orb-tools/review:
-          exclude: RC009 #Complex Run step's commands should be imported.
+          exclude: RC009
           filters: *filters
       - shellcheck/check:
           exclude: SC2148,SC2038,SC2086,SC2002,SC2016
-          #SC2148: Include a shebang (#!) to specify the shell.
-          #SC2086 Double quote to prevent globbing and word splitting.
-          #SC2002: Useless cat. Consider 'cmd < file | ..' or 'cmd file | ..' instead.
-          #SC2016: Expressions don't expand in single quotes, use double quotes for that.
           filters: *filters
       - orb-tools/publish:
           orb-name: circleci/android
