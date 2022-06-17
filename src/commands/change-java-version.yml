@@ -2,6 +2,12 @@ description: |
   Change default java version from OpenJDK v11 to v8.
 
 steps:
-  - run: java -version
-  - run: sudo update-java-alternatives --set /usr/lib/jvm/java-1.8.0-openjdk-amd64
-  - run: java -version
+  - run: 
+      command: java -version
+      name: check java version before running command
+  - run: 
+      command: sudo update-java-alternatives --set /usr/lib/jvm/java-1.8.0-openjdk-amd64
+      name: change OpenJDK version
+  - run: 
+      command: java -version
+      name: check for correctness
