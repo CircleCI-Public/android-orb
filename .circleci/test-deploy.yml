@@ -22,7 +22,7 @@ jobs:
     machine:
       image: android:2022.04.1
     steps: android/change-java-version
-    
+
   test-ndk-install: #test installs the Android NDK toolkit
     parameters:
       executor: #defines the environment to run the job in the parameters, to be called later in the executor child
@@ -199,3 +199,5 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
+  test-java-version:
+    jobs: test-java-version
