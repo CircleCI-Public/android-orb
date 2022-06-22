@@ -6,9 +6,10 @@ parameters:
     type: string
     default: v1
   gradle-cache:
-    description: Location where the gradle cache was stored
+    description: |
+      Location where the gradle cache was stored
     type: string
-    default: /tmp/gradle_cache_seed
+    default: "/tmp/gradle_cache_seed"
 steps:
   - save_cache:
       name: Save gradle cache
