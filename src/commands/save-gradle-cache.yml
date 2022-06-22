@@ -16,6 +16,7 @@ steps:
         if [ << parameters.gradle-cache-checksum >> != "/tmp/gradle_cache_seed"]; then
           echo '<< parameters.gradle-cache-checksum >>' ><<parameters.gradle-cache-checksum>>.txt
         fi
+        ls
       name: write a txt file for the cache checksum
   - save_cache:
       name: Save gradle cache
