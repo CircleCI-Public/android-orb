@@ -14,10 +14,37 @@ prod-deploy-requires: &prod-deploy-requires
     ui-tests-system-images;android-29;default;x86,
     ui-tests-system-images;android-29;google_apis;x86_64,
     test-emulator-commands,
-    test-start-emulator-and-run-tests
+    test-start-emulator-and-run-tests,
+    test-java-version
   ]
 
 jobs:
+  test-java-version:
+    parameters:
+      executor:
+        type: executor
+        description: |
+          Which Android image/executor to use. Choose between 'android-docker'
+          and 'android-machine'.
+      java-version:
+        type: integer
+        description: |
+          Version to use in the change-java-version job
+    executor: <<parameters.executor>>
+    steps:
+      - checkout
+      - android/change-java-version:
+          java-version: << parameters.java-version >>
+      - run:
+          command: |
+            JAVA_VER="$( java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 )"
+            JAVAC_VER="$( javac -version 2>&1 | head -1 | cut -f 2- -d ' ' | sed '/^1\./s///' | cut -d'.' -f1 )"
+            if [ "$JAVA_VER" -ne <<parameters.java-version>> ] || [ "$JAVAC_VER" -ne <<parameters.java-version>> ]; then
+              echo "Job failed because either the java version or javac version was not changed."
+              exit 1
+            fi
+          name: check for correctness
+  
   test-ndk-install:
     parameters:
       executor:
@@ -126,6 +153,17 @@ jobs:
 workflows:
   test-deploy:
     jobs:
+      - test-java-version:
+          name: "Test OpenJDK version change"
+          executor:
+            name: android/android-docker
+            tag: "2021.10.1"
+          matrix:
+            parameters:
+              java-version:
+                - 8
+                - 11
+                - 13
       - test-ndk-install:
           name: "Test NDK Install on Android Docker"
           matrix:
