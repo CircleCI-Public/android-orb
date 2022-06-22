@@ -16,7 +16,7 @@ workflows:
       - orb-tools/pack:
           filters: *filters
       - orb-tools/review:
-          exclude: RC009
+          #exclude: RC009
           filters: *filters
       - shellcheck/check:
           exclude: SC2148,SC2038,SC2086,SC2002,SC2016
