@@ -20,7 +20,7 @@ steps:
       name: write a txt file for the cache checksum
   - save_cache:
       name: Save gradle cache
-      key: gradle-<< parameters.cache-prefix>>-{{ arch }}-{{ checksum "/<< parameters.gradle-cache-checksum >> " }}
+      key: gradle-<< parameters.cache-prefix>>-{{ arch }}-{{ checksum "<< parameters.gradle-cache-checksum >> " }}
       paths:
         - ~/.gradle/caches
         - ~/.gradle/wrapper
