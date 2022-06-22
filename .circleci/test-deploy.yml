@@ -164,6 +164,7 @@ workflows:
                 - 8
                 - 11
                 - 13
+          filters: *filters
       - test-ndk-install:
           name: "Test NDK Install on Android Docker"
           matrix:
