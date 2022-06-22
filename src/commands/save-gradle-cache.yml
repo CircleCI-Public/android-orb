@@ -5,10 +5,14 @@ parameters:
     description: Used to form part of the cache key
     type: string
     default: v1
+  gradle-cache:
+    description: Location where the gradle cache was stored
+    type: string
+    default: /tmp/gradle_cache_seed
 steps:
   - save_cache:
       name: Save gradle cache
-      key: gradle-<< parameters.cache-prefix>>-{{ arch }}-{{ checksum "/tmp/gradle_cache_seed" }}
+      key: gradle-<< parameters.cache-prefix>>-{{ arch }}-{{ checksum "<< parameter.gradle-cache >> " }}
       paths:
         - ~/.gradle/caches
         - ~/.gradle/wrapper

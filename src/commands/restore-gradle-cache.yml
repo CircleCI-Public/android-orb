@@ -11,6 +11,10 @@ parameters:
       file changes.
     type: string
     default: ". -name \"build.gradle*\" -o -name \"settings.gradle*\""
+  gradle-cache:
+    description: Location where the gradle cache was stored
+    type: string
+    default: /tmp/gradle_cache_seed
 steps:
   - run:
       environment:
@@ -19,4 +23,4 @@ steps:
       command: <<include(scripts/generate-cache-checksum.sh)>>
   - restore_cache:
       name: Restore gradle cache
-      key: gradle-<< parameters.cache-prefix>>-{{ arch }}-{{ checksum "/tmp/gradle_cache_seed" }}
+      key: gradle-<< parameters.cache-prefix>>-{{ arch }}-{{ checksum "<< parameters.gradle-cache >>" }}
