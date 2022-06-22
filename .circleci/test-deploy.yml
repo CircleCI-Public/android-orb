@@ -89,6 +89,7 @@ jobs:
           run-logcat: true
           memory: 3072
           restore-gradle-cache-prefix: v1-multiple
+          restore-gradle-cache-checksum: test
           post-emulator-launch-assemble-command: "cd compose-samples/Owl && ./gradlew assembleDebugAndroidTest && cd ../Jetsnack && ./gradlew assembleDebugAndroidTest"
       - android/run-tests:
           working-directory: ./compose-samples/Owl
@@ -96,6 +97,7 @@ jobs:
           working-directory: ./compose-samples/Jetsnack
       - android/save-gradle-cache:
           cache-prefix: v1-multiple
+          gradle-cache-checksum: test
       - android/kill-emulators
       - run: sdkmanager "system-images;android-28;default;x86"
       - android/create-avd:
@@ -109,6 +111,7 @@ jobs:
           override-args: "-delay-adb -verbose -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim"
           wait-for-emulator: true
           restore-gradle-cache-post-emulator-launch: false
+          restore-gradle-cache-checksum: test
           post-emulator-launch-assemble-command: ""
           disable-animations: false
           pre-emulator-wait-steps:
