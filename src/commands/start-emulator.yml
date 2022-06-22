@@ -103,6 +103,11 @@ parameters:
       file changes.
     type: string
     default: ". -name 'build.gradle'"
+  restore-gradle-cache-checksum:
+    description: |
+      Location where the gradle cache checksum was stored
+    type: string
+    default: "/tmp/gradle_cache_seed"
   post-emulator-wait-steps:
     description: |
       Steps to execute after waiting for the emulator to start up
@@ -174,6 +179,7 @@ steps:
         - restore-gradle-cache:
             cache-prefix: << parameters.restore-gradle-cache-prefix >>
             find-args: << parameters.restore-gradle-cache-find-args >>
+            gradle-cache-checksum: << parameters.restore-gradle-cache-checksum >>
   - when:
       condition:
         and:

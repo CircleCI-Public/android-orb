@@ -11,9 +11,9 @@ parameters:
       file changes.
     type: string
     default: ". -name 'build.gradle'"
-  gradle-cache:
+  gradle-cache-checksum:
     description: |
-      Location where the gradle cache was stored
+      Location where the gradle cache checksum was stored
     type: string
     default: "/tmp/gradle_cache_seed"
 steps:
@@ -24,4 +24,4 @@ steps:
         shasum | awk '{print $1}' > /tmp/gradle_cache_seed
   - restore_cache:
       name: Restore gradle cache
-      key: gradle-<< parameters.cache-prefix>>-{{ arch }}-{{ checksum "<< parameters.gradle-cache >>" }}
+      key: gradle-<< parameters.cache-prefix>>-{{ arch }}-{{ checksum "<< parameters.gradle-cache-checksum >>" }}
