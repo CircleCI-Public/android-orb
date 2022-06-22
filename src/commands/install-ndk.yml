@@ -23,13 +23,18 @@ steps:
         [ -w /usr/local/bin ] && SUDO="" || SUDO=sudo
 
         echo y | sdkmanager "ndk;<< parameters.version >>"
+        android_ndk_home=""
 
-        echo "export ANDROID_NDK_HOME=/opt/android/<< parameters.version >>" >> $BASH_ENV
+        if [[ -d "$HOME"/android-sdk/ndk/<< parameters.version >> ]]; then
+          android_ndk_home="$HOME/android-sdk/ndk/<< parameters.version >>" >> "$BASH_ENV"
 
-        if [[ -d $HOME/android-sdk/ndk/<< parameters.version >> ]] || [[ -d /opt/android/sdk/ndk/<< parameters.version >> ]]; then
-          echo "Android NDK installed"
+        elif [[ -d /opt/android/sdk/ndk/<< parameters.version >> ]]; then
+          android_ndk_home="/opt/android/<< parameters.version >>" >> "$BASH_ENV"
+
         else
           echo "Android NDK did not install successfully"
           exit 1
         fi
 
+        echo "export ANDROID_NDK_HOME=$android_ndk_home" >> "$BASH_ENV"
+        echo "Android NDK was installed at \"$android_ndk_home\"."
