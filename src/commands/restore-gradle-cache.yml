@@ -21,7 +21,7 @@ steps:
       name: Generate cache checksum
       command: |
         find << parameters.find-args >> | sort | xargs cat |
-        shasum | awk '{print $1}' > /tmp/gradle_cache_seed
+        shasum | awk '{print $1}' > <<parameters.gradle-cache-checksum>>
   - restore_cache:
       name: Restore gradle cache
       key: gradle-<< parameters.cache-prefix>>-{{ arch }}-{{ checksum "<< parameters.gradle-cache-checksum >>" }}
