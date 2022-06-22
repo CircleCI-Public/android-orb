@@ -9,8 +9,11 @@ parameters:
 steps:
   - run:
       command: |
-        JAVA_VER="$( java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 )"
-        if [ "$JAVA_VER" -ne <<parameters.java-version>> ]; then
+        CURRENT_JAVA_VER="$( java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 )"
+        CURRENT_JAVAC_VER="$( javac -version 2>&1 | head -1 | cut -f 2- -d ' ' | sed '/^1\./s///' | cut -d'.' -f1 )"
+        echo "Current Java Version: $CURRENT_JAVA_VERSION"
+        echo "Current Java Compiler Version : $CURRENT_JAVAC_VERSTION"
+        if [ "$CURRENT_JAVA_VER" -ne <<parameters.java-version>> ]; then
           if [ <<parameters.java-version>> -eq 8 ] || [ <<parameters.java-version>> -eq 11 ]; then
             if [ <<parameters.java-version>> -eq 8 ]; then
               sudo update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
@@ -24,7 +27,9 @@ steps:
           echo "export JAVA_HOME=/usr/lib/jvm/java-<<parameters.java-version>>-openjdk-amd64" >>~/.bashrc
           echo "export PATH=$JAVA_HOME/bin:$PATH" >>~/.bashrc
         fi
-        JAVA_VER="$( java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 )"
-        JAVAC_VER="$( javac -version 2>&1 | head -1 | cut -f 2- -d ' ' | sed '/^1\./s///' | cut -d'.' -f1 )"
+        NEW_JAVA_VER="$( java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 )"
+        NEW_JAVAC_VER="$( javac -version 2>&1 | head -1 | cut -f 2- -d ' ' | sed '/^1\./s///' | cut -d'.' -f1 )"
+        echo "New Java Version : $NEW_JAVA_VER"
+        echo "New Java Compiler Version : $NEW_JAVAC_VER"
       name: change OpenJDK version
 
