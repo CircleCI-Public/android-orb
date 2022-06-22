@@ -11,9 +11,11 @@ parameters:
     type: string
     default: "/tmp/gradle_cache_seed"
 steps:
+  - run:
+      command: echo '<< parameters.gradle-cache-checksum >>' ><<paramters.gradle-cache-checksum>>.txt
   - save_cache:
       name: Save gradle cache
-      key: gradle-<< parameters.cache-prefix>>-{{ arch }}-{{ checksum "<< parameters.gradle-cache-checksum >> " }}
+      key: gradle-<< parameters.cache-prefix>>-{{ arch }}-{{ checksum "/<< parameters.gradle-cache-checksum >>.txt " }}
       paths:
         - ~/.gradle/caches
         - ~/.gradle/wrapper
