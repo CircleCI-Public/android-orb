@@ -11,8 +11,8 @@ steps:
       command: |
         CURRENT_JAVA_VER="$( java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 )"
         CURRENT_JAVAC_VER="$( javac -version 2>&1 | head -1 | cut -f 2- -d ' ' | sed '/^1\./s///' | cut -d'.' -f1 )"
-        echo "Current Java Version: $CURRENT_JAVA_VERSION"
-        echo "Current Java Compiler Version : $CURRENT_JAVAC_VERSTION"
+        echo "Current Java Version: $CURRENT_JAVA_VER"
+        echo "Current Java Compiler Version : $CURRENT_JAVAC_VER"
         if [ "$CURRENT_JAVA_VER" -ne <<parameters.java-version>> ]; then
           if [ <<parameters.java-version>> -eq 8 ] || [ <<parameters.java-version>> -eq 11 ]; then
             if [ <<parameters.java-version>> -eq 8 ]; then

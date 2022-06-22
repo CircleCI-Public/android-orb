@@ -37,6 +37,8 @@ jobs:
           java-version: << parameters.java-version >>
       - run:
           command: |
+            JAVA_VER="$( java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 )"
+            JAVAC_VER="$( javac -version 2>&1 | head -1 | cut -f 2- -d ' ' | sed '/^1\./s///' | cut -d'.' -f1 )"
             if [ "$JAVA_VER" -ne <<parameters.java-version>> ] || [ "$JAVAC_VER" -ne <<parameters.java-version>> ]; then
               echo "Job failed because either the java version or javac version was not changed."
               exit 1
