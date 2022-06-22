@@ -13,7 +13,7 @@ parameters:
 steps:
   - save_cache:
       name: Save gradle cache
-      key: gradle-<< parameters.cache-prefix>>-{{ arch }}-{{ checksum "<< parameter.gradle-cache >> " }}
+      key: gradle-<< parameters.cache-prefix>>-{{ arch }}-{{ checksum "<< parameters.gradle-cache >> " }}
       paths:
         - ~/.gradle/caches
         - ~/.gradle/wrapper
