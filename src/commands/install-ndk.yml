@@ -26,10 +26,10 @@ steps:
         android_ndk_home=""
 
         if [[ -d "$HOME"/android-sdk/ndk/<< parameters.version >> ]]; then
-          android_ndk_home="$HOME/android-sdk/ndk/<< parameters.version >>" >> "$BASH_ENV"
+          android_ndk_home="$HOME/android-sdk/ndk/<< parameters.version >>"
 
         elif [[ -d /opt/android/sdk/ndk/<< parameters.version >> ]]; then
-          android_ndk_home="/opt/android/<< parameters.version >>" >> "$BASH_ENV"
+          android_ndk_home="/opt/android/<< parameters.version >>"
 
         else
           echo "Android NDK did not install successfully"
