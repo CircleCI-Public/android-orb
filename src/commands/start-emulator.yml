@@ -130,45 +130,22 @@ parameters:
     default: true
 steps:
   - run:
+      environment:
+        PARAM_OVERRIDE_ARGS: << parameters.override-args >>
+        PARAM_AVD_NAME: << parameters.avd-name >>
+        PARAM_NO_WINDOW: << parameters.no-window >>
+        PARAM_NO_AUDIO: << parameters.no-audio >>
+        PARAM_NO_BOOT_ANIM: << parameters.no-boot-anim >>
+        PARAM_VERBOSE: << parameters.verbose >>
+        PARAM_NO_SNAPSHOT: << parameters.no-snapshot >>
+        PARAM_DELAY_ABD: << parameters.delay-adb >>
+        PARAM_MEMORY: << parameters.memory >>
+        PARAM_GPU: << parameters.gpu >>
+        PARAM_CAMERA_FRONT: << parameters.camera-front >>
+        PARAM_CAMERA_BACK: << parameters.camera-back >>
+        PARAM_ADDITIONAL_ARGS: << parameters.additional-args >>
       name: Start emulator
-      command: |
-        if [ -n "<< parameters.override-args >>" ]; then
-          echo "override-args parameter was supplied; orb defaults will be overridden"
-          emulator -avd <<parameters.avd-name>> << parameters.override-args >>
-        else
-          if [ "<< parameters.no-window >>" == "true" ]; then
-            set -- "$@" -no-window
-          fi
-          if [ "<< parameters.no-audio >>" == "true" ]; then
-            set -- "$@" -no-audio
-          fi
-          if [ "<< parameters.no-boot-anim >>" == "true" ]; then
-            set -- "$@" -no-boot-anim
-          fi
-          if [ "<< parameters.verbose >>" == "true" ]; then
-            set -- "$@" -verbose
-          fi
-          if [ "<< parameters.no-snapshot >>" == "true" ]; then
-            set -- "$@" -no-snapshot
-          fi
-          if [ "<< parameters.delay-adb >>" == "true" ]; then
-            set -- "$@" -delay-adb
-          fi
-          if [ "<< parameters.memory >>" != "-1" ]; then
-            set -- "$@" -memory << parameters.memory >>
-          fi
-          if [ -n "<< parameters.gpu >>" ]; then
-            set -- "$@" -gpu "<< parameters.gpu >>"
-          fi
-          if [ -n "<< parameters.camera-front >>" ]; then
-            set -- "$@" -camera-front "<< parameters.camera-front >>"
-          fi
-          if [ -n "<< parameters.camera-back >>" ]; then
-            set -- "$@" -camera-back "<< parameters.camera-back >>"
-          fi
-          echo "Starting emulator with arguments $@ << parameters.additional-args >>"
-          emulator -avd <<parameters.avd-name>> "$@" << parameters.additional-args >>
-        fi
+      command: <<include(scripts/start-emulator.sh)>>
       background: true
   - when:
       condition:

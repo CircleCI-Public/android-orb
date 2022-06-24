@@ -28,6 +28,9 @@ steps:
             command: |
               sdkmanager "<< parameters.system-image >>"
   - run:
+      environment:
+        PARAM_AVD_NAME: << parameters.avd-name >>
+        PARAM_SYSTEM_IMAGE: << parameters.system-image >>
+        PARAM_ADDITIONAL_ARGS: << parameters.additional-args >>
       name: Create avd "<< parameters.avd-name >>"
-      command: |
-        echo "no" | avdmanager --verbose create avd -n "<< parameters.avd-name >>" -k "<< parameters.system-image >>" << parameters.additional-args >>
+      command: <<include(scripts/create-avd.sh)>>

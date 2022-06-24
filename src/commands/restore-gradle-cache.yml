@@ -18,6 +18,8 @@ parameters:
     default: "/tmp/gradle_cache_seed"
 steps:
   - run:
+      environment:
+        PARAM_FIND_ARGS: << parameters.find-args >>
       name: Generate cache checksum
       command: |
         find << parameters.find-args >> | sort | xargs cat |

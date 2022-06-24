@@ -18,18 +18,7 @@ parameters:
 
 steps:
   - run:
+      environment:
+        PARAM_VER: << parameters.version >>
       name: Install Android NDK
-      command: |
-        [ -w /usr/local/bin ] && SUDO="" || SUDO=sudo
-
-        echo y | sdkmanager "ndk;<< parameters.version >>"
-
-        echo "export ANDROID_NDK_HOME=/opt/android/<< parameters.version >>" >> $BASH_ENV
-
-        if [[ -d $HOME/android-sdk/ndk/<< parameters.version >> ]] || [[ -d /opt/android/sdk/ndk/<< parameters.version >> ]]; then
-          echo "Android NDK installed"
-        else
-          echo "Android NDK did not install successfully"
-          exit 1
-        fi
-
+      command: <<include(scripts/install-ndk.sh)>>
