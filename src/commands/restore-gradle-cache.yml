@@ -21,6 +21,7 @@ steps:
   - run:
       environment:
         PARAM_FIND_ARGS: << parameters.find-args >>
+        PARAM_GRADLE_CACHE_CHECKSUM: <<parameters.gradle-cache-checksum>>
       name: Generate cache checksum
       command: <<include(scripts/generate-cache-checksum.sh)>>
   - restore_cache:
