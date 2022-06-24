@@ -20,10 +20,9 @@ steps:
   - run:
       environment:
         PARAM_FIND_ARGS: << parameters.find-args >>
+        PARAM_GRADLE_CACHE_CHECKSUM: <<parameters.gradle-cache-checksum>>
       name: Generate cache checksum
-      command: |
-        find << parameters.find-args >> | sort | xargs cat |
-        shasum | awk '{print $1}' > <<parameters.gradle-cache-checksum>>
+      command: <<include(scripts/generate-cache-checksum.sh)>>
   - restore_cache:
       name: Restore gradle cache
       key: gradle-<< parameters.cache-prefix>>-{{ arch }}-{{ checksum "<< parameters.gradle-cache-checksum >>" }}

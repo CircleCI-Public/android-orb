@@ -1,3 +1,3 @@
 #!/bin/bash
 find ${PARAM_FIND_ARGS} | sort | xargs cat |
-shasum | awk '{print $1}' > /tmp/gradle_cache_seed
+shasum | awk '{print $1}' > ${PARAM_GRADLE_CACHE_CHECKSUM}
