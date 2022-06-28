@@ -102,7 +102,7 @@ parameters:
       Use this to customize how the find command is used to look for relevant
       file changes.
     type: string
-    default: ". -name 'build.gradle'"
+    default: . -type f \( -name 'build.gradle' -o -name 'settings.gradle' -o -name 'build.gradle.kts' -o -name 'settings.gradle.kts' \)
   post-emulator-wait-steps:
     description: |
       Steps to execute after waiting for the emulator to start up

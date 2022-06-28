@@ -119,7 +119,7 @@ parameters:
       Use this to customize how the find command is used to look for relevant
       file changes.
     type: string
-    default: ". -name 'build.gradle'"
+    default: . -type f \( -name 'build.gradle' -o -name 'settings.gradle' -o -name 'build.gradle.kts' -o -name 'settings.gradle.kts' \)
   save-gradle-cache:
     description: |
       Whether to write to the gradle cache after the tests have run
