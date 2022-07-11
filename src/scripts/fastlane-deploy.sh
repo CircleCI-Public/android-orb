@@ -1,2 +1,4 @@
 #!/bin/bash
-sudo gem install fastlane && bundle install && bundle exec fastlane ${PARAM_LANE_NAME}
+sudo gem install fastlane && fastlane ${PARAM_LANE_NAME}
+
+#&& cd src && ls && bundle install && bundle exec 

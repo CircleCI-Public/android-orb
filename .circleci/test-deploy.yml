@@ -150,6 +150,14 @@ jobs:
           post-run-tests-steps:
             - android/save-build-cache  
 
+  test-fastlane:
+    docker:
+      - image: cimg/android:2022.06
+    steps: 
+      - checkout
+      - android/fastlane-deploy:
+          lane-name: "-v"
+
 workflows:
   test-deploy:
     jobs:
@@ -219,6 +227,7 @@ workflows:
       - test-start-emulator-and-run-tests:
           tag: "202102-01"
           filters: *filters
+      - test-fastlane
       - orb-tools/pack:
           filters: *filters
       - orb-tools/publish:
