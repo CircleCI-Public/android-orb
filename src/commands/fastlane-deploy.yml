@@ -8,9 +8,8 @@ parameters:
   lane-name:
     description: The name of the lane fastlane will execute
     type: string
+    default: "deploy"
 steps:
   - run:
-      environment:
-        PARAM_LANE_NAME: << parameters.lane-name >>
       name: Run fastlane
-      command: <<include(scripts/fastlane-deploy.sh)>>
+      command: fastlane << parameters.lane-name >>

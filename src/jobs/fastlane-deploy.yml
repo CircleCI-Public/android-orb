@@ -1,0 +1,54 @@
+description: |
+  Deploy an android app on CircleCI to the Google Play Store using Fastlane. For use with CirceCI Environment Variables.
+
+parameters:
+  executor:
+    description: Executor for the job
+    type: executor
+  base64-keystore:
+    description: your base64 keystore
+    type: string
+  release-key-alias:
+    description: Release key alias
+    type: string
+  release-key-password:
+    description: Password for your release key
+    type: string
+  release-keystore:
+    description: Points to the location of your decrypted keystore
+    type: string
+  release-store-password:
+    description: Password for your keystore
+    type: string
+  keystore-properties-working-directory:
+    description: Working directory to create keystore.properties in
+    type: string
+  google-play-key:
+    description: your google play key
+    type: string
+  lane-name:
+    description: The name of the lane fastlane will execute
+    type: string
+    default: "deploy"
+  fastlane-working-directory:
+    description: Working directory to run fastlane commands in
+    type: string
+
+executor: << parameters.executor >>
+
+steps:
+  - checkout
+  - android/decode-keystore:
+      base64-keystore: << parameters.base64-keystore >>
+  - android/create-keystore-properties:
+      release-key-alias: << parameters.release-key-alias >>
+      release-key-password: << parameters.release-key-password >>
+      release-keystore: << parameters.release-keystore >>
+      release-store-password: << parameters.release-store-password >>
+      working-directory: << parameters.keystore-properties-working-directory >>
+  - android/create-google-play-key:
+      google-play-key: << parameters.google-play-key >>
+  - android/fastlane-deploy:
+      lane-name: << parameters.lane-name >>
+      fastlane-working-directory: << parameters.fastlane-working-directory >>
+

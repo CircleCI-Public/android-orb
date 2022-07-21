@@ -1,0 +1,10 @@
+description: |
+  generate json file for your google play key. For use with environment variables.
+parameters:
+  google-play-key:
+    description: your google play key
+    type: string
+steps:
+  - run:
+      name: Create Google Play key
+      command: echo << parameters.google-play.key >> > google-play-key.json
