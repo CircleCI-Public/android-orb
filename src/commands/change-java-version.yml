@@ -12,4 +12,3 @@ steps:
         PARAM_JAVA_VER: << parameters.java-version >>
       name: Change OpenJDK version
       command: <<include(scripts/change-java-version.sh)>>
-
