@@ -45,14 +45,6 @@ parameters:
     description: Working directory to run fastlane commands in
     type: string
     default: '.'
-  node-version:
-    description: Version of npm to install
-    type: string
-    default: "16.13.0"
-  npm-working-directory:
-    description: Location to run npm install
-    type: string
-    default: "."
   checkout:
     description: Whether to run the checkout step
     type: boolean
