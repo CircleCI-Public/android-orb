@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
   android: circleci/android@dev:<<pipeline.git.revision>>
+  node: circleci/node@5.0.2
   orb-tools: circleci/orb-tools@11.1
 
 filters: &filters
@@ -150,6 +151,29 @@ jobs:
           post-run-tests-steps:
             - android/save-build-cache  
 
+  test-fastlane: 
+    docker:
+      - image: cimg/android:2022.07
+    resource_class: large
+    steps: 
+      - checkout
+      - run: 
+          name: clone sample project
+          command: git clone git@github.com:CircleCI-Public/ReactNativeCFD.git
+      - node/install:
+          install-yarn: false
+          node-version: "16.13.0"
+      - run: cd ReactNativeCFD && npm install
+      - android/decode-keystore:
+          keystore-location: ReactNativeCFD/android/app/keystore
+      - android/create-keystore-properties:
+          working-directory: ReactNativeCFD/android
+      - android/create-google-play-key:
+          working-directory: ReactNativeCFD/android
+      - android/fastlane-deploy:
+          working-directory: ReactNativeCFD/android
+          lane-name: internal
+
 workflows:
   test-deploy:
     jobs:
@@ -219,6 +243,7 @@ workflows:
       - test-start-emulator-and-run-tests:
           tag: "202102-01"
           filters: *filters
+      - test-fastlane
       - orb-tools/pack:
           filters: *filters
       - orb-tools/publish:
