@@ -1,2 +1,2 @@
-# Ping these folks when changes are made to this repository
-* @CircleCI-Public/cpeng
+# Automatically request PR reviews from the CPE Team as a whole and the Images subteam
+*	@CircleCI-Public/cpeng @CircleCI-Public/images
