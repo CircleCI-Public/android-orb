@@ -5,7 +5,7 @@ description: |
 parameters:
   tag:
     description: |
-      Name of CircleCI Android machine image to use. 
+      Name of CircleCI Android machine image to use.
       Android machine tags can be found at https://circleci.com/developer/machine/image/android#image-tags
     type: string
   resource-class:
