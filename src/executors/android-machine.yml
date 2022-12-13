@@ -1,13 +1,12 @@
 description: |
   This selects an Android machine image.
   CircleCI's Android machine images are recommended for Android emulator tests.
-  Currently, this defaults to the first Android machine image, which is currently
-  in preview status: https://github.com/CircleCI-Public/android-image-preview-docs
 
 parameters:
   tag:
     description: |
-      Name of CircleCI Android machine image to use
+      Name of CircleCI Android machine image to use.
+      Android machine tags can be found at https://circleci.com/developer/machine/image/android#image-tags
     type: string
   resource-class:
     description: |
