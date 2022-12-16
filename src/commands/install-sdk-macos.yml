@@ -1,0 +1,23 @@
+description: |
+  Install an Android SDK version for macOS. If the version is already
+  available, the step will still complete successfully.
+
+  This command is designed to be used with the CircleCI macOS.
+
+  Available SDK versions can be found here:
+  https://developer.android.com/studio#command-line-tools-only
+
+parameters:
+  version:
+    type: string
+    default: "9123335"
+    description: |
+      Version of the SDK to install. Available SDK versions can be found here:
+      https://developer.android.com/studio#command-line-tools-only
+
+steps:
+  - run:
+      environment:
+        PARAM_VER: << parameters.version >>
+      name: Install Android SDK
+      command: <<include(scripts/install-sdk-macos.sh)>>

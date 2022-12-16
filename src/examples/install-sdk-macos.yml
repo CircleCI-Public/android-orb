@@ -1,0 +1,19 @@
+description: |
+  A simple example of using the install-sdk-macos command
+  in a job, using most of the default parameters.
+usage:
+  version: 2.1
+  orbs:
+    android: circleci/android@2.0
+  jobs:
+    test:
+      macos:
+        xcode: 14.1.0
+      steps:
+        - checkout
+        # Install an Android SDK version for macOS. You can specify version if needed.
+        - android/install-sdk-macos
+  workflows:
+    test:
+      jobs:
+        - test

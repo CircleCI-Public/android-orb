@@ -1,0 +1,20 @@
+description: |
+  CircleCI's macOS execution environment:
+  https://circleci.com/docs/configuration-reference/#macos
+
+parameters:
+  xcode_version:
+    type: string
+    default: 14.1.0
+    description: |
+      Which macOS execution environment to use. For details, see
+      https://circleci.com/docs/configuration-reference/#macos
+  resource-class:
+    description: Resource class used for the executor.
+    type: enum
+    default: medium
+    enum: [medium, macos.x86.medium.gen2, large, macos.x86.metal.gen1]
+
+macos:
+  xcode: <<parameters.xcode_version>>
+resource_class: << parameters.resource-class >>
