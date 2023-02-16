@@ -25,18 +25,12 @@ parameters:
     description: |
       Additional args to be passed directly to the avd creation command
 steps:
-  - when:
-      condition: << parameters.install >>
-      steps:
-        - run:
-            name: Install system image "<< parameters.system-image >>"
-            command: |
-              sdkmanager "<< parameters.system-image >>"
-  - run:
-      environment:
-        PARAM_AVD_NAME: << parameters.avd-name >>
-        PARAM_SYSTEM_IMAGE: << parameters.system-image >>
-        PARAM_ADDITIONAL_ARGS: << parameters.additional-args >>
-      name: Create avd "<< parameters.avd-name >>"
-      command: <<include(scripts/create-avd.sh)>>
-      background: << parameters.background >>
+    - run:
+        environment:
+          PARAM_AVD_NAME: << parameters.avd-name >>
+          PARAM_INSTALL: << parameters.install >>
+          PARAM_SYSTEM_IMAGE: << parameters.system-image >>
+          PARAM_ADDITIONAL_ARGS: << parameters.additional-args >>
+        name: Create avd "<< parameters.avd-name >>"
+        command: <<include(scripts/create-avd.sh)>>
+        background: << parameters.background >>
