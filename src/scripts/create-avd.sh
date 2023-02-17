@@ -1,6 +1,6 @@
 #!/bin/bash
 
-IMAGE=$(eval echo "$PARAM_SYSTEM_IMAGE")
+IMAGE=$(eval echo "${!PARAM_SYSTEM_IMAGE}")
 
 echo $IMAGE
 
