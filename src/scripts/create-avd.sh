@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ "${PARAM_INSTALL}" == 1 ]; then
-    sdkmanager ${!PARAM_SYSTEM_IMAGE}
+    sdkmanager "${!PARAM_SYSTEM_IMAGE}"
 
 fi
 
