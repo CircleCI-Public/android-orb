@@ -1,6 +1,6 @@
 #!/bin/bash
 
-IMAGE=$(eval echo "${ORB_EVAL_PARAM_SYSTEM_IMAGE}")
+IMAGE=$(eval echo "${PARAM_SYSTEM_IMAGE}")
 
 if [ "${PARAM_INSTALL}" == 1 ]; then
     sdkmanager "$IMAGE"
