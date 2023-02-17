@@ -6,7 +6,7 @@ run_with_retry() {
             until [ $n -gt $MAX_TRIES ]
             do
               echo "Starting test attempt $n"
-              ${PARAM_TEST_COMMAND} && break
+              $PARAM_TEST_COMMAND && break
               n=$((n+1))
               sleep "${PARAM_RETRY_INTERVAL}"
             done
