@@ -2,6 +2,8 @@
 
 IMAGE=$(eval echo "$PARAM_SYSTEM_IMAGE")
 
+echo $IMAGE
+
 if [ "${PARAM_INSTALL}" == 1 ]; then
     sdkmanager "$IMAGE"
 
