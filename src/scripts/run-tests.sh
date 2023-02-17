@@ -1,11 +1,13 @@
 #!/bin/bash
+
+TEST_COMMAND="${PARAM_TEST_COMMAND}"
 run_with_retry() {
             MAX_TRIES=${PARAM_MAX_TRIES}
             n=1
             until [ $n -gt $MAX_TRIES ]
             do
               echo "Starting test attempt $n"
-              ${PARAM_TEST_COMMAND} && break
+              ${TEST_COMMAND} && break
               n=$((n+1))
               sleep "${PARAM_RETRY_INTERVAL}"
             done
