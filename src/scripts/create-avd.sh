@@ -2,6 +2,9 @@
 
 SYSTEM_IMAGE='${!PARAM_SYSTEM_IMAGE}'
 
+echo $SYSTEM_IMAGE
+echo $PARAM_SYSTEM_IMAGE
+
 if [ "${PARAM_INSTALL}" == 1 ]; then
     sdkmanager "$SYSTEM_IMAGE"
 
