@@ -1,13 +1,13 @@
 #!/bin/bash
 
-IMAGE=$(eval echo ${ORB_EVAL_PARAM_SYSTEM_IMAGE})
+IMAGE=$(eval echo ${ORB_EVAL_[PARAM_SYSTEM_IMAGE]})
 
 if [ "${PARAM_INSTALL}" == 1 ]; then
     sdkmanager ${IMAGE}
     echo ${IMAGE}
-    echo ${IMAGE}
-    echo ${IMAGE}
-    echo ${IMAGE}
+    echo "${!IMAGE}"
+    echo "${IMAGE}"
+    echo $IMAGE}
     echo "installed"
 
 fi
