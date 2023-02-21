@@ -123,6 +123,12 @@ jobs:
                 command: |
                   echo "Test"
       - android/kill-emulators
+      - android/create-avd:
+          avd-name: test3
+          system-image: system-images;android-27;default;x86
+          install: true
+          background: true
+      - run: sleep 15 && echo "should cancel previous command"
 
   test-start-emulator-and-run-tests:
     parameters:
@@ -172,7 +178,7 @@ jobs:
           working-directory: ReactNativeCFD/android
       - android/fastlane-deploy:
           working-directory: ReactNativeCFD/android
-          lane-name: internal
+          lane-name: list
 
 workflows:
   test-deploy:
