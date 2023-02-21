@@ -1,6 +1,6 @@
 #!/bin/bash
 
-IMAGE="${ORB_EVAL_[PARAM_SYSTEM_IMAGE]}"
+IMAGE=$(eval echo "${ORB_EVAL_PARAM_SYSTEM_IMAGE}")
 
 echo ${IMAGE}
 
