@@ -17,7 +17,7 @@ parameters:
   background:
     type: boolean
     description: |
-      Where to run the creation command in background
+      Whether to run the creation command in background
     default: false
   additional-args:
     type: string
