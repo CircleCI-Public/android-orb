@@ -3,7 +3,7 @@
 IMAGE=$(eval echo "${PARAM_SYSTEM_IMAGE}")
 
 if [ "${PARAM_INSTALL}" == 1 ]; then
-    sdkmanager ${IMAGE}
+    sdkmanager $IMAGE
 
 fi
 
