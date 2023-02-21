@@ -3,7 +3,7 @@
 echo $PARAM_SYSTEM_IMAGE
 
 if [ "${PARAM_INSTALL}" == 1 ]; then
-    sdkmanager $PARAM_SYSTEM_IMAGE
+    sdkmanager ${PARAM_SYSTEM_IMAGE}
 
 fi
 
