@@ -5,6 +5,10 @@ parameters:
     description: Command to run in order to run the tests
     type: string
     default: "./gradlew connectedDebugAndroidTest"
+  pre-test-command:
+    description: Command to run prior to runnning the test command
+    type: string
+    default: " "
   working-directory:
     description: Working directory to run the tests in
     type: string
@@ -26,6 +30,7 @@ steps:
       environment:
         PARAM_MAX_TRIES: << parameters.max-tries >>
         PARAM_TEST_COMMAND: << parameters.test-command >>
+        PARAM_PRE_TEST_COMMAND: << parameters.pre-test-command >>
         PARAM_RETRY_INTERVAL: << parameters.retry-interval >>
       name: Run tests with max tries of <<parameters.max-tries>>
       working_directory: <<parameters.working-directory>>

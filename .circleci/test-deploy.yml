@@ -93,6 +93,7 @@ jobs:
           post-emulator-launch-assemble-command: "cd compose-samples/Owl && ./gradlew assembleDebugAndroidTest && cd ../Jetsnack && ./gradlew assembleDebugAndroidTest"
       - android/run-tests:
           working-directory: ./compose-samples/Owl
+          pre-test-command: "./gradlew clean"
       - android/run-tests:
           working-directory: ./compose-samples/Jetsnack
       - android/save-gradle-cache:
