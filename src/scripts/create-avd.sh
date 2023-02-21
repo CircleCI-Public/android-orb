@@ -1,6 +1,6 @@
 #!/bin/bash
 
-IMAGE=${ORB_VAL_[PARAM_SYSTEM_IMAGE]}
+IMAGE=${ORB_ENV[PARAM_SYSTEM_IMAGE]}
 
 if [ "${PARAM_INSTALL}" == 1 ]; then
     sdkmanager ${IMAGE}
