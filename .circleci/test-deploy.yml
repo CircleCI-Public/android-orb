@@ -154,8 +154,8 @@ jobs:
             - run: cd compose-samples/Jetchat && ./gradlew assembleDebugAndroidTest
           post-emulator-launch-assemble-command: ""
           run-tests-working-directory: ./compose-samples/Jetchat
-          test-command: $TEST_COMMAND
-          system-image: $SYSTEM_IMAGE
+          test-command: TEST_COMMAND
+          system-image: SYSTEM_IMAGE
           post-run-tests-steps:
             - android/save-build-cache
 
