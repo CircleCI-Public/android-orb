@@ -2,7 +2,7 @@
 
 # IMAGE=$(eval echo "\$$PARAM_SYSTEM_IMAGE}")
 
-echo $(eval echo "${PARAM_SYSTEM_IMAGE}")
+ "$(eval echo "${PARAM_SYSTEM_IMAGE}")"
 # echo "${!PARAM_SYSTEM_IMAGE}"
 echo $PARAM_SYSTEM_IMAGE
 
