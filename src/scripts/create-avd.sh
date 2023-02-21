@@ -1,6 +1,5 @@
 #!/bin/bash
 
- "$(eval echo "${PARAM_SYSTEM_IMAGE}")"
 echo $PARAM_SYSTEM_IMAGE
 
 if [ "${PARAM_INSTALL}" == 1 ]; then
