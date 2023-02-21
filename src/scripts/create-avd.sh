@@ -7,7 +7,7 @@ if [ "${PARAM_INSTALL}" == 1 ]; then
     echo ${IMAGE}
     echo "${!IMAGE}"
     echo "${IMAGE}"
-    echo $IMAGE}
+    echo $IMAGE
     echo "installed"
 
 fi
