@@ -155,6 +155,10 @@ parameters:
       Steps to run after the tests
     type: steps
     default: []
+  pre-test-command:
+    description: Command to run prior to runnning the test command
+    type: string
+    default: " "
   test-command:
     description: Command to run in order to run the tests
     type: string
@@ -214,6 +218,7 @@ steps:
   - << parameters.pre-run-tests-steps >>
   - run-tests:
       working-directory: << parameters.run-tests-working-directory >>
+      pre-test-command: << parameters.pre-test-command >>
       test-command: << parameters.test-command >>
       max-tries: << parameters.max-tries >>
       retry-interval: << parameters.retry-interval >>

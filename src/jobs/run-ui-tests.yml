@@ -2,6 +2,10 @@ description: |
   Creates an AVD, starts an emulator and runs Android UI tests.
   This is a job that wraps the "start-emulator-and-run-tests" command.
 parameters:
+  pre-test-command:
+    description: Command to run prior to runnning the test command
+    type: string
+    default: " "
   test-command:
     description: Command to run in order to run the tests
     type: string
@@ -223,6 +227,7 @@ steps:
       pre-run-tests-steps: << parameters.pre-run-tests-steps >>
       post-run-tests-steps: << parameters.post-run-tests-steps >>
       run-tests-working-directory: << parameters.run-tests-working-directory >>
+      pre-test-command: << parameters.pre-test-command >>
       test-command: << parameters.test-command >>
       max-tries: << parameters.max-tries >>
       retry-interval: << parameters.retry-interval >>
