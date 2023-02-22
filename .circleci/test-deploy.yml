@@ -258,7 +258,7 @@ workflows:
           vcs-type: << pipeline.project.type >>
           pub-type: production
           requires: *prod-deploy-requires
-          context: orb-publisher
+          context: image-orbs
           filters:
             branches:
               ignore: /.*/
