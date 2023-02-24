@@ -185,6 +185,21 @@ parameters:
       Whether to kill the emulators after the tests complete
     type: boolean
     default: true
+  pull-data:
+    description: |
+      Whether to pull data after running tests
+    type: boolean
+    default: false
+  pull-data-path:
+    description: |
+      Emulator directory to pull data from
+    type: string
+    default: data
+  pull-data-target:
+    description: |
+      Location to save pulled data
+    type: string
+    default: .
 
 steps:
   - create-avd:
@@ -223,6 +238,9 @@ steps:
       max-tries: << parameters.max-tries >>
       retry-interval: << parameters.retry-interval >>
       no-output-timeout: << parameters.no-output-timeout >>
+      pull-data: << parameters.pull-data >>
+      pull-data-path: << parameters.pull-data-path >>
+      pull-data-target: << parameters.pull-data-target >>
   - << parameters.post-run-tests-steps >>
   - when:
       condition: << parameters.save-gradle-cache >>

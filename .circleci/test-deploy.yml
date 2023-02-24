@@ -157,6 +157,8 @@ jobs:
           run-tests-working-directory: ./compose-samples/Jetchat
           post-run-tests-steps:
             - android/save-build-cache
+          pull-data: true
+          pull-data-path: storage
 
   test-fastlane:
     docker:

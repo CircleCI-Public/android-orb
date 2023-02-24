@@ -25,6 +25,21 @@ parameters:
     description: Use this to configure the no_output_timeout value
     type: string
     default: 10m
+  pull-data:
+    description: |
+      Whether to pull data after running tests
+    type: boolean
+    default: false
+  pull-data-path:
+    description: |
+      Emulator directory to pull data from
+    type: string
+    default: data
+  pull-data-target:
+    description: |
+      Location to save pulled data
+    type: string
+    default: .
 steps:
   - run:
       environment:
@@ -35,3 +50,7 @@ steps:
       name: Run tests with max tries of <<parameters.max-tries>>
       working_directory: <<parameters.working-directory>>
       command: <<include(scripts/run-tests.sh)>>
+  - when:
+      condition: << parameters.pull-data >>
+      steps:
+        - run: adb pull << parameters.pull-data-path >> << pull-data-target >>
