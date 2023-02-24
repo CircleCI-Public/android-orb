@@ -159,6 +159,7 @@ jobs:
             - android/save-build-cache
           pull-data: true
           pull-data-path: storage
+          pull-data-target: "."
 
   test-fastlane:
     docker:

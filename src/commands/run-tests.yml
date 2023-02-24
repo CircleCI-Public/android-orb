@@ -39,7 +39,7 @@ parameters:
     description: |
       Location to save pulled data
     type: string
-    default: .
+    default: "."
 steps:
   - run:
       environment:
@@ -53,4 +53,4 @@ steps:
   - when:
       condition: << parameters.pull-data >>
       steps:
-        - run: adb pull << parameters.pull-data-path >> << pull-data-target >>
+        - run: adb pull << parameters.pull-data-path >> << parameters.pull-data-target >>
