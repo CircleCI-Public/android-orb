@@ -49,6 +49,7 @@ steps:
         PARAM_RETRY_INTERVAL: << parameters.retry-interval >>
       name: Run tests with max tries of <<parameters.max-tries>>
       working_directory: <<parameters.working-directory>>
+      no_output_timeout: <<parameters.no-output-timeout>>
       command: <<include(scripts/run-tests.sh)>>
   - when:
       condition: << parameters.pull-data >>
