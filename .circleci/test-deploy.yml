@@ -40,8 +40,14 @@ jobs:
           command: |
             JAVA_VER="$( java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 )"
             JAVAC_VER="$( javac -version 2>&1 | head -1 | cut -f 2- -d ' ' | sed '/^1\./s///' | cut -d'.' -f1 )"
-            if [ "$JAVA_VER" -ne <<parameters.java-version>> ] || [ "$JAVAC_VER" -ne <<parameters.java-version>> ]; then
-              echo "Job failed because either the java version or javac version was not changed."
+            if [ "$JAVA_VER" -ne <<parameters.java-version>> ]; then
+              echo "Job failed because java version was not changed."
+              echo "current java version:" $JAVA_VER
+              exit 1
+            fi
+            if [ "$JAVAC_VER" -ne <<parameters.java-version>> ]; then
+              echo "Job failed because javac version was not changed."
+              echo "current javac version:" $JAVAC_VER
               exit 1
             fi
           name: check for correctness
@@ -191,13 +197,14 @@ workflows:
           name: "Test OpenJDK version change"
           executor:
             name: android/android-docker
-            tag: "2021.10.1"
+            tag: "2023.03.1"
           matrix:
             parameters:
               java-version:
                 - 8
                 - 11
-                - 13
+                - 17
+                - 18
           filters: *filters
       - test-ndk-install:
           name: "Test NDK Install on Android Docker"
