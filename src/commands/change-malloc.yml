@@ -1,0 +1,13 @@
+description: |
+  Change default malloc from glibc malloc to jemalloc
+parameters:
+  implementation:
+    type: enum
+    default: jemalloc
+    enum: [jemalloc, tcmalloc]
+steps:
+  - run:
+      environment:
+        PARAM_IMPLEMENTATION: << parameters.implementation >>
+      name: change malloc implementation to << parameters.implementation >>
+      command: <<include(scripts/change-malloc-implementation.sh)>>
