@@ -213,7 +213,8 @@ jobs:
 workflows:
   test-deploy:
     jobs:
-      - test-malloc
+      - test-malloc:
+          name: "Test Changing Malloc Implementations"
       - test-java-version:
           name: "Test OpenJDK version change"
           executor:
