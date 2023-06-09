@@ -192,7 +192,7 @@ jobs:
   test-malloc:
     docker:
       - image: cimg/android:2023.06
-    resource_class: large
+    resource_class: medium
     steps:
       - checkout
       - android/change-malloc
