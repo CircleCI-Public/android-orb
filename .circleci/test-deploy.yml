@@ -189,15 +189,37 @@ jobs:
       - android/fastlane-deploy:
           working-directory: ReactNativeCFD/android
           lane-name: list
-
+  test-malloc:
+    docker:
+      - image: cimg/android:2023.06
+    resource_class: medium
+    steps:
+      - checkout
+      - android/change-malloc
+      - run:
+          name: check malloc override to jemalloc
+          command: cat /etc/environment | grep jemalloc
+      - run:
+          name: check jemalloc size
+          command: sudo apt show libjemalloc-dev | grep Size
+      - android/change-malloc:
+          implementation: tcmalloc
+      - run:
+          name: check malloc override to tcmalloc
+          command: cat /etc/environment | grep tcmalloc
+      - run:
+          name: check tcmalloc size
+          command: sudo apt show google-perftools | grep Size
 workflows:
   test-deploy:
     jobs:
+      - test-malloc:
+          name: "Test Changing Malloc Implementations"
       - test-java-version:
           name: "Test OpenJDK version change"
           executor:
             name: android/android-docker
-            tag: "2023.03.1"
+            tag: "2023.05.1"
           matrix:
             parameters:
               java-version:
