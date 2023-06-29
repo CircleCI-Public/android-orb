@@ -12,6 +12,7 @@
             fi
             sudo update-alternatives --set javac /usr/lib/jvm/java-"${PARAM_JAVA_VER}"-openjdk-amd64/bin/javac
           else
+            sudo apt-get update
             sudo apt install openjdk-"${PARAM_JAVA_VER}"-jdk
             sudo update-alternatives --set javac /usr/lib/jvm/java-"${PARAM_JAVA_VER}"-openjdk-amd64/bin/javac
             sudo update-alternatives --set java /usr/lib/jvm/java-"${PARAM_JAVA_VER}"-openjdk-amd64/bin/java
