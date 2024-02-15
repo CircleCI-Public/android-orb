@@ -3,11 +3,12 @@ description: |
 usage:
   version: 2.1
   orbs:
-    android: circleci/android@2.0
+    android: circleci/android@2.4.0
   workflows:
     test:
       jobs:
         - android/run-ui-tests:
             executor:
               name: android/android-machine
+              tag: "default"
               resource-class: xlarge

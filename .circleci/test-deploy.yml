@@ -258,7 +258,7 @@ workflows:
           name: "ui-tests-<<matrix.system-image>>"
           executor:
             name: android/android-machine
-            tag: "202102-01"
+            tag: "default"
           checkout: false
           pre-steps:
             - run:
@@ -277,10 +277,10 @@ workflows:
           filters: *filters
       - test-emulator-commands:
           system-image: "system-images;android-29;default;x86"
-          tag: "202102-01"
+          tag: "default"
           filters: *filters
       - test-start-emulator-and-run-tests:
-          tag: "202102-01"
+          tag: "default"
           filters: *filters
       - test-fastlane
       - orb-tools/pack:
