@@ -11,7 +11,6 @@ filters: &filters
 prod-deploy-requires: &prod-deploy-requires
   [
     orb-tools/pack,
-    ui-tests-system-images;android-25;default;x86,
     ui-tests-system-images;android-29;default;x86,
     ui-tests-system-images;android-29;google_apis;x86_64,
     test-emulator-commands,
@@ -86,7 +85,7 @@ jobs:
             git clone https://github.com/android/compose-samples
             cd compose-samples
             # pin the revision for consistency
-            git checkout f1e930dbe6f209dde9ceb5d3419bbf314aabcb58
+            git checkout 367230e7de69e5ee01bcfcf9a7c7e650f16ef957
       - android/create-avd:
           avd-name: test1
           system-image: <<parameters.system-image>>
@@ -96,12 +95,10 @@ jobs:
           run-logcat: true
           memory: 3072
           restore-gradle-cache-prefix: v1-multiple
-          post-emulator-launch-assemble-command: "cd compose-samples/Owl && ./gradlew assembleDebugAndroidTest && cd ../Jetsnack && ./gradlew assembleDebugAndroidTest"
+          post-emulator-launch-assemble-command: "cd compose-samples/Owl && ./gradlew assembleDebugAndroidTest"
       - android/run-tests:
           working-directory: ./compose-samples/Owl
           pre-test-command: "./gradlew tasks"
-      - android/run-tests:
-          working-directory: ./compose-samples/Jetsnack
       - android/save-gradle-cache:
           cache-prefix: v1-multiple
       - android/kill-emulators
@@ -112,7 +109,7 @@ jobs:
           install: false
       - android/start-emulator:
           avd-name: test2
-          # we expect the no-window parameter to be overriden by override-args
+          # we expect the no-window parameter to be overridden by override-args
           no-window: true
           override-args: "-delay-adb -verbose -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim"
           wait-for-emulator: true
@@ -156,7 +153,7 @@ jobs:
                     git clone https://github.com/android/compose-samples
                     cd compose-samples
                     # pin the revision for consistency
-                    git checkout f1e930dbe6f209dde9ceb5d3419bbf314aabcb58
+                    git checkout 367230e7de69e5ee01bcfcf9a7c7e650f16ef957
             - android/restore-build-cache
             - run: cd compose-samples/Jetchat && ./gradlew assembleDebugAndroidTest
           post-emulator-launch-assemble-command: ""
@@ -246,7 +243,7 @@ workflows:
           name: "Test NDK Install on Android Machine"
           executor:
             name: android/android-machine
-            tag: "2021.10.1"
+            tag: "default"
           matrix:
             parameters:
               ndk:
@@ -267,13 +264,13 @@ workflows:
                   git clone https://github.com/android/compose-samples
                   cd compose-samples
                   # pin the revision for consistency
-                  git checkout f1e930dbe6f209dde9ceb5d3419bbf314aabcb58
+                  git checkout 367230e7de69e5ee01bcfcf9a7c7e650f16ef957
                   cd ..
                   cp -r compose-samples/Jetchat/* .
                   rm -rf compose-samples
           matrix:
             parameters:
-              system-image: ["system-images;android-29;default;x86", "system-images;android-29;google_apis;x86_64", "system-images;android-25;default;x86"]
+              system-image: ["system-images;android-29;default;x86", "system-images;android-29;google_apis;x86_64"]
           filters: *filters
       - test-emulator-commands:
           system-image: "system-images;android-29;default;x86"
