@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  android: circleci/android@2.5.0
 setup: true
 orbs:
   orb-tools: circleci/orb-tools@11.1
