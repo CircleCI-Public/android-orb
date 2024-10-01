@@ -286,9 +286,9 @@ workflows:
       - orb-tools/pack:
           filters: *filters
       # - orb-tools/publish:
-      #     orb-name: circleci/android
-      #     vcs-type: << pipeline.project.type >>
-      #     pub-type: production
+      #     orb_name: circleci/android
+      #     vcs_type: << pipeline.project.type >>
+      #     pub_type: production
       #     requires: *prod-deploy-requires
       #     context: image-orbs
       #     filters:
