@@ -1,14 +1,14 @@
 description: |
   Save gradle cache
 parameters:
-  cache-prefix:
+  cache_prefix:
     description: Used to form part of the cache key
     type: string
     default: v1
 steps:
   - save_cache:
       name: Save gradle cache
-      key: gradle-<< parameters.cache-prefix>>-{{ arch }}-{{ checksum "/tmp/gradle_cache_seed" }}
+      key: gradle-<< parameters.cache_prefix>>-{{ arch }}-{{ checksum "/tmp/gradle_cache_seed" }}
       paths:
         - ~/.gradle/caches
         - ~/.gradle/wrapper

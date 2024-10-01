@@ -1,9 +1,9 @@
 description: |
   Start an emulator as a background process.
-  The AVD used should already be created. (See "create-avd" command for how
+  The AVD used should already be created. (See "create_avd" command for how
   one could be created)
 parameters:
-  avd-name:
+  avd_name:
     description: |
       The name of the existing AVD to use for the emulator
     type: string
@@ -13,16 +13,16 @@ parameters:
       If set to "", the emulator will be run without the -gpu flag.
     type: string
     default: "swiftshader_indirect"
-  camera-front:
+  camera_front:
     description: |
-      The value to use for the "-camera-front" flag.
-      If set to "", the emulator will be run without the -camera-front flag.
+      The value to use for the "-camera_front" flag.
+      If set to "", the emulator will be run without the -camera_front flag.
     type: string
     default: ""
-  camera-back:
+  camera_back:
     description: |
-      The value to use for the "-camera-back" flag.
-      If set to "", the emulator will be run without the -camera-back flag.
+      The value to use for the "-camera_back" flag.
+      If set to "", the emulator will be run without the -camera_back flag.
     type: string
     default: ""
   memory:
@@ -31,29 +31,29 @@ parameters:
       If set to -1, the emulator will be run without the -memory flag.
     type: integer
     default: -1
-  no-window:
+  no_window:
     description: |
-      Whether to run the emulator with the -no-window flag
+      Whether to run the emulator with the -no_window flag
     type: boolean
     default: true
-  no-audio:
+  no_audio:
     description: |
       Whether to run the emulator with the -noaudio flag
     type: boolean
     default: true
-  no-boot-anim:
+  no_boot_anim:
     description: |
-      Whether to run the emulator with the -no-boot-anim flag
+      Whether to run the emulator with the -no_boot_anim flag
     type: boolean
     default: true
-  no-snapshot:
+  no_snapshot:
     description: |
-      Whether to run the emulator with the -no-snapshot flag
+      Whether to run the emulator with the -no_snapshot flag
     type: boolean
     default: true
-  delay-adb:
+  delay_adb:
     description: |
-      Whether to run the emulator with the -delay-adb flag
+      Whether to run the emulator with the -delay_adb flag
     type: boolean
     default: false
   verbose:
@@ -61,64 +61,64 @@ parameters:
       Whether to run the emulator with the -verbose flag
     type: boolean
     default: true
-  additional-args:
+  additional_args:
     description: |
       Additional args to be passed directly to the emulator command
     type: string
     default: ""
-  override-args:
+  override_args:
     description: |
       If this is set to a non-blank value, the emulator command will be
-      run with the -avd flag and the value of "override-args" (i.e. none of the defaults
+      run with the -avd flag and the value of "override_args" (i.e. none of the defaults
       provided by the orb command will be used)
     type: string
     default: ""
-  pre-emulator-wait-steps:
+  pre_emulator_wait_steps:
     description: |
       Steps to execute while before beginning to wait for the emulator to start up
     type: steps
     default: []
-  post-emulator-launch-assemble-command:
+  post_emulator_launch_assemble_command:
     description: |
       If this is set to a non-blank value, the configured command will be run
       after the emulator has been launched, and before commencing the
       wait for the emulator to finish starting up.
     type: string
     default: "./gradlew assembleDebugAndroidTest"
-  restore-gradle-cache-post-emulator-launch:
+  restore_gradle_cache-post-emulator-launch:
     description: |
       Whether to restore the gradle cache after the emulator has been launched,
       and before commencing the wait for the emulator to finish starting up.
     type: boolean
     default: true
-  restore-gradle-cache-prefix:
+  restore_gradle_cache_prefix:
     description: |
-      Cache prefix used if the "restore-gradle-cache-post-emulator-launch" parameter
+      Cache prefix used if the "restore_gradle_cache-post-emulator-launch" parameter
       is set to true.
     type: string
     default: "v1"
-  restore-gradle-cache-find-args:
+  restore_gradle_cache-find_args:
     description: |
       Use this to customize how the find command is used to look for relevant
       file changes.
     type: string
     default:  ". -name \"build.gradle*\" -o -name \"settings.gradle*\""
-  post-emulator-wait-steps:
+  post_emulator_wait_steps:
     description: |
       Steps to execute after waiting for the emulator to start up
     type: steps
     default: []
-  wait-for-emulator:
+  wait_for_emulator:
     description: |
       Whether to wait for the emulator to start up
     type: boolean
     default: true
-  run-logcat:
+  run_logcat:
     description: |
       Whether to run with logcat in the background, after the emulator starts up
     type: boolean
     default: false
-  disable-animations:
+  disable_animations:
     description: |
       Whether to disable animations that may interfere with tests, after the emulator starts up
     type: boolean
@@ -126,53 +126,53 @@ parameters:
 steps:
   - run:
       environment:
-        PARAM_OVERRIDE_ARGS: << parameters.override-args >>
-        PARAM_AVD_NAME: << parameters.avd-name >>
-        PARAM_NO_WINDOW: << parameters.no-window >>
-        PARAM_NO_AUDIO: << parameters.no-audio >>
-        PARAM_NO_BOOT_ANIM: << parameters.no-boot-anim >>
+        PARAM_OVERRIDE_ARGS: << parameters.override_args >>
+        PARAM_AVD_NAME: << parameters.avd_name >>
+        PARAM_NO_WINDOW: << parameters.no_window >>
+        PARAM_NO_AUDIO: << parameters.no_audio >>
+        PARAM_NO_BOOT_ANIM: << parameters.no_boot_anim >>
         PARAM_VERBOSE: << parameters.verbose >>
-        PARAM_NO_SNAPSHOT: << parameters.no-snapshot >>
-        PARAM_DELAY_ABD: << parameters.delay-adb >>
+        PARAM_NO_SNAPSHOT: << parameters.no_snapshot >>
+        PARAM_DELAY_ABD: << parameters.delay_adb >>
         PARAM_MEMORY: << parameters.memory >>
         PARAM_GPU: << parameters.gpu >>
-        PARAM_CAMERA_FRONT: << parameters.camera-front >>
-        PARAM_CAMERA_BACK: << parameters.camera-back >>
-        PARAM_ADDITIONAL_ARGS: << parameters.additional-args >>
+        PARAM_CAMERA_FRONT: << parameters.camera_front >>
+        PARAM_CAMERA_BACK: << parameters.camera_back >>
+        PARAM_ADDITIONAL_ARGS: << parameters.additional_args >>
       name: Start emulator
-      command: <<include(scripts/start-emulator.sh)>>
+      command: <<include(scripts/start_emulator.sh)>>
       background: true
   - when:
       condition:
         and:
-          - << parameters.restore-gradle-cache-post-emulator-launch >>
-          - equal: [ true, << parameters.wait-for-emulator >> ]
+          - << parameters.restore_gradle_cache-post-emulator-launch >>
+          - equal: [ true, << parameters.wait_for_emulator >> ]
       steps:
-        - restore-gradle-cache:
-            cache-prefix: << parameters.restore-gradle-cache-prefix >>
-            find-args: << parameters.restore-gradle-cache-find-args >>
+        - restore_gradle_cache:
+            cache_prefix: << parameters.restore_gradle_cache_prefix >>
+            find_args: << parameters.restore_gradle_cache-find_args >>
   - when:
       condition:
         and:
-          - << parameters.post-emulator-launch-assemble-command >>
-          - equal: [ true, << parameters.wait-for-emulator >> ]
+          - << parameters.post_emulator_launch_assemble_command >>
+          - equal: [ true, << parameters.wait_for_emulator >> ]
       steps:
         - run:
-            name: "Run: << parameters.post-emulator-launch-assemble-command >>"
+            name: "Run: << parameters.post_emulator_launch_assemble_command >>"
             command: |
               # This is meant to do something useful in parallel with the emulator
               # starting up, like assembling the app, which is required for UI tests
-              << parameters.post-emulator-launch-assemble-command >>
+              << parameters.post_emulator_launch_assemble_command >>
   - when:
-      condition: << parameters.wait-for-emulator >>
+      condition: << parameters.wait_for_emulator >>
       steps:
-        - << parameters.pre-emulator-wait-steps >>
+        - << parameters.pre_emulator_wait_steps >>
   - when:
-      condition: << parameters.wait-for-emulator >>
+      condition: << parameters.wait_for_emulator >>
       steps:
-        - wait-for-emulator
+        - wait_for_emulator
         - when:
-            condition: << parameters.run-logcat >>
+            condition: << parameters.run_logcat >>
             steps:
               - run:
                   name: Logcat
@@ -180,7 +180,7 @@ steps:
                     adb logcat
                   background: true
         - when:
-            condition: << parameters.disable-animations >>
+            condition: << parameters.disable_animations >>
             steps:
-                - disable-animations
-        - << parameters.post-emulator-wait-steps >>
+                - disable_animations
+        - << parameters.post_emulator_wait_steps >>

@@ -1,27 +1,27 @@
 description: |
   Creates an AVD, starts an emulator and runs Android UI tests.
-  This is a job that wraps the "start-emulator-and-run-tests" command.
+  This is a job that wraps the "start_emulator-and-run_tests" command.
 parameters:
-  pre-test-command:
+  pre_test_command:
     description: Command to run prior to runnning the test command
     type: string
     default: " "
-  test-command:
+  test_command:
     description: Command to run in order to run the tests
     type: string
     default: "./gradlew connectedDebugAndroidTest"
-  system-image:
+  system_image:
     description: |
-      Name of system image e.g. "system-images;android-29;default;x86".
+      Name of system image e.g. "system_images;android-29;default;x86".
       It should match the name seen in the "sdkmanager --list" output.
     type: string
-    default: system-images;android-29;default;x86
-  pre-run-tests-steps:
+    default: system_images;android-29;default;x86
+  pre-run_tests-steps:
     description: |
       Steps to run before the tests
     type: steps
     default: []
-  post-run-tests-steps:
+  post-run_tests-steps:
     description: |
       Steps to run after the tests
     type: steps
@@ -33,17 +33,17 @@ parameters:
     description: Whether to run the checkout step
     type: boolean
     default: true
-  avd-name:
+  avd_name:
     description: |
       The name of the AVD to create
     type: string
     default: test
-  install-system-image:
+  install-system_image:
     description: |
       Whether to first install the system image via sdkmanager
     type: boolean
     default: true
-  additional-avd-args:
+  additional_avd_args:
     description: |
       Additional args to be passed directly to the avd creation command
     type: string
@@ -54,16 +54,16 @@ parameters:
       If set to "", the emulator will be run without the -gpu flag.
     type: string
     default: "swiftshader_indirect"
-  camera-front:
+  camera_front:
     description: |
-      The value to use for the "-camera-front" flag.
-      If set to "", the emulator will be run without the -camera-front flag.
+      The value to use for the "-camera_front" flag.
+      If set to "", the emulator will be run without the -camera_front flag.
     type: string
     default: ""
-  camera-back:
+  camera_back:
     description: |
-      The value to use for the "-camera-back" flag.
-      If set to "", the emulator will be run without the -camera-back flag.
+      The value to use for the "-camera_back" flag.
+      If set to "", the emulator will be run without the -camera_back flag.
     type: string
     default: ""
   memory:
@@ -72,29 +72,29 @@ parameters:
       If set to -1, the emulator will be run without the -memory flag.
     type: integer
     default: -1
-  no-window:
+  no_window:
     description: |
-      Whether to run the emulator with the -no-window flag
+      Whether to run the emulator with the -no_window flag
     type: boolean
     default: true
-  no-audio:
+  no_audio:
     description: |
       Whether to run the emulator with the -noaudio flag
     type: boolean
     default: true
-  no-boot-anim:
+  no_boot_anim:
     description: |
-      Whether to run the emulator with the -no-boot-anim flag
+      Whether to run the emulator with the -no_boot_anim flag
     type: boolean
     default: true
-  no-snapshot:
+  no_snapshot:
     description: |
-      Whether to run the emulator with the -no-snapshot flag
+      Whether to run the emulator with the -no_snapshot flag
     type: boolean
     default: true
-  delay-adb:
+  delay_adb:
     description: |
-      Whether to run the emulator with the -delay-adb flag
+      Whether to run the emulator with the -delay_adb flag
     type: boolean
     default: false
   verbose:
@@ -102,106 +102,106 @@ parameters:
       Whether to run the emulator with the -verbose flag
     type: boolean
     default: true
-  additional-emulator-args:
+  additional_emulator_args:
     description: |
       Additional args to be passed directly to the emulator command
     type: string
     default: ""
-  override-emulator-args:
+  override_emulator_args:
     description: |
       If this is set to a non-blank value, the emulator command will be
-      run with the -avd flag and the value of "override-args" (i.e. none of the defaults
+      run with the -avd flag and the value of "override_args" (i.e. none of the defaults
       provided by the orb command will be used)
     type: string
     default: ""
-  pre-emulator-wait-steps:
+  pre_emulator_wait_steps:
     description: |
       Steps to execute while before beginning to wait for the emulator to start up
     type: steps
     default: []
-  post-emulator-launch-assemble-command:
+  post_emulator_launch_assemble_command:
     description: |
       If this is set to a non-blank value, the configured command will be run
       after the emulator has been launched, and before commencing the
       wait for the emulator to finish starting up.
     type: string
     default: "./gradlew assembleDebugAndroidTest"
-  restore-gradle-cache-post-emulator-launch:
+  restore_gradle_cache-post-emulator-launch:
     description: |
       Whether to restore the gradle cache after the emulator has been launched,
       and before commencing the wait for the emulator to finish starting up.
     type: boolean
     default: true
-  restore-gradle-cache-prefix:
+  restore_gradle_cache_prefix:
     description: |
-      Cache prefix used if the "restore-gradle-cache-post-emulator-launch" parameter
+      Cache prefix used if the "restore_gradle_cache-post-emulator-launch" parameter
       is set to true.
     type: string
     default: "v1"
-  restore-gradle-cache-find-args:
+  restore_gradle_cache-find_args:
     description: |
       Use this to customize how the find command is used to look for relevant
       file changes.
     type: string
     default: ". -name \"build.gradle*\" -o -name \"settings.gradle*\""
-  save-gradle-cache:
+  save_gradle_cache:
     description: |
       Whether to write to the gradle cache after the tests have run
     type: boolean
     default: true
-  post-emulator-wait-steps:
+  post_emulator_wait_steps:
     description: |
       Steps to execute after waiting for the emulator to start up
     type: steps
     default: []
-  wait-for-emulator:
+  wait_for_emulator:
     description: |
       Whether to wait for the emulator to start up
     type: boolean
     default: true
-  run-logcat:
+  run_logcat:
     description: |
       Whether to run with logcat in the background, after the emulator starts up
     type: boolean
     default: false
-  disable-animations:
+  disable_animations:
     description: |
       Whether to disable animations that may interfere with tests, after the emulator starts up
     type: boolean
     default: true
-  run-tests-working-directory:
+  run_tests-working_directory:
     description: Working directory to run the tests in
     type: string
     default: "."
-  max-tries:
+  max_tries:
     description: Max number of tries. To disable retries, set this to 1.
     type: integer
     default: 2
-  retry-interval:
+  retry_interval:
     description: Duration in seconds to wait before the next try
     type: integer
     default: 5
-  no-output-timeout:
+  no_output_timeout:
     description: |
       Use this to configure the no_output_timeout value of the test run
     type: string
     default: 10m
-  kill-emulators:
+  kill_emulators:
     description: |
       Whether to kill the emulators after the tests complete
     type: boolean
     default: true
-  pull-data:
+  pull_data:
     description: |
       Whether to pull data after running tests
     type: boolean
     default: false
-  pull-data-path:
+  pull_data-path:
     description: |
       Emulator directory to pull data from
     type: string
     default: data
-  pull-data-target:
+  pull_data-target:
     description: |
       Location to save pulled data
     type: string
@@ -213,42 +213,42 @@ steps:
       condition: << parameters.checkout >>
       steps:
         - checkout
-  - start-emulator-and-run-tests:
-      avd-name: << parameters.avd-name >>
-      system-image: <<parameters.system-image>>
-      install-system-image: << parameters.install-system-image >>
-      additional-avd-args: << parameters.additional-avd-args >>
+  - start_emulator-and-run_tests:
+      avd_name: << parameters.avd_name >>
+      system_image: <<parameters.system_image>>
+      install-system_image: << parameters.install-system_image >>
+      additional_avd_args: << parameters.additional_avd_args >>
       gpu: << parameters.gpu >>
-      camera-front: << parameters.camera-front >>
-      camera-back: << parameters.camera-back >>
+      camera_front: << parameters.camera_front >>
+      camera_back: << parameters.camera_back >>
       memory: << parameters.memory >>
-      no-window: << parameters.no-window >>
-      no-audio: << parameters.no-audio >>
-      no-boot-anim: << parameters.no-boot-anim >>
-      no-snapshot: << parameters.no-snapshot >>
-      delay-adb: << parameters.delay-adb >>
+      no_window: << parameters.no_window >>
+      no_audio: << parameters.no_audio >>
+      no_boot_anim: << parameters.no_boot_anim >>
+      no_snapshot: << parameters.no_snapshot >>
+      delay_adb: << parameters.delay_adb >>
       verbose: << parameters.verbose >>
-      additional-emulator-args: << parameters.additional-emulator-args >>
-      override-emulator-args: << parameters.override-emulator-args >>
-      wait-for-emulator: << parameters.wait-for-emulator >>
-      pre-emulator-wait-steps: << parameters.pre-emulator-wait-steps >>
-      post-emulator-launch-assemble-command: << parameters.post-emulator-launch-assemble-command >>
-      restore-gradle-cache-post-emulator-launch: << parameters.restore-gradle-cache-post-emulator-launch >>
-      post-emulator-wait-steps: << parameters.post-emulator-wait-steps >>
-      run-logcat: << parameters.run-logcat >>
-      restore-gradle-cache-prefix: << parameters.restore-gradle-cache-prefix >>
-      restore-gradle-cache-find-args: << parameters.restore-gradle-cache-find-args >>
-      save-gradle-cache: << parameters.save-gradle-cache >>
-      disable-animations: << parameters.disable-animations >>
-      pre-run-tests-steps: << parameters.pre-run-tests-steps >>
-      post-run-tests-steps: << parameters.post-run-tests-steps >>
-      run-tests-working-directory: << parameters.run-tests-working-directory >>
-      pre-test-command: << parameters.pre-test-command >>
-      test-command: << parameters.test-command >>
-      max-tries: << parameters.max-tries >>
-      retry-interval: << parameters.retry-interval >>
-      no-output-timeout: << parameters.no-output-timeout >>
-      kill-emulators: << parameters.kill-emulators >>
-      pull-data: << parameters.pull-data >>
-      pull-data-path: << parameters.pull-data-path >>
-      pull-data-target: << parameters.pull-data-target >>
+      additional_emulator_args: << parameters.additional_emulator_args >>
+      override_emulator_args: << parameters.override_emulator_args >>
+      wait_for_emulator: << parameters.wait_for_emulator >>
+      pre_emulator_wait_steps: << parameters.pre_emulator_wait_steps >>
+      post_emulator_launch_assemble_command: << parameters.post_emulator_launch_assemble_command >>
+      restore_gradle_cache-post-emulator-launch: << parameters.restore_gradle_cache-post-emulator-launch >>
+      post_emulator_wait_steps: << parameters.post_emulator_wait_steps >>
+      run_logcat: << parameters.run_logcat >>
+      restore_gradle_cache_prefix: << parameters.restore_gradle_cache_prefix >>
+      restore_gradle_cache-find_args: << parameters.restore_gradle_cache-find_args >>
+      save_gradle_cache: << parameters.save_gradle_cache >>
+      disable_animations: << parameters.disable_animations >>
+      pre-run_tests-steps: << parameters.pre-run_tests-steps >>
+      post-run_tests-steps: << parameters.post-run_tests-steps >>
+      run_tests-working_directory: << parameters.run_tests-working_directory >>
+      pre_test_command: << parameters.pre_test_command >>
+      test_command: << parameters.test_command >>
+      max_tries: << parameters.max_tries >>
+      retry_interval: << parameters.retry_interval >>
+      no_output_timeout: << parameters.no_output_timeout >>
+      kill_emulators: << parameters.kill_emulators >>
+      pull_data: << parameters.pull_data >>
+      pull_data-path: << parameters.pull_data-path >>
+      pull_data-target: << parameters.pull_data-target >>

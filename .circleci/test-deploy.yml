@@ -2,80 +2,67 @@ version: 2.1
 orbs:
   android: {}
   node: circleci/node@6.1.0
-  orb-tools: circleci/orb-tools@11.5.1
-
+  orb-tools: circleci/orb-tools@12.1.0
 filters: &filters
   tags:
     only: /.*/
-
-prod-deploy-requires: &prod-deploy-requires
-  [
-    orb-tools/pack,
-    ui-tests-system-images;android-31;default;x86,
-    ui-tests-system-images;android-35;google_apis;x86_64,
-    test-emulator-commands,
-    test-start-emulator-and-run-tests,
-    test-java-version
-  ]
-
+prod-deploy-requires: &prod-deploy-requires [orb-tools/pack, ui-tests-system_images;android-31;default;x86, ui-tests-system_images;android-35;google_apis;x86_64, test-emulator-commands, test-start_emulator-and-run_tests, test-java_version]
 jobs:
-  test-java-version:
+  test-java_version:
     parameters:
       executor:
         type: executor
         description: |
-          Which Android image/executor to use. Choose between 'android-docker'
-          and 'android-machine'.
-      java-version:
+          Which Android image/executor to use. Choose between 'android_docker'
+          and 'android_machine'.
+      java_version:
         type: integer
         description: |
-          Version to use in the change-java-version job
+          Version to use in the change_java_version job
     executor: <<parameters.executor>>
     steps:
       - checkout
-      - android/change-java-version:
-          java-version: << parameters.java-version >>
+      - android/change_java_version:
+          java_version: << parameters.java_version >>
       - run:
           command: |
             JAVA_VER="$( java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 )"
             JAVAC_VER="$( javac -version 2>&1 | head -1 | cut -f 2- -d ' ' | sed '/^1\./s///' | cut -d'.' -f1 )"
-            if [ "$JAVA_VER" -ne <<parameters.java-version>> ]; then
+            if [ "$JAVA_VER" -ne <<parameters.java_version>> ]; then
               echo "Job failed because java version was not changed."
               echo "current java version:" $JAVA_VER
               exit 1
             fi
-            if [ "$JAVAC_VER" -ne <<parameters.java-version>> ]; then
+            if [ "$JAVAC_VER" -ne <<parameters.java_version>> ]; then
               echo "Job failed because javac version was not changed."
               echo "current javac version:" $JAVAC_VER
               exit 1
             fi
           name: check for correctness
-
   test-ndk-install:
     parameters:
       executor:
         type: executor
         description: |
-          Which Android image/executor to use. Choose between 'android-docker'
-          and 'android-machine'.
+          Which Android image/executor to use. Choose between 'android_docker'
+          and 'android_machine'.
       ndk:
         type: string
         description: ndk version to install
     executor: << parameters.executor >>
     steps:
       - checkout
-      - android/install-ndk:
+      - android/install_ndk:
           version: << parameters.ndk >>
-
   test-emulator-commands:
     parameters:
-      system-image:
+      system_image:
         type: string
       tag:
         type: string
         description: "Android machine image tag to use."
     executor:
-      name: android/android-machine
+      name: android/android_machine
       tag: << parameters.tag >>
     steps:
       - checkout
@@ -86,84 +73,82 @@ jobs:
             cd compose-samples
             # pin the revision for consistency
             # git checkout 367230e7de69e5ee01bcfcf9a7c7e650f16ef957
-      - android/create-avd:
-          avd-name: test1
-          system-image: <<parameters.system-image>>
+      - android/create_avd:
+          avd_name: test1
+          system_image: <<parameters.system_image>>
           install: true
-      - android/start-emulator:
-          avd-name: test1
-          run-logcat: true
+      - android/start_emulator:
+          avd_name: test1
+          run_logcat: true
           memory: 3072
-          restore-gradle-cache-prefix: v1-multiple
-          post-emulator-launch-assemble-command: "cd compose-samples/Owl && ./gradlew assembleDebugAndroidTest"
-      - android/run-tests:
-          working-directory: ./compose-samples/Owl
-          pre-test-command: "./gradlew tasks"
-      - android/save-gradle-cache:
-          cache-prefix: v1-multiple
-      - android/kill-emulators
-      - run: sdkmanager "system-images;android-31;default;x86"
-      - android/create-avd:
-          avd-name: test2
-          system-image: system-images;android-31;default;x86
+          restore_gradle_cache_prefix: v1-multiple
+          post_emulator_launch_assemble_command: "cd compose-samples/Owl && ./gradlew assembleDebugAndroidTest"
+      - android/run_tests:
+          working_directory: ./compose-samples/Owl
+          pre_test_command: "./gradlew tasks"
+      - android/save_gradle_cache:
+          cache_prefix: v1-multiple
+      - android/kill_emulators
+      - run: sdkmanager "system_images;android-31;default;x86"
+      - android/create_avd:
+          avd_name: test2
+          system_image: system_images;android-31;default;x86
           install: false
-      - android/start-emulator:
-          avd-name: test2
-          # we expect the no-window parameter to be overridden by override-args
-          no-window: true
-          override-args: "-delay-adb -verbose -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim"
-          wait-for-emulator: true
-          restore-gradle-cache-post-emulator-launch: false
-          post-emulator-launch-assemble-command: ""
-          disable-animations: false
-          pre-emulator-wait-steps:
+      - android/start_emulator:
+          avd_name: test2
+          # we expect the no_window parameter to be overridden by override_args
+          no_window: true
+          override_args: "-delay_adb -verbose -gpu swiftshader_indirect -no_snapshot -noaudio -no_boot_anim"
+          wait_for_emulator: true
+          restore_gradle_cache-post-emulator-launch: false
+          post_emulator_launch_assemble_command: ""
+          disable_animations: false
+          pre_emulator_wait_steps:
             - run:
-                name: Dummy pre-emulator-wait-steps
+                name: Dummy pre_emulator_wait_steps
                 command: |
                   echo "Test"
-          post-emulator-wait-steps:
+          post_emulator_wait_steps:
             - run:
-                name: Dummy post-emulator-wait-steps
+                name: Dummy post_emulator_wait_steps
                 command: |
                   echo "Test"
-      - android/kill-emulators
-      - android/create-avd:
-          avd-name: test3
-          system-image: system-images;android-31;default;x86
+      - android/kill_emulators
+      - android/create_avd:
+          avd_name: test3
+          system_image: system_images;android-31;default;x86
           install: true
           background: true
       - run: sleep 15 && echo "should cancel previous command"
-
-  test-start-emulator-and-run-tests:
+  test-start_emulator-and-run_tests:
     parameters:
       tag:
         type: string
         description: "Android machine image tag to use."
     executor:
-      name: android/android-machine
+      name: android/android_machine
       tag: << parameters.tag >>
-      resource-class: xlarge
+      resource_class: xlarge
     steps:
       - checkout
-      - android/start-emulator-and-run-tests:
-          pre-emulator-wait-steps:
+      - android/start_emulator-and-run_tests:
+          pre_emulator_wait_steps:
             - run:
                 name: Clone project
                 command: |
-                    git clone https://github.com/android/compose-samples
-                    cd compose-samples
-                    # pin the revision for consistency
-                    # git checkout 367230e7de69e5ee01bcfcf9a7c7e650f16ef957
-            - android/restore-build-cache
+                  git clone https://github.com/android/compose-samples
+                  cd compose-samples
+                  # pin the revision for consistency
+                  # git checkout 367230e7de69e5ee01bcfcf9a7c7e650f16ef957
+            - android/restore_build_cache
             - run: cd compose-samples/Jetchat && ./gradlew assembleDebugAndroidTest
-          post-emulator-launch-assemble-command: ""
-          run-tests-working-directory: ./compose-samples/Jetchat
-          post-run-tests-steps:
-            - android/save-build-cache
-          pull-data: true
-          pull-data-path: storage
-          pull-data-target: "."
-
+          post_emulator_launch_assemble_command: ""
+          run_tests-working_directory: ./compose-samples/Jetchat
+          post-run_tests-steps:
+            - android/save_build_cache
+          pull_data: true
+          pull_data-path: storage
+          pull_data-target: "."
   test-fastlane:
     docker:
       - image: cimg/android:2022.07
@@ -177,29 +162,29 @@ jobs:
           install-yarn: false
           node-version: "16.13.0"
       - run: cd ReactNativeCFD && npm install
-      - android/decode-keystore:
-          keystore-location: ReactNativeCFD/android/app/keystore
-      - android/create-keystore-properties:
-          working-directory: ReactNativeCFD/android
-      - android/create-google-play-key:
-          working-directory: ReactNativeCFD/android
-      - android/fastlane-deploy:
-          working-directory: ReactNativeCFD/android
-          lane-name: list
+      - android/decode_keystore:
+          keystore_location: ReactNativeCFD/android/app/keystore
+      - android/create_keystore_properties:
+          working_directory: ReactNativeCFD/android
+      - android/create_google_play_key:
+          working_directory: ReactNativeCFD/android
+      - android/fastlane_deploy:
+          working_directory: ReactNativeCFD/android
+          lane_name: list
   test-malloc:
     docker:
       - image: cimg/android:2023.06
     resource_class: medium
     steps:
       - checkout
-      - android/change-malloc
+      - android/change_malloc
       - run:
           name: check malloc override to jemalloc
           command: cat /etc/environment | grep jemalloc
       - run:
           name: check jemalloc size
           command: sudo apt show libjemalloc-dev | grep Size
-      - android/change-malloc:
+      - android/change_malloc:
           implementation: tcmalloc
       - run:
           name: check malloc override to tcmalloc
@@ -212,14 +197,14 @@ workflows:
     jobs:
       - test-malloc:
           name: "Test Changing Malloc Implementations"
-      - test-java-version:
+      - test-java_version:
           name: "Test OpenJDK version change"
           executor:
-            name: android/android-docker
+            name: android/android_docker
             tag: "2023.05.1"
           matrix:
             parameters:
-              java-version:
+              java_version:
                 - 8
                 - 11
                 - 17
@@ -231,9 +216,9 @@ workflows:
           matrix:
             parameters:
               executor:
-                - name: android/android-docker
+                - name: android/android_docker
                   tag: "2021.10.1"
-                - name: android/android-docker
+                - name: android/android_docker
                   tag: "2021.09.1"
               ndk:
                 - "23.0.7599858"
@@ -244,7 +229,7 @@ workflows:
       - test-ndk-install:
           name: "Test NDK Install on Android Machine"
           executor:
-            name: android/android-machine
+            name: android/android_machine
             tag: "default"
           matrix:
             parameters:
@@ -254,10 +239,10 @@ workflows:
                 - "19.2.5345600"
                 - "27.1.12297006"
           filters: *filters
-      - android/run-ui-tests:
-          name: "ui-tests-<<matrix.system-image>>"
+      - android/run_ui_tests:
+          name: "ui-tests-<<matrix.system_image>>"
           executor:
-            name: android/android-machine
+            name: android/android_machine
             tag: "default"
           checkout: false
           pre-steps:
@@ -273,26 +258,26 @@ workflows:
                   rm -rf compose-samples
           matrix:
             parameters:
-              system-image: ["system-images;android-31;default;x86", "system-images;android-35;google_apis;x86_64"]
+              system_image: ["system_images;android-31;default;x86", "system_images;android-35;google_apis;x86_64"]
           filters: *filters
       - test-emulator-commands:
-          system-image: "system-images;android-31;default;x86"
+          system_image: "system_images;android-31;default;x86"
           tag: "default"
           filters: *filters
-      - test-start-emulator-and-run-tests:
+      - test-start_emulator-and-run_tests:
           tag: "default"
           filters: *filters
       - test-fastlane
       - orb-tools/pack:
           filters: *filters
-      # - orb-tools/publish:
-      #     orb-name: circleci/android
-      #     vcs-type: << pipeline.project.type >>
-      #     pub-type: production
-      #     requires: *prod-deploy-requires
-      #     context: image-orbs
-      #     filters:
-      #       branches:
-      #         ignore: /.*/
-      #       tags:
-      #         only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
+    # - orb-tools/publish:
+    #     orb_name: circleci/android
+    #     vcs_type: << pipeline.project.type >>
+    #     pub_type: production
+    #     requires: *prod-deploy-requires
+    #     context: image-orbs
+    #     filters:
+    #       branches:
+    #         ignore: /.*/
+    #       tags:
+    #         only: /^v[0-9]+\.[0-9]+\.[0-9]+$/

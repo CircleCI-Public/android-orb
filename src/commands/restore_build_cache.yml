@@ -2,7 +2,7 @@ description: >
   Restore the build cache. See `save_build_cache` for more information.
 
 parameters:
-  cache-prefix:
+  cache_prefix:
     description: Used to form part of the cache key
     type: string
     default: v1
@@ -10,4 +10,4 @@ parameters:
 steps:
   - restore_cache:
       name: Restore build cache
-      key: android-orb-<<parameters.cache-prefix>>-
+      key: android-orb-<<parameters.cache_prefix>>-

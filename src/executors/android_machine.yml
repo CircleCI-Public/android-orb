@@ -8,7 +8,7 @@ parameters:
       Name of CircleCI Android machine image to use.
       Android machine tags can be found at https://circleci.com/developer/machine/image/android#image-tags
     type: string
-  resource-class:
+  resource_class:
     description: |
       Resource class used for the executor. It is recommended
       to use large and above to avoid memory issues such as process
@@ -19,4 +19,4 @@ parameters:
 
 machine:
   image: android:<< parameters.tag >>
-  resource_class: << parameters.resource-class >>
+  resource_class: << parameters.resource_class >>

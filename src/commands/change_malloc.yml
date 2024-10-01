@@ -10,4 +10,4 @@ steps:
       environment:
         PARAM_IMPLEMENTATION: << parameters.implementation >>
       name: change malloc implementation to << parameters.implementation >>
-      command: <<include(scripts/change-malloc-implementation.sh)>>
+      command: <<include(scripts/change_malloc-implementation.sh)>>

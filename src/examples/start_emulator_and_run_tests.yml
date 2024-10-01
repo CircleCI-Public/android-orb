@@ -1,7 +1,7 @@
 description: |
-  A simple example of using the start-emulator-and-run-tests command
+  A simple example of using the start_emulator-and-run_tests command
   in a job, using most of the default parameters.
-  Parameters like the system-image and emulator options (e.g. "no-window")
+  Parameters like the system_image and emulator options (e.g. "no_window")
   may need to be adjusted from the defaults, according to your project.
 usage:
   version: 2.1
@@ -10,9 +10,9 @@ usage:
   jobs:
     test:
       executor:
-        name: android/android-machine
+        name: android/android_machine
         tag: "default"
-        resource-class: large
+        resource_class: large
       steps:
         - checkout
         # Creates an AVD and starts up the emulator using the AVD.
@@ -21,16 +21,16 @@ usage:
         # When the emulator is ready, UI tests will be run.
         # After the tests are run, the gradle cache will be saved (if it
         # hasn't been saved before)
-        - android/start-emulator-and-run-tests:
-            system-image: system-images;android-29;default;x86
+        - android/start_emulator-and-run_tests:
+            system_image: system_images;android-29;default;x86
         #   The cache prefix can be overridden
-        #   restore-gradle-cache-prefix: v1a
+        #   restore_gradle_cache_prefix: v1a
         #
         #   The command to be run, while waiting for emulator startup, can be overridden
-        #   post-emulator-launch-assemble-command: ./gradlew assembleDebugAndroidTest
+        #   post_emulator_launch_assemble_command: ./gradlew assembleDebugAndroidTest
         #
         #   The test command can be overridden
-        #   test-command: ./gradlew connectedDebugAndroidTest
+        #   test_command: ./gradlew connectedDebugAndroidTest
   workflows:
     test:
       jobs:

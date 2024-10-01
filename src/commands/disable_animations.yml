@@ -3,4 +3,4 @@ description: |
 steps:
   - run:
       name: Disable emulator animations
-      command: <<include(scripts/disable-animations.sh)>>
+      command: <<include(scripts/disable_animations.sh)>>

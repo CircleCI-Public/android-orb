@@ -9,7 +9,7 @@ parameters:
     description: |
       The Android image tag to use.
       Choose a tag from https://circleci.com/developer/images/image/cimg/android#image-tags.
-  resource-class:
+  resource_class:
     description: Resource class used for the executor.
     type: enum
     default: medium
@@ -17,4 +17,4 @@ parameters:
 
 docker:
   - image: cimg/android:<< parameters.tag >>
-resource_class: << parameters.resource-class >>
+resource_class: << parameters.resource_class >>

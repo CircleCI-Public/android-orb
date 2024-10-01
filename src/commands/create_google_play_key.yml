@@ -1,16 +1,16 @@
 description: |
   Generate JSON file for your google play key. For use with environment variables.
 parameters:
-  google-play-key:
+  google_play_key:
     description: Your google play key
     type: env_var_name
     default: GOOGLE_PLAY_KEY
-  working-directory:
+  working_directory:
     description: Working directory to create google play key in
     type: string
     default: "."
 steps:
   - run:
       name: Create Google Play key
-      command: echo ${<< parameters.google-play-key >>} > google-play-key.json
-      working_directory: << parameters.working-directory >>
+      command: echo ${<< parameters.google_play_key >>} > google_play_key.json
+      working_directory: << parameters.working_directory >>

@@ -10,4 +10,4 @@ executor: << parameters.executor >>
 
 steps:
   - checkout
-  - accept-licenses
+  - accept_licenses
