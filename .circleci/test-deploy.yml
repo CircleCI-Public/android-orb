@@ -6,7 +6,7 @@ orbs:
 filters: &filters
   tags:
     only: /.*/
-prod-deploy-requires: &prod-deploy-requires [orb-tools/pack, ui-tests-system-images;android-31;default;x86_64, ui-tests-system-images;android-35;google_apis;x86_64, test-emulator-commands, test-start_emulator-and-run_tests, test-java_version]
+prod-deploy-requires: &prod-deploy-requires [orb-tools/pack, ui-tests-system-images;android-31;default;x86_64, ui-tests-system-images;android-35;google_apis;x86_64, test-start_emulator-and-run_tests, test-java_version]
 jobs:
   test_java_version:
     parameters:
@@ -82,9 +82,9 @@ jobs:
           run_logcat: true
           memory: 3072
           restore_gradle_cache_prefix: v1-multiple
-          post_emulator_launch_assemble_command: "cd compose-samples/Owl && ./gradlew assembleDebugAndroidTest"
+          post_emulator_launch_assemble_command: "cd compose-samples/Reply && ./gradlew assembleDebugAndroidTest"
       - android/run_tests:
-          working_directory: ./compose-samples/Owl
+          working_directory: ./compose-samples/Reply
           pre_test_command: "./gradlew tasks"
       - android/save_gradle_cache:
           cache_prefix: v1-multiple
@@ -260,10 +260,10 @@ workflows:
             parameters:
               system_image: ["system-images;android-31;default;x86_64", "system-images;android-35;google_apis;x86_64"]
           filters: *filters
-      - test-emulator-commands:
-          system_image: "system-images;android-31;default;x86_64"
-          tag: "default"
-          filters: *filters
+      # - test-emulator-commands:
+      #     system_image: "system-images;android-31;default;x86_64"
+      #     tag: "default"
+      #     filters: *filters
       - test_start_emulator_and_run_tests:
           tag: "default"
           filters: *filters
