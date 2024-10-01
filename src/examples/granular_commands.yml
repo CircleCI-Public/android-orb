@@ -5,7 +5,7 @@ description: |
 usage:
   version: 2.1
   orbs:
-    android: circleci/android@2.4.0
+    android: circleci/android@3.0.0
   jobs:
     test:
       executor:
@@ -17,7 +17,7 @@ usage:
         # Create an AVD named "myavd"
         - android/create_avd:
             avd_name: myavd
-            system_image: system-images;android-29;default;x86
+            system_image: system-images;android-31;default;x86_64
             install: true
         # By default, after starting up the emulator, a cache will be restored,
         # "./gradlew assembleDebugAndroidTest" will be run and then a script
