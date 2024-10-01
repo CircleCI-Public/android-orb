@@ -1,8 +1,8 @@
 version: 2.1
 orbs:
-  android: circleci/android@dev:<<pipeline.git.revision>>
-  node: circleci/node@5.0.2
-  orb-tools: circleci/orb-tools@11.5.1
+  android: {}
+  node: circleci/node@6.1.0
+  orb-tools: circleci/orb-tools@12.1.0
 
 filters: &filters
   tags:
