@@ -29,7 +29,7 @@ parameters:
     description: Password for your keystore
     type: env_var_name
     default: RELEASE_STORE_PASSWORD
-  keystore-properties-working_directory:
+  keystore_properties_working_directory:
     description: Working directory to create keystore.properties in
     type: string
     default: '.'
@@ -41,7 +41,7 @@ parameters:
     description: The name of the lane fastlane will execute
     type: string
     default: "deploy"
-  fastlane-working_directory:
+  fastlane_working_directory:
     description: Working directory to run fastlane commands in
     type: string
     default: '.'
@@ -65,10 +65,10 @@ steps:
       release_key_password: << parameters.release_key_password >>
       release_keystore: << parameters.release_keystore >>
       release_store_password: << parameters.release_store_password >>
-      working_directory: << parameters.keystore-properties-working_directory >>
+      working_directory: << parameters.keystore_properties_working_directory >>
   - create_google_play_key:
       google_play_key: << parameters.google_play_key >>
   - fastlane_deploy:
       lane_name: << parameters.lane_name >>
-      working_directory: << parameters.fastlane-working_directory >>
+      working_directory: << parameters.fastlane_working_directory >>
 
