@@ -285,14 +285,14 @@ workflows:
       - test-fastlane
       - orb-tools/pack:
           filters: *filters
-      - orb-tools/publish:
-          orb-name: circleci/android
-          vcs-type: << pipeline.project.type >>
-          pub-type: production
-          requires: *prod-deploy-requires
-          # context: image-orbs
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
+      # - orb-tools/publish:
+      #     orb-name: circleci/android
+      #     vcs-type: << pipeline.project.type >>
+      #     pub-type: production
+      #     requires: *prod-deploy-requires
+      #     context: image-orbs
+      #     filters:
+      #       branches:
+      #         ignore: /.*/
+      #       tags:
+      #         only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
