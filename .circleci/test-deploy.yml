@@ -11,8 +11,8 @@ filters: &filters
 prod-deploy-requires: &prod-deploy-requires
   [
     orb-tools/pack,
-    ui-tests-system-images;android-29;default;x86,
-    ui-tests-system-images;android-29;google_apis;x86_64,
+    ui-tests-system-images;android-31;default;x86,
+    ui-tests-system-images;android-35;google_apis;x86_64,
     test-emulator-commands,
     test-start-emulator-and-run-tests,
     test-java-version
@@ -85,7 +85,7 @@ jobs:
             git clone https://github.com/android/compose-samples
             cd compose-samples
             # pin the revision for consistency
-            git checkout 367230e7de69e5ee01bcfcf9a7c7e650f16ef957
+            # git checkout 367230e7de69e5ee01bcfcf9a7c7e650f16ef957
       - android/create-avd:
           avd-name: test1
           system-image: <<parameters.system-image>>
@@ -102,10 +102,10 @@ jobs:
       - android/save-gradle-cache:
           cache-prefix: v1-multiple
       - android/kill-emulators
-      - run: sdkmanager "system-images;android-28;default;x86"
+      - run: sdkmanager "system-images;android-31;default;x86"
       - android/create-avd:
           avd-name: test2
-          system-image: system-images;android-28;default;x86
+          system-image: system-images;android-31;default;x86
           install: false
       - android/start-emulator:
           avd-name: test2
@@ -129,7 +129,7 @@ jobs:
       - android/kill-emulators
       - android/create-avd:
           avd-name: test3
-          system-image: system-images;android-27;default;x86
+          system-image: system-images;android-31;default;x86
           install: true
           background: true
       - run: sleep 15 && echo "should cancel previous command"
@@ -153,7 +153,7 @@ jobs:
                     git clone https://github.com/android/compose-samples
                     cd compose-samples
                     # pin the revision for consistency
-                    git checkout 367230e7de69e5ee01bcfcf9a7c7e650f16ef957
+                    # git checkout 367230e7de69e5ee01bcfcf9a7c7e650f16ef957
             - android/restore-build-cache
             - run: cd compose-samples/Jetchat && ./gradlew assembleDebugAndroidTest
           post-emulator-launch-assemble-command: ""
@@ -224,6 +224,7 @@ workflows:
                 - 11
                 - 17
                 - 18
+                - 21
           filters: *filters
       - test-ndk-install:
           name: "Test NDK Install on Android Docker"
@@ -238,6 +239,7 @@ workflows:
                 - "23.0.7599858"
                 - "21.4.7075529"
                 - "19.2.5345600"
+                - "27.1.12297006"
           filters: *filters
       - test-ndk-install:
           name: "Test NDK Install on Android Machine"
@@ -250,6 +252,7 @@ workflows:
                 - "23.0.7599858"
                 - "21.4.7075529"
                 - "19.2.5345600"
+                - "27.1.12297006"
           filters: *filters
       - android/run-ui-tests:
           name: "ui-tests-<<matrix.system-image>>"
@@ -264,16 +267,16 @@ workflows:
                   git clone https://github.com/android/compose-samples
                   cd compose-samples
                   # pin the revision for consistency
-                  git checkout 367230e7de69e5ee01bcfcf9a7c7e650f16ef957
+                  # git checkout 367230e7de69e5ee01bcfcf9a7c7e650f16ef957
                   cd ..
                   cp -r compose-samples/Jetchat/* .
                   rm -rf compose-samples
           matrix:
             parameters:
-              system-image: ["system-images;android-29;default;x86", "system-images;android-29;google_apis;x86_64"]
+              system-image: ["system-images;android-31;default;x86", "system-images;android-35;google_apis;x86_64"]
           filters: *filters
       - test-emulator-commands:
-          system-image: "system-images;android-29;default;x86"
+          system-image: "system-images;android-31;default;x86"
           tag: "default"
           filters: *filters
       - test-start-emulator-and-run-tests:
@@ -287,7 +290,7 @@ workflows:
           vcs-type: << pipeline.project.type >>
           pub-type: production
           requires: *prod-deploy-requires
-          context: image-orbs
+          # context: image-orbs
           filters:
             branches:
               ignore: /.*/
