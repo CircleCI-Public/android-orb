@@ -22,7 +22,7 @@ usage:
         # After the tests are run, the gradle cache will be saved (if it
         # hasn't been saved before)
         - android/start_emulator_and_run_tests:
-            system_image: system_images;android-29;default;x86
+            system_image: system-images;android-29;default;x86
         #   The cache prefix can be overridden
         #   restore_gradle_cache_prefix: v1a
         #

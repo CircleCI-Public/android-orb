@@ -12,5 +12,5 @@ usage:
             name: "ui-tests-<<matrix.system_image>>"
             matrix:
               parameters:
-                system_image: ["system_images;android-28;default;x86", "system_images;android-29;default;x86"]
+                system_image: ["system-images;android-28;default;x86", "system-images;android-29;default;x86"]
 

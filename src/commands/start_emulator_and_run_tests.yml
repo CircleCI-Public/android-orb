@@ -10,10 +10,10 @@ parameters:
     default: test
   system_image:
     description: |
-      Name of system image e.g. "system_images;android-29;default;x86".
+      Name of system image e.g. "system-images;android-29;default;x86".
       It should match the name seen in the "sdkmanager --list" output.
     type: string
-    default: system_images;android-29;default;x86
+    default: system-images;android-29;default;x86
   install_system_image:
     description: |
       Whether to first install the system image via sdkmanager

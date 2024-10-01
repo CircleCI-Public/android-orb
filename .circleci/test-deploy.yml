@@ -6,7 +6,7 @@ orbs:
 filters: &filters
   tags:
     only: /.*/
-prod-deploy-requires: &prod-deploy-requires [orb-tools/pack, ui-tests-system_images;android-31;default;x86, ui-tests-system_images;android-35;google_apis;x86_64, test-emulator-commands, test-start_emulator-and-run_tests, test-java_version]
+prod-deploy-requires: &prod-deploy-requires [orb-tools/pack, ui-tests-system-images;android-31;default;x86, ui-tests-system-images;android-35;google_apis;x86_64, test-emulator-commands, test-start_emulator-and-run_tests, test-java_version]
 jobs:
   test_java_version:
     parameters:
@@ -89,10 +89,10 @@ jobs:
       - android/save_gradle_cache:
           cache_prefix: v1-multiple
       - android/kill_emulators
-      - run: sdkmanager "system_images;android-31;default;x86"
+      - run: sdkmanager "system-images;android-31;default;x86"
       - android/create_avd:
           avd_name: test2
-          system_image: system_images;android-31;default;x86
+          system_image: system-images;android-31;default;x86
           install: false
       - android/start_emulator:
           avd_name: test2
@@ -116,7 +116,7 @@ jobs:
       - android/kill_emulators
       - android/create_avd:
           avd_name: test3
-          system_image: system_images;android-31;default;x86
+          system_image: system-images;android-31;default;x86
           install: true
           background: true
       - run: sleep 15 && echo "should cancel previous command"
@@ -258,10 +258,10 @@ workflows:
                   rm -rf compose-samples
           matrix:
             parameters:
-              system_image: ["system_images;android-31;default;x86", "system_images;android-35;google_apis;x86_64"]
+              system_image: ["system-images;android-31;default;x86", "system-images;android-35;google_apis;x86_64"]
           filters: *filters
       - test-emulator-commands:
-          system_image: "system_images;android-31;default;x86"
+          system_image: "system-images;android-31;default;x86"
           tag: "default"
           filters: *filters
       - test_start_emulator_and_run_tests:
