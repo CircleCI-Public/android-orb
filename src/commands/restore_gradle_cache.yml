@@ -16,7 +16,7 @@ steps:
       environment:
         PARAM_FIND_ARGS: << parameters.find_args >>
       name: Generate cache checksum
-      command: <<include(scripts/generate-cache-checksum.sh)>>
+      command: <<include(scripts/generate_cache_checksum.sh)>>
   - restore_cache:
       name: Restore gradle cache
       key: gradle-<< parameters.cache_prefix>>-{{ arch }}-{{ checksum "/tmp/gradle_cache_seed" }}
