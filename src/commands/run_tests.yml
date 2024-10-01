@@ -30,12 +30,12 @@ parameters:
       Whether to pull data after running tests
     type: boolean
     default: false
-  pull_data-path:
+  pull_data_path:
     description: |
       Emulator directory to pull data from
     type: string
     default: data
-  pull_data-target:
+  pull_data_target:
     description: |
       Location to save pulled data
     type: string
@@ -54,4 +54,4 @@ steps:
   - when:
       condition: << parameters.pull_data >>
       steps:
-        - run: adb pull << parameters.pull_data-path >> << parameters.pull_data-target >>
+        - run: adb pull << parameters.pull_data_path >> << parameters.pull_data_target >>

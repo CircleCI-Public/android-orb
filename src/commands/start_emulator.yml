@@ -85,7 +85,7 @@ parameters:
       wait for the emulator to finish starting up.
     type: string
     default: "./gradlew assembleDebugAndroidTest"
-  restore_gradle_cache-post-emulator-launch:
+  restore_gradle_cache_post_emulator_launch:
     description: |
       Whether to restore the gradle cache after the emulator has been launched,
       and before commencing the wait for the emulator to finish starting up.
@@ -97,7 +97,7 @@ parameters:
       is set to true.
     type: string
     default: "v1"
-  restore_gradle_cache-find_args:
+  restore_gradle_cache_find_args:
     description: |
       Use this to customize how the find command is used to look for relevant
       file changes.
@@ -145,12 +145,12 @@ steps:
   - when:
       condition:
         and:
-          - << parameters.restore_gradle_cache-post-emulator-launch >>
+          - << parameters.restore_gradle_cache_post_emulator_launch >>
           - equal: [ true, << parameters.wait_for_emulator >> ]
       steps:
         - restore_gradle_cache:
             cache_prefix: << parameters.restore_gradle_cache_prefix >>
-            find_args: << parameters.restore_gradle_cache-find_args >>
+            find_args: << parameters.restore_gradle_cache_find_args >>
   - when:
       condition:
         and:

@@ -16,12 +16,12 @@ parameters:
       It should match the name seen in the "sdkmanager --list" output.
     type: string
     default: system_images;android-29;default;x86
-  pre-run_tests-steps:
+  pre_run_tests_steps:
     description: |
       Steps to run before the tests
     type: steps
     default: []
-  post-run_tests-steps:
+  post_run_tests_steps:
     description: |
       Steps to run after the tests
     type: steps
@@ -38,7 +38,7 @@ parameters:
       The name of the AVD to create
     type: string
     default: test
-  install-system_image:
+  install_system_image:
     description: |
       Whether to first install the system image via sdkmanager
     type: boolean
@@ -126,7 +126,7 @@ parameters:
       wait for the emulator to finish starting up.
     type: string
     default: "./gradlew assembleDebugAndroidTest"
-  restore_gradle_cache-post-emulator-launch:
+  restore_gradle_cache_post_emulator_launch:
     description: |
       Whether to restore the gradle cache after the emulator has been launched,
       and before commencing the wait for the emulator to finish starting up.
@@ -138,7 +138,7 @@ parameters:
       is set to true.
     type: string
     default: "v1"
-  restore_gradle_cache-find_args:
+  restore_gradle_cache_find_args:
     description: |
       Use this to customize how the find command is used to look for relevant
       file changes.
@@ -169,7 +169,7 @@ parameters:
       Whether to disable animations that may interfere with tests, after the emulator starts up
     type: boolean
     default: true
-  run_tests-working_directory:
+  run_tests_working_directory:
     description: Working directory to run the tests in
     type: string
     default: "."
@@ -196,12 +196,12 @@ parameters:
       Whether to pull data after running tests
     type: boolean
     default: false
-  pull_data-path:
+  pull_data_path:
     description: |
       Emulator directory to pull data from
     type: string
     default: data
-  pull_data-target:
+  pull_data_target:
     description: |
       Location to save pulled data
     type: string
@@ -213,10 +213,10 @@ steps:
       condition: << parameters.checkout >>
       steps:
         - checkout
-  - start_emulator-and-run_tests:
+  - start_emulator_and_run_tests:
       avd_name: << parameters.avd_name >>
       system_image: <<parameters.system_image>>
-      install-system_image: << parameters.install-system_image >>
+      install_system_image: << parameters.install_system_image >>
       additional_avd_args: << parameters.additional_avd_args >>
       gpu: << parameters.gpu >>
       camera_front: << parameters.camera_front >>
@@ -233,16 +233,16 @@ steps:
       wait_for_emulator: << parameters.wait_for_emulator >>
       pre_emulator_wait_steps: << parameters.pre_emulator_wait_steps >>
       post_emulator_launch_assemble_command: << parameters.post_emulator_launch_assemble_command >>
-      restore_gradle_cache-post-emulator-launch: << parameters.restore_gradle_cache-post-emulator-launch >>
+      restore_gradle_cache_post_emulator_launch: << parameters.restore_gradle_cache_post_emulator_launch >>
       post_emulator_wait_steps: << parameters.post_emulator_wait_steps >>
       run_logcat: << parameters.run_logcat >>
       restore_gradle_cache_prefix: << parameters.restore_gradle_cache_prefix >>
-      restore_gradle_cache-find_args: << parameters.restore_gradle_cache-find_args >>
+      restore_gradle_cache_find_args: << parameters.restore_gradle_cache_find_args >>
       save_gradle_cache: << parameters.save_gradle_cache >>
       disable_animations: << parameters.disable_animations >>
-      pre-run_tests-steps: << parameters.pre-run_tests-steps >>
-      post-run_tests-steps: << parameters.post-run_tests-steps >>
-      run_tests-working_directory: << parameters.run_tests-working_directory >>
+      pre_run_tests_steps: << parameters.pre_run_tests_steps >>
+      post_run_tests_steps: << parameters.post_run_tests_steps >>
+      run_tests_working_directory: << parameters.run_tests_working_directory >>
       pre_test_command: << parameters.pre_test_command >>
       test_command: << parameters.test_command >>
       max_tries: << parameters.max_tries >>
@@ -250,5 +250,5 @@ steps:
       no_output_timeout: << parameters.no_output_timeout >>
       kill_emulators: << parameters.kill_emulators >>
       pull_data: << parameters.pull_data >>
-      pull_data-path: << parameters.pull_data-path >>
-      pull_data-target: << parameters.pull_data-target >>
+      pull_data_path: << parameters.pull_data_path >>
+      pull_data_target: << parameters.pull_data_target >>

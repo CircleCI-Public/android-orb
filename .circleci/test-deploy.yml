@@ -8,7 +8,7 @@ filters: &filters
     only: /.*/
 prod-deploy-requires: &prod-deploy-requires [orb-tools/pack, ui-tests-system_images;android-31;default;x86, ui-tests-system_images;android-35;google_apis;x86_64, test-emulator-commands, test-start_emulator-and-run_tests, test-java_version]
 jobs:
-  test-java_version:
+  test_java_version:
     parameters:
       executor:
         type: executor
@@ -100,7 +100,7 @@ jobs:
           no_window: true
           override_args: "-delay_adb -verbose -gpu swiftshader_indirect -no_snapshot -noaudio -no_boot_anim"
           wait_for_emulator: true
-          restore_gradle_cache-post-emulator-launch: false
+          restore_gradle_cache_post_emulator_launch: false
           post_emulator_launch_assemble_command: ""
           disable_animations: false
           pre_emulator_wait_steps:
@@ -120,7 +120,7 @@ jobs:
           install: true
           background: true
       - run: sleep 15 && echo "should cancel previous command"
-  test-start_emulator-and-run_tests:
+  test_start_emulator_and_run_tests:
     parameters:
       tag:
         type: string
@@ -131,7 +131,7 @@ jobs:
       resource_class: xlarge
     steps:
       - checkout
-      - android/start_emulator-and-run_tests:
+      - android/start_emulator_and_run_tests:
           pre_emulator_wait_steps:
             - run:
                 name: Clone project
@@ -143,12 +143,12 @@ jobs:
             - android/restore_build_cache
             - run: cd compose-samples/Jetchat && ./gradlew assembleDebugAndroidTest
           post_emulator_launch_assemble_command: ""
-          run_tests-working_directory: ./compose-samples/Jetchat
-          post-run_tests-steps:
+          run_tests_working_directory: ./compose-samples/Jetchat
+          post_run_tests_steps:
             - android/save_build_cache
           pull_data: true
-          pull_data-path: storage
-          pull_data-target: "."
+          pull_data_path: storage
+          pull_data_target: "."
   test-fastlane:
     docker:
       - image: cimg/android:2022.07
@@ -197,7 +197,7 @@ workflows:
     jobs:
       - test-malloc:
           name: "Test Changing Malloc Implementations"
-      - test-java_version:
+      - test_java_version:
           name: "Test OpenJDK version change"
           executor:
             name: android/android_docker
@@ -264,7 +264,7 @@ workflows:
           system_image: "system_images;android-31;default;x86"
           tag: "default"
           filters: *filters
-      - test-start_emulator-and-run_tests:
+      - test_start_emulator_and_run_tests:
           tag: "default"
           filters: *filters
       - test-fastlane
