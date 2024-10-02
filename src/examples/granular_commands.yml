@@ -1,6 +1,6 @@
 description: |
   An example of using the more granular commands of the orb together,
-  to achieve something similar to using the "start_emulator-and-run_tests" command
+  to achieve something similar to using the "start_emulator_and_run_tests" command
   or the "run_ui_tests" job.
 usage:
   version: 2.1

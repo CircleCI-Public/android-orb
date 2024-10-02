@@ -32,14 +32,14 @@ parameters:
     default: "swiftshader_indirect"
   camera_front:
     description: |
-      The value to use for the "-camera_front" flag.
-      If set to "", the emulator will be run without the -camera_front flag.
+      The value to use for the "-camera-front" flag.
+      If set to "", the emulator will be run without the -camera-front flag.
     type: string
     default: ""
   camera_back:
     description: |
-      The value to use for the "-camera_back" flag.
-      If set to "", the emulator will be run without the -camera_back flag.
+      The value to use for the "-camera-back" flag.
+      If set to "", the emulator will be run without the -camera-back flag.
     type: string
     default: ""
   memory:
@@ -50,7 +50,7 @@ parameters:
     default: -1
   no_window:
     description: |
-      Whether to run the emulator with the -no_window flag
+      Whether to run the emulator with the -no-window flag
     type: boolean
     default: true
   no_audio:
@@ -60,17 +60,17 @@ parameters:
     default: true
   no_boot_anim:
     description: |
-      Whether to run the emulator with the -no_boot_anim flag
+      Whether to run the emulator with the -no-boot-anim flag
     type: boolean
     default: true
   no_snapshot:
     description: |
-      Whether to run the emulator with the -no_snapshot flag
+      Whether to run the emulator with the -no-snapshot flag
     type: boolean
     default: true
   delay_adb:
     description: |
-      Whether to run the emulator with the -delay_adb flag
+      Whether to run the emulator with the -delay-adb flag
     type: boolean
     default: false
   verbose:
@@ -110,7 +110,7 @@ parameters:
     default: true
   restore_gradle_cache_prefix:
     description: |
-      Cache prefix used if the "restore_gradle_cache-post-emulator-launch" parameter
+      Cache prefix used if the "restore_gradle_cache_post_emulator_launch" parameter
       is set to true.
     type: string
     default: "v1"

@@ -1,5 +1,5 @@
 description: |
-  A simple example of using the start_emulator-and-run_tests command
+  A simple example of using the start_emulator_and_run_tests command
   in a job, using most of the default parameters.
   Parameters like the system_image and emulator options (e.g. "no_window")
   may need to be adjusted from the defaults, according to your project.

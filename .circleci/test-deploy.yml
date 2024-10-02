@@ -98,7 +98,7 @@ jobs:
           avd_name: test2
           # we expect the no_window parameter to be overridden by override_args
           no_window: true
-          override_args: "-delay_adb -verbose -gpu swiftshader_indirect -no_snapshot -noaudio -no_boot_anim"
+          override_args: "-delay-adb -verbose -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim"
           wait_for_emulator: true
           restore_gradle_cache_post_emulator_launch: false
           post_emulator_launch_assemble_command: ""

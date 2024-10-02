@@ -14,3 +14,7 @@ usage:
             # Specify job "pre-steps" and "post-steps" if necessary
             # to execute custom steps before and afer any of the built-in steps
             system_image: "system-images;android-31;default;x86_64"
+            executor:
+              name: android/android_machine
+              resource-class: large
+              tag: 2024.01.1
