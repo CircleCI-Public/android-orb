@@ -13,4 +13,3 @@ usage:
             matrix:
               parameters:
                 system_image: ["system-images;android-31;default;x86_64", "system-images;android-31;default;x86_64"]
-
