@@ -5,13 +5,15 @@ description: |
 parameters:
   avd_name:
     description: |
-      The name of the AVD to create
+      The name of the AVD to create.
+      You can pass environment variables, using the $ syntax e.g. "$AVD_NAME"
     type: string
     default: test
   system_image:
     description: |
       Name of system image e.g. "system-images;android-29;default;x86".
       It should match the name seen in the "sdkmanager --list" output.
+      You can pass environment variables, using the $ syntax e.g. "$SYSTEM_IMAGE"
     type: string
     default: system-images;android-29;default;x86
   install_system_image:
@@ -21,7 +23,8 @@ parameters:
     default: true
   additional_avd_args:
     description: |
-      Additional args to be passed directly to the avd creation command
+      Additional args to be passed directly to the avd creation command.
+      You can pass environment variables, using the $ syntax e.g. "$ADDITIONAL_ARGS"
     type: string
     default: ""
   gpu:
@@ -156,11 +159,15 @@ parameters:
     type: steps
     default: []
   pre_test_command:
-    description: Command to run prior to runnning the test command
+    description: |
+      Command to run prior to runnning the test command
+      You can pass environment variables, using the $ syntax e.g. "$PRE_TEST_COMMAND"
     type: string
     default: " "
   test_command:
-    description: Command to run in order to run the tests
+    description: |
+      Command to run in order to run the tests
+      You can pass environment variables, using the $ syntax e.g. "$TEST_COMMAND"
     type: string
     default: "./gradlew connectedDebugAndroidTest"
   run_tests_working_directory:
