@@ -12,5 +12,5 @@ parameters:
 steps:
   - run:
       name: Create Google Play key
-      command: echo ${<< parameters.google_play_key >>} > google_play_key.json
+      command: echo ${<< parameters.google_play_key >>} > google-play-key.json
       working_directory: << parameters.working_directory >>

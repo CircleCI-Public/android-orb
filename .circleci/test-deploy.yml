@@ -6,7 +6,13 @@ orbs:
 filters: &filters
   tags:
     only: /.*/
-prod-deploy-requires: &prod-deploy-requires [orb-tools/pack, ui-tests-system-images;android-31;default;x86_64, ui-tests-system-images;android-35;google_apis;x86_64, test_start_emulator_and_run_tests, test_java_version]
+prod-deploy-requires: &prod-deploy-requires 
+  [
+    orb-tools/pack,
+    ui-tests-system-images;android-31;default;x86_64,
+    ui-tests-system-images;android-35;google_apis;x86_64,
+    test_start_emulator_and_run_tests, test_java_version
+  ]
 jobs:
   test_java_version:
     parameters:
