@@ -21,4 +21,4 @@ steps:
       environment:
         PARAM_VER: << parameters.version >>
       name: Install Android NDK
-      command: <<include(scripts/install-ndk.sh)>>
+      command: <<include(scripts/install_ndk.sh)>>

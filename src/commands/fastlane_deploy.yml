@@ -1,16 +1,16 @@
 description: |
   Runs fastlane lanes to deploy to Google Play Store
 parameters:
-  working-directory:
+  working_directory:
     description: Working directory to run fastlane commands in
     type: string
     default: "."
-  lane-name:
+  lane_name:
     description: The name of the lane fastlane will execute
     type: string
     default: "deploy"
 steps:
   - run:
       name: Run fastlane
-      command: fastlane << parameters.lane-name >>
-      working_directory: << parameters.working-directory >>
+      command: fastlane << parameters.lane_name >>
+      working_directory: << parameters.working_directory >>

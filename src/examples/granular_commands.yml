@@ -1,0 +1,40 @@
+description: |
+  An example of using the more granular commands of the orb together,
+  to achieve something similar to using the "start_emulator_and_run_tests" command
+  or the "run_ui_tests" job.
+usage:
+  version: 2.1
+  orbs:
+    android: circleci/android@3.0.0
+  jobs:
+    test:
+      executor:
+        name: android/android_machine
+        tag: "default"
+        resource_class: large
+      steps:
+        - checkout
+        # Create an AVD named "myavd"
+        - android/create_avd:
+            avd_name: myavd
+            system_image: system-images;android-31;default;x86_64
+            install: true
+        # By default, after starting up the emulator, a cache will be restored,
+        # "./gradlew assembleDebugAndroidTest" will be run and then a script
+        # will be run to wait for the emulator to start up.
+        # Specify the "post_emulator_launch_assemble_command" command to override
+        # the gradle command run, or set "wait_for_emulator" to false to disable
+        # waiting for the emulator altogether.
+        - android/start_emulator:
+            avd_name: myavd
+            no_window: true
+            restore_gradle_cache_prefix: v1a
+        # Runs "./gradlew connectedDebugAndroidTest" by default.
+        # Specify the "test_command" parameter to customize the command run.
+        - android/run_tests
+        - android/save_gradle_cache:
+            cache_prefix: v1a
+  workflows:
+    test:
+      jobs:
+        - test

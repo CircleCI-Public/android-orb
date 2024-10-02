@@ -3,4 +3,4 @@ description: |
 steps:
   - run:
       name: Kill any running emulators
-      command: <<include(scripts/kill-emulators.sh)>>
+      command: <<include(scripts/kill_emulators.sh)>>

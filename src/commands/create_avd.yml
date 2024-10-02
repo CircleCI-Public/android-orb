@@ -1,11 +1,11 @@
 description: |
   Create an AVD.
 parameters:
-  avd-name:
+  avd_name:
     type: string
     description: |
       The name of the AVD to create
-  system-image:
+  system_image:
     type: string
     description: |
       Name of system image e.g. "system-images;android-29;default;x86".
@@ -19,7 +19,7 @@ parameters:
     description: |
       Whether to run the creation command in background
     default: false
-  additional-args:
+  additional_args:
     type: string
     default: ""
     description: |
@@ -27,10 +27,10 @@ parameters:
 steps:
     - run:
         environment:
-          PARAM_AVD_NAME: << parameters.avd-name >>
+          PARAM_AVD_NAME: << parameters.avd_name >>
           PARAM_INSTALL: << parameters.install >>
-          PARAM_SYSTEM_IMAGE: << parameters.system-image >>
-          PARAM_ADDITIONAL_ARGS: << parameters.additional-args >>
-        name: Create avd "<< parameters.avd-name >>"
-        command: <<include(scripts/create-avd.sh)>>
+          PARAM_SYSTEM_IMAGE: << parameters.system_image >>
+          PARAM_ADDITIONAL_ARGS: << parameters.additional_args >>
+        name: Create avd "<< parameters.avd_name >>"
+        command: <<include(scripts/create_avd.sh)>>
         background: << parameters.background >>

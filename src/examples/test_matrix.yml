@@ -1,0 +1,16 @@
+description: |
+  A simple example of using a test matrix to test on different
+  emulators.
+usage:
+  version: 2.1
+  orbs:
+    android: circleci/android@3.0.0
+  workflows:
+    test:
+      jobs:
+        - android/run_ui_tests:
+            name: "ui-tests-<<matrix.system_image>>"
+            matrix:
+              parameters:
+                system_image: ["system-images;android-31;default;x86_64", "system-images;android-31;default;x86_64"]
+

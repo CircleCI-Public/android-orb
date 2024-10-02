@@ -1,0 +1,14 @@
+description: |
+  An example of overriding the android_machine executor's default resource class
+usage:
+  version: 2.1
+  orbs:
+    android: circleci/android@3.0.0
+  workflows:
+    test:
+      jobs:
+        - android/run_ui_tests:
+            executor:
+              name: android/android_machine
+              tag: "default"
+              resource_class: xlarge
