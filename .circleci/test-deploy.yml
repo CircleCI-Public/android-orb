@@ -10,7 +10,7 @@ prod-deploy-requires: &prod-deploy-requires
   [
     orb-tools/pack,
     ui-tests-system-images;android-31;default;x86_64,
-    ui-tests-system-images;android-35;google_apis;x86_64,
+    ui-tests-system-images;android-33;google_apis;x86_64,
     test_start_emulator_and_run_tests, test_java_version
   ]
 jobs:
@@ -251,6 +251,7 @@ workflows:
             name: android/android_machine
             tag: "default"
           checkout: false
+          max_tries: 4
           pre-steps:
             - run:
                 name: Setup project
@@ -264,7 +265,7 @@ workflows:
                   rm -rf compose-samples
           matrix:
             parameters:
-              system_image: ["system-images;android-31;default;x86_64", "system-images;android-35;google_apis;x86_64"]
+              system_image: ["system-images;android-31;default;x86_64", "system-images;android-33;google_apis;x86_64"]
           filters: *filters
       # - test-emulator-commands:
       #     system_image: "system-images;android-31;default;x86_64"

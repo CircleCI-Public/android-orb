@@ -19,7 +19,7 @@ parameters:
 steps:
   - save_cache:
       name: Save build cache
-      key: android-orb-<<parameters.cache_prefix>>-{{ epoch }}
+      key: android-orb-<<parameters.cache_prefix>>
       paths:
         - ~/.android/build-cache
         - ~/.android/cache
