@@ -9,8 +9,7 @@ filters: &filters
 prod-deploy-requires: &prod-deploy-requires 
   [
     orb-tools/pack,
-    ui-tests-system-images;android-31;default;x86_64,
-    ui-tests-system-images;android-33;google_apis;x86_64,
+    ui-tests-jetchat,
     test_start_emulator_and_run_tests, test_java_version
   ]
 jobs:
@@ -246,7 +245,7 @@ workflows:
                 - "27.1.12297006"
           filters: *filters
       - android/run_ui_tests:
-          name: "ui-tests-<<matrix.system_image>>"
+          name: "ui-tests-jetchat-<<matrix.system_image>>"
           executor:
             name: android/android_machine
             tag: "default"
@@ -264,6 +263,7 @@ workflows:
                   cp -r compose-samples/Jetchat/* .
                   rm -rf compose-samples
           matrix:
+            alias: ui-tests-jetchat
             parameters:
               system_image: ["system-images;android-31;default;x86_64", "system-images;android-33;google_apis;x86_64"]
           filters: *filters
