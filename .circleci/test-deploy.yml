@@ -265,7 +265,7 @@ workflows:
           matrix:
             alias: ui-tests-jetchat
             parameters:
-              system_image: ["system-images;android-31;default;x86_64", "system-images;android-33;google_apis;x86_64"]
+              system_image: ["system-images;android-31;default;x86_64", "system-images;android-30;default;x86_64"]
           filters: *filters
       # - test-emulator-commands:
       #     system_image: "system-images;android-31;default;x86_64"
