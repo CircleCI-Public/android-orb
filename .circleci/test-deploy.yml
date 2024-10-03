@@ -78,7 +78,7 @@ jobs:
             git clone https://github.com/android/compose-samples
             cd compose-samples
             # pin the revision for consistency
-            # git checkout 367230e7de69e5ee01bcfcf9a7c7e650f16ef957
+            git checkout 5b9a06f39fe3656f05d5169b6d63086573b91754
       - android/create_avd:
           avd_name: test1
           system_image: <<parameters.system_image>>
@@ -145,7 +145,7 @@ jobs:
                   git clone https://github.com/android/compose-samples
                   cd compose-samples
                   # pin the revision for consistency
-                  # git checkout 367230e7de69e5ee01bcfcf9a7c7e650f16ef957
+                  git checkout 5b9a06f39fe3656f05d5169b6d63086573b91754
             - android/restore_build_cache
             - run: cd compose-samples/Jetchat && ./gradlew assembleDebugAndroidTest
           post_emulator_launch_assemble_command: ""
@@ -259,7 +259,7 @@ workflows:
                   git clone https://github.com/android/compose-samples
                   cd compose-samples
                   # pin the revision for consistency
-                  # git checkout 367230e7de69e5ee01bcfcf9a7c7e650f16ef957
+                  git checkout 5b9a06f39fe3656f05d5169b6d63086573b91754
                   cd ..
                   cp -r compose-samples/Jetchat/* .
                   rm -rf compose-samples
