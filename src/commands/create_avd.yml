@@ -4,12 +4,14 @@ parameters:
   avd_name:
     type: string
     description: |
-      The name of the AVD to create
+      The name of the AVD to create.
+      You can pass environment variables, using the $ syntax e.g. "$AVD_NAME"
   system_image:
     type: string
     description: |
       Name of system image e.g. "system-images;android-29;default;x86".
       It should match the name seen in the "sdkmanager --list" output.
+      You can pass environment variables, using the $ syntax e.g. "$SYSTEM_IMAGE"
   install:
     type: boolean
     description: |
@@ -24,13 +26,14 @@ parameters:
     default: ""
     description: |
       Additional args to be passed directly to the avd creation command
+      You can pass environment variables, using the $ syntax e.g. "$ADDITIONAL_ARGS"
 steps:
-    - run:
-        environment:
-          PARAM_AVD_NAME: << parameters.avd_name >>
-          PARAM_INSTALL: << parameters.install >>
-          PARAM_SYSTEM_IMAGE: << parameters.system_image >>
-          PARAM_ADDITIONAL_ARGS: << parameters.additional_args >>
-        name: Create avd "<< parameters.avd_name >>"
-        command: <<include(scripts/create_avd.sh)>>
-        background: << parameters.background >>
+  - run:
+      environment:
+        PARAM_AVD_NAME: << parameters.avd_name >>
+        PARAM_INSTALL: << parameters.install >>
+        PARAM_SYSTEM_IMAGE: << parameters.system_image >>
+        PARAM_ADDITIONAL_ARGS: << parameters.additional_args >>
+      name: Create avd "<< parameters.avd_name >>"
+      command: <<include(scripts/create_avd.sh)>>
+      background: << parameters.background >>

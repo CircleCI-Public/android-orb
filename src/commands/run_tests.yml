@@ -2,11 +2,15 @@ description: |
   Runs tests, with retries supported
 parameters:
   pre_test_command:
-    description: Command to run prior to runnning the test command
+    description: |
+      Command to run prior to runnning the test command
+      You can pass environment variables, using the $ syntax e.g. "$PRE_TEST_COMMAND"
     type: string
     default: " "
   test_command:
-    description: Command to run in order to run the tests
+    description: |
+      Command to run in order to run the tests
+      You can pass environment variables, using the $ syntax e.g. "$TEST_COMMAND"
     type: string
     default: "./gradlew connectedDebugAndroidTest"
   working_directory:
