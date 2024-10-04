@@ -9,8 +9,7 @@ filters: &filters
 prod-deploy-requires: &prod-deploy-requires 
   [
     orb-tools/pack,
-    ui-tests-system-images;android-31;default;x86_64,
-    ui-tests-system-images;android-35;google_apis;x86_64,
+    ui-tests-jetchat,
     test_start_emulator_and_run_tests, test_java_version
   ]
 jobs:
@@ -78,7 +77,7 @@ jobs:
             git clone https://github.com/android/compose-samples
             cd compose-samples
             # pin the revision for consistency
-            # git checkout 367230e7de69e5ee01bcfcf9a7c7e650f16ef957
+            git checkout 5b9a06f39fe3656f05d5169b6d63086573b91754
       - android/create_avd:
           avd_name: test1
           system_image: <<parameters.system_image>>
@@ -145,7 +144,7 @@ jobs:
                   git clone https://github.com/android/compose-samples
                   cd compose-samples
                   # pin the revision for consistency
-                  # git checkout 367230e7de69e5ee01bcfcf9a7c7e650f16ef957
+                  git checkout 5b9a06f39fe3656f05d5169b6d63086573b91754
             - android/restore_build_cache
             - run: cd compose-samples/Jetchat && ./gradlew assembleDebugAndroidTest
           post_emulator_launch_assemble_command: ""
@@ -246,11 +245,12 @@ workflows:
                 - "27.1.12297006"
           filters: *filters
       - android/run_ui_tests:
-          name: "ui-tests-<<matrix.system_image>>"
+          name: "ui-tests-jetchat-<<matrix.system_image>>"
           executor:
             name: android/android_machine
             tag: "default"
           checkout: false
+          max_tries: 4
           pre-steps:
             - run:
                 name: Setup project
@@ -258,13 +258,14 @@ workflows:
                   git clone https://github.com/android/compose-samples
                   cd compose-samples
                   # pin the revision for consistency
-                  # git checkout 367230e7de69e5ee01bcfcf9a7c7e650f16ef957
+                  git checkout 5b9a06f39fe3656f05d5169b6d63086573b91754
                   cd ..
                   cp -r compose-samples/Jetchat/* .
                   rm -rf compose-samples
           matrix:
+            alias: ui-tests-jetchat
             parameters:
-              system_image: ["system-images;android-31;default;x86_64", "system-images;android-35;google_apis;x86_64"]
+              system_image: ["system-images;android-31;default;x86_64", "system-images;android-30;default;x86_64"]
           filters: *filters
       # - test-emulator-commands:
       #     system_image: "system-images;android-31;default;x86_64"
