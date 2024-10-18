@@ -16,11 +16,7 @@ parameters:
     type: enum
     default: large
     enum: [medium, large, xlarge, 2xlarge]
-  shell:
-    type: string
-    default: "bash -eo pipefail"
 
 machine:
   image: android:<< parameters.tag >>
   resource_class: << parameters.resource_class >>
-  shell: <<parameters.shell>>
