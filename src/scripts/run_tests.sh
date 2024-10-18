@@ -1,6 +1,6 @@
 #!/bin/bash
-PARAM_PRE_TEST_COMMAND="$(circleci env subst "$PARAM_PRE_TEST_COMMAND")"
-PARAM_TEST_COMMAND="$(circleci env subst "$PARAM_TEST_COMMAND")"
+PARAM_PRE_TEST_COMMAND="$(echo "$PARAM_PRE_TEST_COMMAND" | circleci env subst "$PARAM_PRE_TEST_COMMAND")"
+PARAM_TEST_COMMAND="$(echo "$PARAM_TEST_COMMAND" | circleci env subst "$PARAM_TEST_COMMAND")"
 
 run_with_retry() {
   MAX_TRIES=${PARAM_MAX_TRIES}
