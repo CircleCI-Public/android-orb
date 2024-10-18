@@ -283,6 +283,7 @@ workflows:
       - test_start_emulator_and_run_tests:
           name: test_start_emulator_and_run_tests-with-args
           tag: "default"
+          shell: bash -eox pipefail
           args: -d pixel_6
           filters: *filters
       - test-fastlane
