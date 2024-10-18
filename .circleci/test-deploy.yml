@@ -134,9 +134,13 @@ jobs:
         type: string
         default: ""
         description: Additional args to pass to avd creation
+      shell:
+        type: string
+        default: "bash -eo pipefail"
     executor:
       name: android/android_machine
       tag: << parameters.tag >>
+      shell: <<parameters.shell>>
       resource_class: xlarge
     steps:
       - checkout
@@ -283,7 +287,7 @@ workflows:
       - test_start_emulator_and_run_tests:
           name: test_start_emulator_and_run_tests-with-args
           tag: "default"
-          shell: bash -eox pipefail
+          shell: "bash -eox pipefail"
           args: -d pixel_6
           filters: *filters
       - test-fastlane
