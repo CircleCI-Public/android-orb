@@ -130,6 +130,10 @@ jobs:
       tag:
         type: string
         description: "Android machine image tag to use."
+      args:
+        type: string
+        default: ""
+        description: Additional args to pass to avd creation
     executor:
       name: android/android_machine
       tag: << parameters.tag >>
@@ -148,6 +152,7 @@ jobs:
             - android/restore_build_cache
             - run: cd compose-samples/Jetchat && ./gradlew assembleDebugAndroidTest
           post_emulator_launch_assemble_command: ""
+          additional_avd_args: <<parameters.args>>
           run_tests_working_directory: ./compose-samples/Jetchat
           post_run_tests_steps:
             - android/save_build_cache
@@ -272,7 +277,13 @@ workflows:
       #     tag: "default"
       #     filters: *filters
       - test_start_emulator_and_run_tests:
+          name: test_start_emulator_and_run_tests
           tag: "default"
+          filters: *filters
+      - test_start_emulator_and_run_tests:
+          name: test_start_emulator_and_run_tests-with-args
+          tag: "default"
+          args: -d pixel_6
           filters: *filters
       - test-fastlane
       - orb-tools/pack:
