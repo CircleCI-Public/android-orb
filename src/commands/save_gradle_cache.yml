@@ -12,3 +12,4 @@ steps:
       paths:
         - ~/.gradle/caches
         - ~/.gradle/wrapper
+        - .gradle/configuration-cache
