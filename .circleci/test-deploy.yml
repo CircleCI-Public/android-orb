@@ -94,10 +94,10 @@ jobs:
       - android/save_gradle_cache:
           cache_prefix: v1-multiple
       - android/kill_emulators
-      - run: sdkmanager "system-images;android-31;default;x86_64"
+      - run: sdkmanager "system-images;android-34;default;x86_64"
       - android/create_avd:
           avd_name: test2
-          system_image: system-images;android-31;default;x86_64
+          system_image: system-images;android-34;default;x86_64
           install: false
       - android/start_emulator:
           avd_name: test2
@@ -121,7 +121,7 @@ jobs:
       - android/kill_emulators
       - android/create_avd:
           avd_name: test3
-          system_image: system-images;android-31;default;x86_64
+          system_image: system-images;android-34;default;x86_64
           install: true
           background: true
       - run: sleep 15 && echo "should cancel previous command"
@@ -211,7 +211,7 @@ workflows:
           name: "Test OpenJDK version change"
           executor:
             name: android/android_docker
-            tag: "2023.05.1"
+            tag: "2024.11.1"
           matrix:
             parameters:
               java_version:
@@ -227,9 +227,9 @@ workflows:
             parameters:
               executor:
                 - name: android/android_docker
-                  tag: "2021.10.1"
+                  tag: "2024.11.1"
                 - name: android/android_docker
-                  tag: "2021.09.1"
+                  tag: "2024.11.1"
               ndk:
                 - "23.0.7599858"
                 - "21.4.7075529"
@@ -253,7 +253,7 @@ workflows:
           name: "ui-tests-jetchat-<<matrix.system_image>>"
           executor:
             name: android/android_machine
-            tag: "default"
+            tag: "2024.11.1"
           checkout: false
           max_tries: 4
           pre-steps:
@@ -270,7 +270,7 @@ workflows:
           matrix:
             alias: ui-tests-jetchat
             parameters:
-              system_image: ["system-images;android-31;default;x86_64", "system-images;android-30;default;x86_64"]
+              system_image: ["system-images;android-31;default;x86_64", "system-images;android-30;default;x86_64", "system-images;android-34;google_apis;x86_64"]
           filters: *filters
       # - test-emulator-commands:
       #     system_image: "system-images;android-31;default;x86_64"
