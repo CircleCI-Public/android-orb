@@ -1,5 +1,5 @@
 #!/bin/bash
-CURRENT_DISTRIBUTION="$(echo $(java -version 2>&1 | tr '[:upper:]' '[:lower:]' | grep -Eo 'corretto|temurin|zulu|openjdk' | head -n1 || echo "unknown"))"
+CURRENT_DISTRIBUTION="$(java -version 2>&1 | tr '[:upper:]' '[:lower:]' | grep -Eo 'corretto|temurin|zulu|openjdk' | head -n1 || echo "unknown")"
 CURRENT_JAVA_VER="$(java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1)"
 CURRENT_JAVAC_VER="$(javac -version 2>&1 | head -1 | cut -f 2- -d ' ' | sed '/^1\./s///' | cut -d'.' -f1)"
 echo "Current Java Version: $CURRENT_JAVA_VER"
