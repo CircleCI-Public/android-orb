@@ -1,5 +1,5 @@
 #!/bin/bash
-CURRENT_DISTRIBUTON="$(echo $(java -version 2>&1 | tr '[:upper:]' '[:lower:]' | grep -Eo 'corretto|temurin|zulu|openjdk' | head -n1 || echo "unknown"))"
+CURRENT_DISTRIBUTION="$(echo $(java -version 2>&1 | tr '[:upper:]' '[:lower:]' | grep -Eo 'corretto|temurin|zulu|openjdk' | head -n1 || echo "unknown"))"
 CURRENT_JAVA_VER="$(java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1)"
 CURRENT_JAVAC_VER="$(javac -version 2>&1 | head -1 | cut -f 2- -d ' ' | sed '/^1\./s///' | cut -d'.' -f1)"
 echo "Current Java Version: $CURRENT_JAVA_VER"
@@ -31,7 +31,7 @@ if [ "$CURRENT_JAVA_VER" -ne "${PARAM_JAVA_VER}" ] && [ "$CURRENT_DISTRIBUTION" 
         sudo apt install java-"${PARAM_JAVA_VER}"-amazon-corretto-jdk
         sudo update-alternatives --set javac /usr/lib/jvm/java-"${PARAM_JAVA_VER}"-amazon-corretto/bin/javac
         sudo update-alternatives --set java /usr/lib/jvm/java-"${PARAM_JAVA_VER}"-amazon-corretto/bin/java
-        echo "export JAVA_HOME=/usr/lib/jvm/java-"${PARAM_JAVA_VER}"-amazon-corretto" >> "$BASH_ENV"
+        echo "export JAVA_HOME=/usr/lib/jvm/java-${PARAM_JAVA_VER}-amazon-corretto" >> "$BASH_ENV"
         ;;
       "temurin")
         sudo apt update
@@ -42,7 +42,7 @@ if [ "$CURRENT_JAVA_VER" -ne "${PARAM_JAVA_VER}" ] && [ "$CURRENT_DISTRIBUTION" 
         sudo apt install temurin-"${PARAM_JAVA_VER}"-jdk
         sudo update-alternatives --set javac /usr/lib/jvm/temurin-"${PARAM_JAVA_VER}"-jdk-amd64/bin/javac
         sudo update-alternatives --set java /usr/lib/jvm/temurin-"${PARAM_JAVA_VER}"-jdk-amd64/bin/java
-        echo "export JAVA_HOME=/usr/lib/jvm/temurin-"${PARAM_JAVA_VER}"-jdk-amd64" >> "$BASH_ENV"
+        echo "export JAVA_HOME=/usr/lib/jvm/temurin-${PARAM_JAVA_VER}-jdk-amd64" >> "$BASH_ENV"
         ;;
       "zulu")
         sudo apt update
@@ -53,7 +53,7 @@ if [ "$CURRENT_JAVA_VER" -ne "${PARAM_JAVA_VER}" ] && [ "$CURRENT_DISTRIBUTION" 
         sudo apt install zulu"${PARAM_JAVA_VER}"-jdk
         sudo update-alternatives --set javac /usr/lib/jvm/zulu-"${PARAM_JAVA_VER}"-amd64/bin/javac
         sudo update-alternatives --set java /usr/lib/jvm/zulu-"${PARAM_JAVA_VER}"-amd64/bin/java
-        echo "export JAVA_HOME=/usr/lib/jvm/zulu-"${PARAM_JAVA_VER}"-amd64" >> "$BASH_ENV"
+        echo "export JAVA_HOME=/usr/lib/jvm/zulu-${PARAM_JAVA_VER}-amd64" >> "$BASH_ENV"
         ;;
       *)
         echo "Unknown distribution: ${PARAM_DISTRIBUTION}"
