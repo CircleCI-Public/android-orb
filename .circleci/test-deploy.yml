@@ -24,6 +24,11 @@ jobs:
         type: integer
         description: |
           Version to use in the change_java_version job
+      java_distribution:
+        type: enum
+        enum: [openjdk, corretto, temurin, zulu]
+        description: |
+          Distribution to use in the change_java_version job
     executor: <<parameters.executor>>
     steps:
       - checkout
