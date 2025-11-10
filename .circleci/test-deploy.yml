@@ -31,8 +31,14 @@ jobs:
           java_version: << parameters.java_version >>
       - run:
           command: |
+            DISTRIBUTION="$(java -version 2>&1 | tr '[:upper:]' '[:lower:]' | grep -Eo 'corretto|temurin|zulu|openjdk' | head -n1 || echo "unknown")"
             JAVA_VER="$( java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 )"
             JAVAC_VER="$( javac -version 2>&1 | head -1 | cut -f 2- -d ' ' | sed '/^1\./s///' | cut -d'.' -f1 )"
+            if [ "$DISTRIBUTION" -ne <<parameters.java_distribution>> ]; then
+              echo "Job failed because java distribution was not changed."
+              echo "current java distribution:" $DISTRIBUTION
+              exit 1
+            fi
             if [ "$JAVA_VER" -ne <<parameters.java_version>> ]; then
               echo "Job failed because java version was not changed."
               echo "current java version:" $JAVA_VER
@@ -41,31 +47,6 @@ jobs:
             if [ "$JAVAC_VER" -ne <<parameters.java_version>> ]; then
               echo "Job failed because javac version was not changed."
               echo "current javac version:" $JAVAC_VER
-              exit 1
-            fi
-          name: check for correctness
-  test_java_distribution:
-    parameters:
-      executor:
-        type: executor
-        description: |
-          Which Android image/executor to use. Choose between 'android_docker'
-          and 'android_machine'.
-      java_distribution:
-        type: integer
-        description: |
-          Distribution to use in the change_java_version job
-    executor: <<parameters.executor>>
-    steps:
-      - checkout
-      - android/change_java_version:
-          distribution: << parameters.java_distribution >>
-      - run:
-          command: |
-            DISTRIBUTION="$(java -version 2>&1 | tr '[:upper:]' '[:lower:]' | grep -Eo 'corretto|temurin|zulu|openjdk' | head -n1 || echo "unknown")"
-            if [ "$DISTRIBUTION" -ne <<parameters.java_distribution>> ]; then
-              echo "Job failed because java distribution was not changed."
-              echo "current java distribution:" $DISTRIBUTION
               exit 1
             fi
           name: check for correctness
@@ -245,20 +226,12 @@ workflows:
                 - 17
                 - 18
                 - 21
-          filters: *filters
-      - test_java_distribution:
-          name: "Test Java distribution change"
-          executor:
-            name: android/android_docker
-            tag: "2023.05.1"
-          matrix:
-            parameters:
               java_distribution:
                 - openjdk
                 - temurin
                 - corretto
                 - zulu
-          filters: *filters   
+          filters: *filters
       - test-ndk-install:
           name: "Test NDK Install on Android Docker"
           matrix:
