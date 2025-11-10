@@ -44,6 +44,31 @@ jobs:
               exit 1
             fi
           name: check for correctness
+  test_java_distribution:
+    parameters:
+      executor:
+        type: executor
+        description: |
+          Which Android image/executor to use. Choose between 'android_docker'
+          and 'android_machine'.
+      java_distribution:
+        type: integer
+        description: |
+          Distribution to use in the change_java_version job
+    executor: <<parameters.executor>>
+    steps:
+      - checkout
+      - android/change_java_version:
+          distribution: << parameters.java_distribution >>
+      - run:
+          command: |
+            DISTRIBUTION="$(java -version 2>&1 | tr '[:upper:]' '[:lower:]' | grep -Eo 'corretto|temurin|zulu|openjdk' | head -n1 || echo "unknown")"
+            if [ "$DISTRIBUTION" -ne <<parameters.java_distribution>> ]; then
+              echo "Job failed because java distribution was not changed."
+              echo "current java distribution:" $DISTRIBUTION
+              exit 1
+            fi
+          name: check for correctness
   test-ndk-install:
     parameters:
       executor:
@@ -221,6 +246,19 @@ workflows:
                 - 18
                 - 21
           filters: *filters
+      - test_java_distribution:
+          name: "Test Java distribution change"
+          executor:
+            name: android/android_docker
+            tag: "2023.05.1"
+          matrix:
+            parameters:
+              java_distribution:
+                - openjdk
+                - temurin
+                - corretto
+                - zulu
+          filters: *filters   
       - test-ndk-install:
           name: "Test NDK Install on Android Docker"
           matrix:
