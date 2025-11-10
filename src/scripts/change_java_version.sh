@@ -4,7 +4,7 @@ CURRENT_JAVA_VER="$(java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s/
 CURRENT_JAVAC_VER="$(javac -version 2>&1 | head -1 | cut -f 2- -d ' ' | sed '/^1\./s///' | cut -d'.' -f1)"
 echo "Current Java Version: $CURRENT_JAVA_VER"
 echo "Current Java Compiler Version : $CURRENT_JAVAC_VER"
-if [ "$CURRENT_JAVA_VER" -ne "${PARAM_JAVA_VER}" ] && [ "$CURRENT_DISTRIBUTION" != "${PARAM_DISTRIBUTION}" ]; then
+if [ "$CURRENT_JAVA_VER" -ne "${PARAM_JAVA_VER}" ] || [ "$CURRENT_DISTRIBUTION" != "${PARAM_DISTRIBUTION}" ]; then
   if [ "${PARAM_DISTRIBUTION}" = "openjdk" ]; then
     if [ "${PARAM_JAVA_VER}" -eq 8 ] || [ "${PARAM_JAVA_VER}" -eq 17 ]; then
       if [ "${PARAM_JAVA_VER}" -eq 8 ]; then
