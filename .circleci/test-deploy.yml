@@ -29,6 +29,7 @@ jobs:
       - checkout
       - android/change_java_version:
           java_version: << parameters.java_version >>
+          distribution: << parameters.java_distribution >>
       - run:
           command: |
             DISTRIBUTION="$(java -version 2>&1 | tr '[:upper:]' '[:lower:]' | grep -Eo 'corretto|temurin|zulu|openjdk' | head -n1 || echo "unknown")"
