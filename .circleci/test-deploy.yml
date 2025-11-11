@@ -24,15 +24,27 @@ jobs:
         type: integer
         description: |
           Version to use in the change_java_version job
+      java_distribution:
+        type: enum
+        enum: [openjdk, corretto, temurin, zulu]
+        description: |
+          Distribution to use in the change_java_version job
     executor: <<parameters.executor>>
     steps:
       - checkout
       - android/change_java_version:
           java_version: << parameters.java_version >>
+          distribution: << parameters.java_distribution >>
       - run:
           command: |
+            DISTRIBUTION="$(java -version 2>&1 | tr '[:upper:]' '[:lower:]' | grep -Eo 'corretto|temurin|zulu' | head -n1 || echo "openjdk")"
             JAVA_VER="$( java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 )"
             JAVAC_VER="$( javac -version 2>&1 | head -1 | cut -f 2- -d ' ' | sed '/^1\./s///' | cut -d'.' -f1 )"
+            if [ "$DISTRIBUTION" != <<parameters.java_distribution>> ]; then
+              echo "Job failed because java distribution was not changed."
+              echo "current java distribution:" $DISTRIBUTION
+              exit 1
+            fi
             if [ "$JAVA_VER" -ne <<parameters.java_version>> ]; then
               echo "Job failed because java version was not changed."
               echo "current java version:" $JAVA_VER
@@ -208,7 +220,6 @@ workflows:
       - test-malloc:
           name: "Test Changing Malloc Implementations"
       - test_java_version:
-          name: "Test OpenJDK version change"
           executor:
             name: android/android_docker
             tag: "2023.05.1"
@@ -220,6 +231,11 @@ workflows:
                 - 17
                 - 18
                 - 21
+              java_distribution:
+                - openjdk
+                - temurin
+                - corretto
+                - zulu
           filters: *filters
       - test-ndk-install:
           name: "Test NDK Install on Android Docker"

@@ -5,10 +5,17 @@ parameters:
     type: integer
     default: 8
     description: |
-      The version of OpenJDK to change to
+      The version of JDK to change to
+  distribution:
+    type: enum
+    default: openjdk
+    enum: [openjdk, corretto, temurin, zulu]
+    description: |
+      The distribution of JDK to change to
 steps:
   - run:
       environment:
         PARAM_JAVA_VER: << parameters.java_version >>
-      name: Change OpenJDK version to << parameters.java_version >>
+        PARAM_DISTRIBUTION: << parameters.distribution >>
+      name: Change << parameters.distribution >> version to << parameters.java_version >>
       command: <<include(scripts/change_java_version.sh)>>
