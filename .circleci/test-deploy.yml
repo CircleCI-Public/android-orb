@@ -220,7 +220,6 @@ workflows:
       - test-malloc:
           name: "Test Changing Malloc Implementations"
       - test_java_version:
-          name: "Test OpenJDK version change"
           executor:
             name: android/android_docker
             tag: "2023.05.1"
