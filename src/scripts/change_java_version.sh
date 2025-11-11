@@ -65,8 +65,8 @@ if [ "$CURRENT_JAVA_VER" -ne "${PARAM_JAVA_VER}" ] || [ "$CURRENT_DISTRIBUTION" 
         sudo apt install zulu"${PARAM_JAVA_VER}"-jdk
         sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/zulu"${PARAM_JAVA_VER}"-ca-amd64/bin/java 1
         sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/zulu"${PARAM_JAVA_VER}"-ca-amd64/bin/javac 1
-        sudo update-alternatives --set javac /usr/lib/jvm/zulu-"${PARAM_JAVA_VER}"-ca-amd64/bin/javac
-        sudo update-alternatives --set java /usr/lib/jvm/zulu-"${PARAM_JAVA_VER}"-ca-amd64/bin/java
+        sudo update-alternatives --set javac /usr/lib/jvm/zulu"${PARAM_JAVA_VER}"-ca-amd64/bin/javac
+        sudo update-alternatives --set java /usr/lib/jvm/zulu"${PARAM_JAVA_VER}"-ca-amd64/bin/java
         echo "export JAVA_HOME=/usr/lib/jvm/zulu-${PARAM_JAVA_VER}-ca-amd64" >> "$BASH_ENV"
         ;;
       *)
