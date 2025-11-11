@@ -28,10 +28,21 @@ if [ "$CURRENT_JAVA_VER" -ne "${PARAM_JAVA_VER}" ] || [ "$CURRENT_DISTRIBUTION" 
         wget -O- https://apt.corretto.aws/corretto.key | sudo apt-key add -
         sudo add-apt-repository -y 'deb https://apt.corretto.aws stable main'
         sudo apt update
-        sudo apt install java-"${PARAM_JAVA_VER}"-amazon-corretto-jdk
-        sudo update-alternatives --set javac /usr/lib/jvm/java-"${PARAM_JAVA_VER}"-amazon-corretto/bin/javac
-        sudo update-alternatives --set java /usr/lib/jvm/java-"${PARAM_JAVA_VER}"-amazon-corretto/bin/java
-        echo "export JAVA_HOME=/usr/lib/jvm/java-${PARAM_JAVA_VER}-amazon-corretto" >> "$BASH_ENV"
+        if [ "${PARAM_JAVA_VER}" -eq 8 ]; then
+          sudo apt install -y java-1.8.0-amazon-corretto-jdk
+          sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-1.8.0-amazon-corretto/bin/java 1
+          sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/java-1.8.0-amazon-corretto/bin/javac 1
+          sudo update-alternatives --set javac /usr/lib/jvm/java-1.8.0-amazon-corretto/bin/javac
+          sudo update-alternatives --set java /usr/lib/jvm/java-1.8.0-amazon-corretto/bin/java
+          echo "export JAVA_HOME=/usr/lib/jvm/java-1.8.0-amazon-corretto" >> "$BASH_ENV"
+        else
+          sudo apt install -y java-"${PARAM_JAVA_VER}"-amazon-corretto-jdk
+          sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/java-"${PARAM_JAVA_VER}"-amazon-corretto/bin/java 1
+          sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/java-"${PARAM_JAVA_VER}"-amazon-corretto/bin/javac 1
+          sudo update-alternatives --set javac /usr/lib/jvm/java-"${PARAM_JAVA_VER}"-amazon-corretto/bin/javac
+          sudo update-alternatives --set java /usr/lib/jvm/java-"${PARAM_JAVA_VER}"-amazon-corretto/bin/java
+          echo "export JAVA_HOME=/usr/lib/jvm/java-${PARAM_JAVA_VER}-amazon-corretto" >> "$BASH_ENV"
+        fi
         ;;
       "temurin")
         sudo apt update
@@ -51,9 +62,11 @@ if [ "$CURRENT_JAVA_VER" -ne "${PARAM_JAVA_VER}" ] || [ "$CURRENT_DISTRIBUTION" 
         sudo apt-add-repository -y 'deb http://repos.azul.com/zulu/deb stable main'
         sudo apt update
         sudo apt install zulu"${PARAM_JAVA_VER}"-jdk
-        sudo update-alternatives --set javac /usr/lib/jvm/zulu-"${PARAM_JAVA_VER}"-amd64/bin/javac
-        sudo update-alternatives --set java /usr/lib/jvm/zulu-"${PARAM_JAVA_VER}"-amd64/bin/java
-        echo "export JAVA_HOME=/usr/lib/jvm/zulu-${PARAM_JAVA_VER}-amd64" >> "$BASH_ENV"
+        sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/zulu"${PARAM_JAVA_VER}"-ca-amd64/bin/java 1
+        sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/zulu"${PARAM_JAVA_VER}"-ca-amd64/bin/javac 1
+        sudo update-alternatives --set javac /usr/lib/jvm/zulu-"${PARAM_JAVA_VER}"-ca-amd64/bin/javac
+        sudo update-alternatives --set java /usr/lib/jvm/zulu-"${PARAM_JAVA_VER}"-ca-amd64/bin/java
+        echo "export JAVA_HOME=/usr/lib/jvm/zulu-${PARAM_JAVA_VER}-ca-amd64" >> "$BASH_ENV"
         ;;
       *)
         echo "Unknown distribution: ${PARAM_DISTRIBUTION}"
