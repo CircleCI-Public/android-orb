@@ -2,6 +2,7 @@
 CURRENT_DISTRIBUTION="$(java -version 2>&1 | tr '[:upper:]' '[:lower:]' | grep -Eo 'corretto|temurin|zulu|openjdk' | head -n1 || echo "unknown")"
 CURRENT_JAVA_VER="$(java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1)"
 CURRENT_JAVAC_VER="$(javac -version 2>&1 | head -1 | cut -f 2- -d ' ' | sed '/^1\./s///' | cut -d'.' -f1)"
+echo "Current Java Distribution: $CURRENT_DISTRIBUTION"
 echo "Current Java Version: $CURRENT_JAVA_VER"
 echo "Current Java Compiler Version : $CURRENT_JAVAC_VER"
 if [ "$CURRENT_JAVA_VER" -ne "${PARAM_JAVA_VER}" ] || [ "$CURRENT_DISTRIBUTION" != "${PARAM_DISTRIBUTION}" ]; then
@@ -76,7 +77,9 @@ if [ "$CURRENT_JAVA_VER" -ne "${PARAM_JAVA_VER}" ] || [ "$CURRENT_DISTRIBUTION" 
   fi
   echo "export PATH=\$JAVA_HOME/bin:\$PATH" >> "$BASH_ENV"
 fi
+NEW_DISTRIBUTION="$(java -version 2>&1 | tr '[:upper:]' '[:lower:]' | grep -Eo 'corretto|temurin|zulu|openjdk' | head -n1 || echo "unknown")"
 NEW_JAVA_VER="$(java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1)"
 NEW_JAVAC_VER="$(javac -version 2>&1 | head -1 | cut -f 2- -d ' ' | sed '/^1\./s///' | cut -d'.' -f1)"
+echo "New Java Distribution: $NEW_DISTRIBUTION"
 echo "New Java Version : $NEW_JAVA_VER"
 echo "New Java Compiler Version : $NEW_JAVAC_VER"
