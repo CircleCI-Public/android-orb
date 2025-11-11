@@ -26,7 +26,7 @@ if [ "$CURRENT_JAVA_VER" -ne "${PARAM_JAVA_VER}" ] || [ "$CURRENT_DISTRIBUTION" 
         sudo apt update
         sudo apt install wget gnupg
         wget -O- https://apt.corretto.aws/corretto.key | sudo apt-key add -
-        sudo add-apt-repository 'deb https://apt.corretto.aws stable main'
+        sudo add-apt-repository -y 'deb https://apt.corretto.aws stable main'
         sudo apt update
         sudo apt install java-"${PARAM_JAVA_VER}"-amazon-corretto-jdk
         sudo update-alternatives --set javac /usr/lib/jvm/java-"${PARAM_JAVA_VER}"-amazon-corretto/bin/javac
@@ -48,7 +48,7 @@ if [ "$CURRENT_JAVA_VER" -ne "${PARAM_JAVA_VER}" ] || [ "$CURRENT_DISTRIBUTION" 
         sudo apt update
         sudo apt install gnupg software-properties-common
         wget -qO - https://repos.azul.com/azul-repo.key | sudo apt-key add -
-        sudo apt-add-repository 'deb http://repos.azul.com/zulu/deb stable main'
+        sudo apt-add-repository -y 'deb http://repos.azul.com/zulu/deb stable main'
         sudo apt update
         sudo apt install zulu"${PARAM_JAVA_VER}"-jdk
         sudo update-alternatives --set javac /usr/lib/jvm/zulu-"${PARAM_JAVA_VER}"-amd64/bin/javac
