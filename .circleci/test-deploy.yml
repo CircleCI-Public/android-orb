@@ -37,10 +37,10 @@ jobs:
           distribution: << parameters.java_distribution >>
       - run:
           command: |
-            DISTRIBUTION="$(java -version 2>&1 | tr '[:upper:]' '[:lower:]' | grep -Eo 'corretto|temurin|zulu|openjdk' | head -n1 || echo "unknown")"
+            DISTRIBUTION="$(java -version 2>&1 | tr '[:upper:]' '[:lower:]' | grep -Eo 'corretto|temurin|zulu' | head -n1 || echo "openjdk")"
             JAVA_VER="$( java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1 )"
             JAVAC_VER="$( javac -version 2>&1 | head -1 | cut -f 2- -d ' ' | sed '/^1\./s///' | cut -d'.' -f1 )"
-            if [ "$DISTRIBUTION" -ne <<parameters.java_distribution>> ]; then
+            if [ "$DISTRIBUTION" != <<parameters.java_distribution>> ]; then
               echo "Job failed because java distribution was not changed."
               echo "current java distribution:" $DISTRIBUTION
               exit 1
